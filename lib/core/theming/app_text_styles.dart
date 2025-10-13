@@ -138,7 +138,7 @@ abstract class AppTextStyles {
     fontWeight: FontWeightHelper.bold,
   );
 
-  static TextStyle font19WhiteDBold = TextStyle(
+  static TextStyle font19WhiteBold = TextStyle(
     fontSize: 19.sp,
     color: AppColors.white,
     fontFamily: "Cairo",

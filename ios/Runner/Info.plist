@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription </key>
+    <string>This app needs access to the photo library to allow you to select and upload images for fruit items in the dashboard.</string>
 </dict>
 </plist>

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
-import 'package:fruit_hub_dashboard/dashboard/presentation/views/dashboard_view.dart';
+import 'package:fruit_hub_dashboard/features/add_product/presentation/views/add_product_view.dart';
+import '../../features/dashboard/presentation/views/dashboard_view.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
@@ -10,7 +11,8 @@ class AppRouter {
     switch (settings.name) {
       case Routes.dashboardView:
         return CupertinoPageRoute(builder: (_) => const DashboardView());
-
+      case Routes.addProductView:
+        return CupertinoPageRoute(builder: (_) => const AddProductView());
       default:
         return null;
     }

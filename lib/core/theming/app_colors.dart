@@ -2,6 +2,7 @@ import 'dart:ui';
 
 abstract class AppColors {
   static const black = Color(0xff000000);
+  static const red = Color(0xffFF0000);
   static const color0C0D0D = Color(0xff0C0D0D);
   static const shadowColor = Color(0x0A000000);
   static const bottomNavigationBarShadowColor = Color(0x19000000);

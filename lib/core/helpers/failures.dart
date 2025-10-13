@@ -12,41 +12,41 @@ class ServerFailure extends Failure {
   factory ServerFailure.fromFirebaseException(FirebaseException exception) {
     switch (exception.code) {
       case 'invalid-email':
-        return ServerFailure('invalid_email');
+        return ServerFailure('Invalid email');
       case 'wrong-password':
-        return ServerFailure("wrong_password_provided_for_that_user");
+        return ServerFailure("Wrong password provided for that user");
       case 'user-not-found':
-        return ServerFailure("no_user_found_for_that_email");
+        return ServerFailure("No user found for that email");
       case 'user-disabled':
-        return ServerFailure('user_disabled');
+        return ServerFailure('User disabled');
       case 'too-many-requests':
-        return ServerFailure('too_many_requests');
+        return ServerFailure('Too many requests');
       case 'operation-not-allowed':
-        return ServerFailure('operation_not_allowed');
+        return ServerFailure('Operation not allowed');
       case 'invalid-credential':
-        return ServerFailure("invalid_email_or_password");
+        return ServerFailure("Invalid email or password");
       case 'network-request-failed':
-        return ServerFailure("network_error_message");
+        return ServerFailure("Network error message");
       case 'weak-password':
-        return ServerFailure("the_password_provided_is_too_weak");
+        return ServerFailure("The password provided is too weak");
       case 'email-already-in-use':
-        return ServerFailure("the_account_already_exists_for_that_email");
+        return ServerFailure("The account already exists for that email");
       case 'internal-error':
-        return ServerFailure("internal_error");
+        return ServerFailure("Internal error");
       case 'app-not-authorized':
-        return ServerFailure("app_not_authorized");
+        return ServerFailure("App not authorized");
       case 'user-token-expired':
-        return ServerFailure("user_token_expired");
+        return ServerFailure("User token expired");
       case 'requires-recent-login':
-        return ServerFailure("requires_recent_login");
+        return ServerFailure("Requires recent login");
       case 'user-mismatch':
-        return ServerFailure("user_mismatch");
+        return ServerFailure("User mismatch");
       case 'quota-exceeded':
-        return ServerFailure("quota_exceeded");
+        return ServerFailure("Quota exceeded");
       case 'permission-denied':
         return ServerFailure("permission-denied");
       default:
-        return ServerFailure("error_occurred_please_try_again");
+        return ServerFailure("An error occurred, please try again");
     }
   }
 }
