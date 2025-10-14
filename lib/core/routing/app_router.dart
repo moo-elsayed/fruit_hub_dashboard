@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
-import 'package:fruit_hub_dashboard/features/add_product/presentation/views/add_product_view.dart';
 import '../../features/dashboard/presentation/views/dashboard_view.dart';
+import '../../features/product/presentation/views/add_product_view.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {

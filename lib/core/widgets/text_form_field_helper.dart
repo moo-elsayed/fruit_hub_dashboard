@@ -119,7 +119,7 @@ class _TextFormFieldHelperState extends State<TextFormFieldHelper> {
         hintText: widget.hint,
         hintStyle: widget.hintStyle ?? AppTextStyles.font13color949D9EBold,
         errorMaxLines: 4,
-        errorStyle: AppTextStyles.font16color0C0D0DSemiBold.copyWith(
+        errorStyle: AppTextStyles.font13color0C0D0DSemiBold.copyWith(
           color: Colors.red,
         ),
         prefixIcon: widget.prefixIcon,
