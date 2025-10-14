@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
+import 'package:fruit_hub_dashboard/features/product/presentation/managers/add_product_cubit/add_product_cubit.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../core/helpers/validator.dart';
 import '../../../../core/theming/app_text_styles.dart';
 import '../../../../core/widgets/custom_material_button.dart';
@@ -74,6 +77,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
               ),
               Gap(16.h),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 16.w,
                 children: [
                   Expanded(
@@ -88,7 +92,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                   ),
                   Expanded(
                     child: TextFormFieldHelper(
-                      controller: _priceController,
+                      controller: _codeController,
                       hint: "code",
                       keyboardType: TextInputType.name,
                       onValidate: Validator.validateCode,
@@ -111,25 +115,46 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
               Gap(16.h),
               FeaturedWidget(onChanged: (value) => _isFeatured = value),
               Gap(30.h),
-              CustomMaterialButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate() && _image != null) {
-                    var fruitEntity = FruitEntity(
-                      image: _image,
-                      isFeatured: _isFeatured,
-                      name: _nameController.text.trim(),
-                      code: _codeController.text.toLowerCase().trim(),
-                      description: _descriptionController.text.trim(),
-                      price: double.parse(_priceController.text),
+              BlocConsumer<AddProductCubit, AddProductState>(
+                listener: (context, state) {
+                  if (state is AddProductSuccess) {
+                    AppToast.showToast(
+                      context: context,
+                      title: "Product Added Successfully",
+                      type: ToastificationType.success,
+                    );
+                  } else if (state is AddProductFailure) {
+                    AppToast.showToast(
+                      context: context,
+                      title: state.errorMessage,
+                      type: ToastificationType.error,
                     );
                   }
-                  if (_image == null) {
-                    context.read<PickImageCubit>().imageNotPicked();
-                  }
                 },
-                maxWidth: true,
-                text: "Add Product",
-                textStyle: AppTextStyles.font16WhiteBold,
+                builder: (context, state) {
+                  return CustomMaterialButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate() && _image != null) {
+                        var fruitEntity = FruitEntity(
+                          image: _image,
+                          isFeatured: _isFeatured,
+                          name: _nameController.text.trim(),
+                          code: _codeController.text.toLowerCase().trim(),
+                          description: _descriptionController.text.trim(),
+                          price: double.parse(_priceController.text),
+                        );
+                        context.read<AddProductCubit>().addProduct(fruitEntity);
+                      }
+                      if (_image == null) {
+                        context.read<PickImageCubit>().imageNotPicked();
+                      }
+                    },
+                    isLoading: state is AddProductLoading,
+                    maxWidth: true,
+                    text: "Add Product",
+                    textStyle: AppTextStyles.font16WhiteBold,
+                  );
+                },
               ),
             ],
           ),

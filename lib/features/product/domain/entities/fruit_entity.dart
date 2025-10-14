@@ -12,7 +12,7 @@ class FruitEntity {
   });
 
   final XFile? image;
-  final String imagePath;
+  String imagePath;
   final String name;
   final String code;
   final String description;
