@@ -1,32 +1,25 @@
-import 'dart:developer';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
 import '../../../../core/helpers/functions.dart';
 
 class ProductSupabase {
-  final Supabase _supabase = Supabase.instance;
+  ProductSupabase(this._storageService);
+
+  final StorageService _storageService;
 
   Future<NetworkResponse<String>> uploadImage({
-    required XFile file,
+    required String bucketName,
     required String path,
     required Uint8List? imageBytes,
   }) async {
     try {
-      await _supabase.client.storage
-          .from('products')
-          .uploadBinary(
-            path,
-            imageBytes!,
-            fileOptions: const FileOptions(upsert: true),
-          );
-
-      final publicUrl = _supabase.client.storage
-          .from('products')
-          .getPublicUrl(path);
-
-      return NetworkSuccess(publicUrl);
+      var imageUrl = await _storageService.uploadFile(
+        bucketName: bucketName,
+        path: path,
+        imageBytes: imageBytes,
+      );
+      return NetworkSuccess(imageUrl);
     } catch (e) {
       errorLogger(
         functionName: 'ProductSupabase.addProduct',
@@ -36,25 +29,18 @@ class ProductSupabase {
     }
   }
 
-  Future<void> deleteImage({
-    required String imageUrl,
-    required String buketName,
-    required String pathToPhoto,
+  Future<NetworkResponse> deleteImage({
+    required String bucketName,
+    required String path,
   }) async {
-    final existingFiles = await Supabase.instance.client.storage
-        .from(buketName)
-        .list(path: '$pathToPhoto/');
-
-    for (var file in existingFiles) {
-      log(Uri.parse(imageUrl).pathSegments.last);
-      log(file.name);
-      if (file.name == Uri.parse(imageUrl).pathSegments.last) {
-        await Supabase.instance.client.storage.from(buketName).remove([
-          '$pathToPhoto/${file.name}',
-        ]);
-        log("removed");
-        break;
-      }
+    try {
+      await _storageService.deleteFile(
+        bucketName: bucketName,
+        path: path,
+      );
+      return NetworkSuccess();
+    } catch (e) {
+      return NetworkFailure(Exception(e.toString()));
     }
   }
 }

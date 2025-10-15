@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_colors.dart';
 import '../../../../core/theming/app_text_styles.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key, required this.title});
+class CustomAddProductAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const CustomAddProductAppBar({super.key, required this.title});
 
   final String title;
 
@@ -17,6 +18,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: AppColors.color2D9F5D,
       elevation: 0,
       centerTitle: true,
+      iconTheme: const IconThemeData(color: AppColors.white),
       title: Text(title, style: AppTextStyles.font19WhiteBold),
     );
   }

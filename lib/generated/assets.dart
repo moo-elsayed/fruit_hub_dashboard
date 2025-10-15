@@ -6,6 +6,12 @@ class Assets {
   static const String fontsCairoMedium = 'assets/fonts/Cairo-Medium.ttf';
   static const String fontsCairoRegular = 'assets/fonts/Cairo-Regular.ttf';
   static const String fontsCairoSemiBold = 'assets/fonts/Cairo-SemiBold.ttf';
+  static const String iconsArrowBack = 'assets/svgs/icons/arrow_back.svg';
   static const String iconsCheck = 'assets/svgs/icons/Check.svg';
+  static const String iconsGoogleIcon = 'assets/svgs/icons/google_icon.svg';
+  static const String imagesSplashAndroid12 = 'assets/images/splash_android_12.png';
+  static const String svgsPlant = 'assets/svgs/plant.svg';
+  static const String svgsSplashBottom = 'assets/svgs/splash-bottom.svg';
+  static const String svgsSuccess = 'assets/svgs/success.svg';
 
 }

@@ -44,7 +44,7 @@ class ServerFailure extends Failure {
       case 'quota-exceeded':
         return ServerFailure("Quota exceeded");
       case 'permission-denied':
-        return ServerFailure("permission-denied");
+        return ServerFailure("Permission denied");
       default:
         return ServerFailure("An error occurred, please try again");
     }

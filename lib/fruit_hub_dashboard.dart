@@ -25,7 +25,7 @@ class FruitHubDashboard extends StatelessWidget {
           ),
         ),
         onGenerateRoute: appRouter.generateRoute,
-        initialRoute: Routes.addProductView,
+        initialRoute: Routes.splashView,
       ),
     );
   }

@@ -5,7 +5,7 @@ import 'package:fruit_hub_dashboard/features/product/domain/use_cases/add_produc
 import 'package:fruit_hub_dashboard/features/product/presentation/managers/add_product_cubit/add_product_cubit.dart';
 import '../managers/pick_image_cubit/pick_image_cubit.dart';
 import '../widgets/add_product_view_body.dart';
-import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_add_product_app_bar.dart';
 
 class AddProductView extends StatefulWidget {
   const AddProductView({super.key});
@@ -18,7 +18,7 @@ class _AddProductViewState extends State<AddProductView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Add Product"),
+      appBar: const CustomAddProductAppBar(title: "Add Product"),
       body: MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => PickImageCubit()),
