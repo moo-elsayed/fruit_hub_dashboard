@@ -15,7 +15,7 @@ class ProductSupabase {
     int quality = 60,
   }) async {
     try {
-      var imageUrl = await _storageService.uploadImage(
+      var imageUrl = await _storageService.uploadCompressedImage(
         bucketName: bucketName,
         image: image,
         path: path,

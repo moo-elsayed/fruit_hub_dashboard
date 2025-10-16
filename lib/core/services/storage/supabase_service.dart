@@ -1,12 +1,26 @@
+import 'dart:typed_data';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService implements StorageService {
-  final Supabase _supabase = Supabase.instance;
+  final SupabaseClient _supabaseClient = Supabase.instance.client;
 
   @override
-  Future<String> uploadImage({
+  Future<String> uploadFile({
+    required String bucketName,
+    required String path,
+    required Uint8List data,
+  }) async {
+    await _supabaseClient.storage
+        .from(bucketName)
+        .uploadBinary(path, data, fileOptions: const FileOptions(upsert: true));
+
+    return _supabaseClient.storage.from(bucketName).getPublicUrl(path);
+  }
+
+  @override
+  Future<String> uploadCompressedImage({
     required String bucketName,
     required String path,
     required XFile image,
@@ -18,25 +32,20 @@ class SupabaseService implements StorageService {
       format: CompressFormat.jpeg,
     );
 
-    await _supabase.client.storage
-        .from(bucketName)
-        .uploadBinary(
-          path,
-          compressedBytes!,
-          fileOptions: const FileOptions(upsert: true),
-        );
+    if (compressedBytes == null) {
+      throw Exception("Image compression failed.");
+    }
 
-    final publicUrl = _supabase.client.storage
-        .from(bucketName)
-        .getPublicUrl(path);
-
-    return publicUrl;
+    return await uploadFile(
+      bucketName: bucketName,
+      path: path,
+      data: compressedBytes,
+    );
   }
 
   @override
   Future<void> deleteFile({
     required String bucketName,
     required String path,
-  }) async =>
-      await Supabase.instance.client.storage.from(bucketName).remove([path]);
+  }) async => await _supabaseClient.storage.from(bucketName).remove([path]);
 }
