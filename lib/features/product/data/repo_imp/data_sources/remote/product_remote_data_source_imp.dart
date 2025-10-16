@@ -1,5 +1,5 @@
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
+import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
 import 'package:fruit_hub_dashboard/features/product/data/firebase/product_firebase.dart';
 import 'package:fruit_hub_dashboard/features/product/data/models/fruit_model.dart';
 import 'package:fruit_hub_dashboard/features/product/data/supabase/product_supabase.dart';
@@ -8,23 +8,28 @@ import '../../../../domain/entities/fruit_entity.dart';
 import '../../../../domain/repo_contarct/data_sources/remote/product_remote_data_source.dart';
 
 class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
-  ProductRemoteDataSourceImp(this._productSupabase, this._productFirebase);
+  ProductRemoteDataSourceImp(
+    this._productSupabase,
+    this._productFirebase,
+    this._databaseService,
+  );
 
   final ProductSupabase _productSupabase;
   final ProductFirebase _productFirebase;
+  final DatabaseService _databaseService;
 
   @override
   Future<NetworkResponse> addProduct(FruitEntity fruitEntity) async {
     String path = 'images/${fruitEntity.code}/${fruitEntity.image!.name}';
-    final compressedBytes = await FlutterImageCompress.compressWithFile(
-      fruitEntity.image!.path,
-      quality: 60,
-      format: CompressFormat.jpeg,
-    );
+
+    if (await _checkIfProductExists(fruitEntity.code)) {
+      return NetworkFailure(Exception('Product with this code already exists'));
+    }
+
     var networkResponse = await _productSupabase.uploadImage(
       bucketName: BackendEndpoints.uploadImage,
       path: path,
-      imageBytes: compressedBytes,
+      image: fruitEntity.image!,
     );
     switch (networkResponse) {
       case NetworkSuccess<String>():
@@ -52,4 +57,10 @@ class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
         return NetworkFailure(networkResponse.exception);
     }
   }
+
+  Future<bool> _checkIfProductExists(String code) async =>
+      await _databaseService.checkIfDataExists(
+        path: BackendEndpoints.checkIfProductExists,
+        documentId: code,
+      );
 }

@@ -1,14 +1,12 @@
-import 'dart:typed_data';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 abstract class StorageService {
-  Future<String> uploadFile({
+  Future<String> uploadImage({
     required String bucketName,
     required String path,
-    required Uint8List? imageBytes,
+    required XFile image,
+    int quality = 60,
   });
 
-  Future<void> deleteFile({
-    required String bucketName,
-    required String path,
-  });
+  Future<void> deleteFile({required String bucketName, required String path});
 }

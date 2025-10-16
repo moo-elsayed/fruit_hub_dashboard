@@ -4,16 +4,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_colors.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
-class FeaturedWidget extends StatefulWidget {
-  const FeaturedWidget({super.key, required this.onChanged});
+class CustomSwitchContainer extends StatefulWidget {
+  const CustomSwitchContainer({
+    super.key,
+    required this.onChanged,
+    required this.text,
+  });
 
   final ValueChanged<bool> onChanged;
+  final String text;
 
   @override
-  State<FeaturedWidget> createState() => _FeaturedWidgetState();
+  State<CustomSwitchContainer> createState() => _CustomSwitchContainerState();
 }
 
-class _FeaturedWidgetState extends State<FeaturedWidget> {
+class _CustomSwitchContainerState extends State<CustomSwitchContainer> {
   bool _isChecked = false;
 
   @override
@@ -27,7 +32,7 @@ class _FeaturedWidgetState extends State<FeaturedWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Featured", style: buildTextStyle(_isChecked)),
+          Text(widget.text, style: buildTextStyle(_isChecked)),
           SizedBox(
             width: 53.w,
             child: CupertinoSwitch(

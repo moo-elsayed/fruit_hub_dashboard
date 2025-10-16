@@ -16,6 +16,7 @@ class ProductFirebase {
       await _firestoreService.addData(
         path: BackendEndpoints.addProduct,
         data: fruit.toJson(),
+        docId: fruit.code,
       );
       return NetworkSuccess();
     } on FirebaseException catch (e) {

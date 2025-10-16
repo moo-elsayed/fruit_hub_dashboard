@@ -27,6 +27,7 @@ void setupServiceLocator() {
       ProductRemoteDataSourceImp(
         ProductSupabase(getIt.get<StorageService>()),
         ProductFirebase(getIt.get<DatabaseService>()),
+        getIt.get<DatabaseService>(),
       ),
     ),
   );

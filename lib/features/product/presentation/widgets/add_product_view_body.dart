@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../domain/entities/fruit_entity.dart';
 import '../managers/pick_image_cubit/pick_image_cubit.dart';
 import 'custom_product_image.dart';
-import 'featured_widget.dart';
+import 'custom_switch_container.dart';
 
 class AddProductViewBody extends StatefulWidget {
   const AddProductViewBody({super.key});
@@ -28,8 +28,12 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
   late TextEditingController _priceController;
   late TextEditingController _codeController;
   late TextEditingController _descriptionController;
+  late TextEditingController _numberOfCaloriesController;
+  late TextEditingController _unitAmountController;
+  late TextEditingController _monthsUntilExpirationController;
   XFile? _image;
-  late bool _isFeatured;
+  bool _isFeatured = false;
+  bool _isOrganic = false;
 
   @override
   void initState() {
@@ -39,6 +43,9 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
     _priceController = TextEditingController();
     _codeController = TextEditingController();
     _descriptionController = TextEditingController();
+    _numberOfCaloriesController = TextEditingController();
+    _unitAmountController = TextEditingController();
+    _monthsUntilExpirationController = TextEditingController();
   }
 
   @override
@@ -47,6 +54,9 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
     _priceController.dispose();
     _codeController.dispose();
     _descriptionController.dispose();
+    _numberOfCaloriesController.dispose();
+    _unitAmountController.dispose();
+    _monthsUntilExpirationController.dispose();
     super.dispose();
   }
 
@@ -70,9 +80,29 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
               Gap(24.h),
               TextFormFieldHelper(
                 controller: _nameController,
-                hint: "name",
+                labelText: "name",
                 keyboardType: TextInputType.name,
                 onValidate: (value) => Validator.validateName(val: value),
+                action: TextInputAction.next,
+              ),
+              Gap(16.h),
+              TextFormFieldHelper(
+                controller: _priceController,
+                labelText: "price",
+                keyboardType: TextInputType.number,
+                onValidate: (value) =>
+                    Validator.validateName(val: value, type: "Price"),
+                action: TextInputAction.next,
+              ),
+              Gap(16.h),
+              TextFormFieldHelper(
+                controller: _descriptionController,
+                labelText: "description",
+                keyboardType: TextInputType.name,
+                onValidate: (value) =>
+                    Validator.validateName(val: value, type: "Description"),
+                maxLines: 5,
+                minLines: 5,
                 action: TextInputAction.next,
               ),
               Gap(16.h),
@@ -82,18 +112,20 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                 children: [
                   Expanded(
                     child: TextFormFieldHelper(
-                      controller: _priceController,
-                      hint: "price",
+                      controller: _monthsUntilExpirationController,
+                      labelText: "months until expiration",
                       keyboardType: TextInputType.number,
-                      onValidate: (value) =>
-                          Validator.validateName(val: value, type: "Price"),
+                      onValidate: (value) => Validator.validateName(
+                        val: value,
+                        type: "months until expiration",
+                      ),
                       action: TextInputAction.next,
                     ),
                   ),
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: _codeController,
-                      hint: "code",
+                      labelText: "code",
                       keyboardType: TextInputType.name,
                       onValidate: Validator.validateCode,
                       action: TextInputAction.next,
@@ -102,18 +134,54 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                 ],
               ),
               Gap(16.h),
-              TextFormFieldHelper(
-                controller: _descriptionController,
-                hint: "description",
-                keyboardType: TextInputType.name,
-                onValidate: (value) =>
-                    Validator.validateName(val: value, type: "Description"),
-                maxLines: 5,
-                minLines: 5,
-                action: TextInputAction.done,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 16.w,
+                children: [
+                  Expanded(
+                    child: TextFormFieldHelper(
+                      controller: _numberOfCaloriesController,
+                      labelText: "number of calories",
+                      keyboardType: TextInputType.number,
+                      onValidate: (value) => Validator.validateName(
+                        val: value,
+                        type: "number of calories",
+                      ),
+                      action: TextInputAction.next,
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormFieldHelper(
+                      controller: _unitAmountController,
+                      labelText: "unit amount per gram",
+                      keyboardType: TextInputType.name,
+                      onValidate: (value) => Validator.validateName(
+                        val: value,
+                        type: "number of calories",
+                      ),
+                      action: TextInputAction.done,
+                    ),
+                  ),
+                ],
               ),
               Gap(16.h),
-              FeaturedWidget(onChanged: (value) => _isFeatured = value),
+              Row(
+                spacing: 16.w,
+                children: [
+                  Expanded(
+                    child: CustomSwitchContainer(
+                      onChanged: (value) => _isOrganic = value,
+                      text: "Organic",
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomSwitchContainer(
+                      onChanged: (value) => _isFeatured = value,
+                      text: "Featured",
+                    ),
+                  ),
+                ],
+              ),
               Gap(30.h),
               BlocConsumer<AddProductCubit, AddProductState>(
                 listener: (context, state) {
@@ -138,10 +206,18 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                         var fruitEntity = FruitEntity(
                           image: _image,
                           isFeatured: _isFeatured,
+                          isOrganic: _isOrganic,
                           name: _nameController.text.trim(),
                           code: _codeController.text.toLowerCase().trim(),
                           description: _descriptionController.text.trim(),
                           price: double.parse(_priceController.text),
+                          numberOfCalories: int.parse(
+                            _numberOfCaloriesController.text,
+                          ),
+                          unitAmount: int.parse(_unitAmountController.text),
+                          monthsUntilExpiration: int.parse(
+                            _monthsUntilExpirationController.text,
+                          ),
                         );
                         context.read<AddProductCubit>().addProduct(fruitEntity);
                       }
@@ -156,6 +232,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                   );
                 },
               ),
+              Gap(24.h),
             ],
           ),
         ),
