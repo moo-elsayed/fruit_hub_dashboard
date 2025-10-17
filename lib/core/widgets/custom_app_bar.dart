@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,9 +36,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.white,
               border: Border.all(color: AppColors.colorF1F1F5),
             ),
-            child: SvgPicture.asset(
-              Assets.iconsArrowBack,
-              fit: BoxFit.scaleDown,
+            child: Transform.rotate(
+              angle: pi,
+              child: SvgPicture.asset(
+                Assets.iconsArrowBack,
+                fit: BoxFit.scaleDown,
+              ),
             ),
           ),
         ),

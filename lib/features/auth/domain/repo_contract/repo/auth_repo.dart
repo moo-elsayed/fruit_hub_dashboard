@@ -13,8 +13,6 @@ abstract class AuthRepo {
     required String username,
   });
 
-  Future<void> sendEmailVerification();
-
   Future<NetworkResponse<UserEntity>> googleSignIn();
 
   Future<NetworkResponse> forgetPassword(String email);

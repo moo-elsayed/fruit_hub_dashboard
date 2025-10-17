@@ -32,15 +32,10 @@ class AuthRepoImp implements AuthRepo {
   Future<void> signOut() async => await _authRemoteDataSource.signOut();
 
   @override
-  Future<void> sendEmailVerification() async =>
-      _authRemoteDataSource.sendEmailVerification();
-
-  @override
   Future<NetworkResponse<UserEntity>> googleSignIn() async =>
       await _authRemoteDataSource.googleSignIn();
 
   @override
   Future<NetworkResponse> forgetPassword(String email) async =>
       await _authRemoteDataSource.forgetPassword(email);
-
 }

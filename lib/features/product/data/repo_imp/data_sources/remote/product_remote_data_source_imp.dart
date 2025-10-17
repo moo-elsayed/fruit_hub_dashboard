@@ -1,66 +1,85 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
 import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
-import 'package:fruit_hub_dashboard/features/product/data/firebase/product_firebase.dart';
+import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
 import 'package:fruit_hub_dashboard/features/product/data/models/fruit_model.dart';
-import 'package:fruit_hub_dashboard/features/product/data/supabase/product_supabase.dart';
 import '../../../../../../core/helpers/backend_endpoints.dart';
+import '../../../../../../core/helpers/failures.dart';
+import '../../../../../../core/helpers/functions.dart';
 import '../../../../domain/entities/fruit_entity.dart';
 import '../../../../domain/repo_contarct/data_sources/remote/product_remote_data_source.dart';
 
 class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
-  ProductRemoteDataSourceImp(
-    this._productSupabase,
-    this._productFirebase,
-    this._databaseService,
-  );
-
-  final ProductSupabase _productSupabase;
-  final ProductFirebase _productFirebase;
   final DatabaseService _databaseService;
+  final StorageService _storageService;
+
+  ProductRemoteDataSourceImp(this._databaseService, this._storageService);
 
   @override
   Future<NetworkResponse> addProduct(FruitEntity fruitEntity) async {
-    String path = 'images/${fruitEntity.code}/${fruitEntity.image!.name}';
-
     if (await _checkIfProductExists(fruitEntity.code)) {
       return NetworkFailure(Exception('Product with this code already exists'));
     }
 
-    var networkResponse = await _productSupabase.uploadImage(
-      bucketName: BackendEndpoints.uploadImage,
-      path: path,
-      image: fruitEntity.image!,
-    );
-    switch (networkResponse) {
-      case NetworkSuccess<String>():
-        final imageUrl = networkResponse.data;
-        fruitEntity.imagePath = imageUrl!;
-        var networkResponse2 = await _productFirebase.addProduct(
-          FruitModel.fromEntity(fruitEntity),
-        );
-        switch (networkResponse2) {
-          case NetworkSuccess():
-            return NetworkSuccess();
-          case NetworkFailure():
-            var networkResponse3 = await _productSupabase.deleteImage(
-              bucketName: 'products',
-              path: path,
-            );
-            switch (networkResponse3) {
-              case NetworkSuccess():
-                return NetworkFailure(networkResponse2.exception);
-              case NetworkFailure():
-                return NetworkFailure(networkResponse3.exception);
-            }
-        }
-      case NetworkFailure<String>():
-        return NetworkFailure(networkResponse.exception);
+    final imagePath = 'images/${fruitEntity.code}/${fruitEntity.image!.name}';
+    String? imageUrl;
+
+    try {
+      imageUrl = await _storageService.uploadCompressedImage(
+        bucketName: BackendEndpoints.uploadImage,
+        path: imagePath,
+        image: fruitEntity.image!,
+      );
+
+      final fruitModel = FruitModel.fromEntity(fruitEntity)
+        ..imagePath = imageUrl;
+      await _databaseService.addData(
+        path: BackendEndpoints.addProduct,
+        data: fruitModel.toJson(),
+        docId: fruitModel.code,
+      );
+
+      return NetworkSuccess();
+    } on FirebaseException catch (e) {
+      return await _handelAddProductError(
+        e: e,
+        imageUrl: imageUrl,
+        imagePath: imagePath,
+        errorMessage: ServerFailure.fromFirebaseException(e).errorMessage,
+      );
+    } catch (e) {
+      return await _handelAddProductError(
+        e: e,
+        imageUrl: imageUrl,
+        imagePath: imagePath,
+        errorMessage: "Failed to add product: ${e.toString()}",
+      );
     }
   }
 
-  Future<bool> _checkIfProductExists(String code) async =>
-      await _databaseService.checkIfDataExists(
-        path: BackendEndpoints.checkIfProductExists,
-        documentId: code,
+  Future<bool> _checkIfProductExists(String code) async {
+    return await _databaseService.checkIfDataExists(
+      path: BackendEndpoints.checkIfProductExists,
+      documentId: code,
+    );
+  }
+
+  Future<NetworkFailure> _handelAddProductError({
+    required Object e,
+    required String imagePath,
+    required String errorMessage,
+    String? imageUrl,
+  }) async {
+    errorLogger(
+      functionName: 'ProductDataSource.addProduct',
+      error: e.toString(),
+    );
+    if (imageUrl != null) {
+      await _storageService.deleteFile(
+        bucketName: BackendEndpoints.uploadImage,
+        path: imagePath,
       );
+    }
+    return NetworkFailure(Exception(errorMessage));
+  }
 }

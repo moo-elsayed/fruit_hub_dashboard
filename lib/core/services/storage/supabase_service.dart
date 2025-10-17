@@ -4,7 +4,9 @@ import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService implements StorageService {
-  final SupabaseClient _supabaseClient = Supabase.instance.client;
+  SupabaseService(this._supabaseClient);
+
+  final SupabaseClient _supabaseClient;
 
   @override
   Future<String> uploadFile({

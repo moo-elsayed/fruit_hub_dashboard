@@ -75,7 +75,7 @@ class _RegisterViewState extends State<RegisterView> {
                     controller: _nameController,
                     hint: "Full Name",
                     keyboardType: TextInputType.name,
-                    onValidate: (value) => Validator.validateName(type: "Name"),
+                    onValidate: (value) => Validator.validateName(type: "Name",val: value),
                     action: TextInputAction.next,
                   ),
                   Gap(16.h),

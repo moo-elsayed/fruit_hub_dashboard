@@ -12,6 +12,13 @@ class UserModel extends UserEntity {
     isVerified: user.emailVerified,
   );
 
+  factory UserModel.fromUserEntity(UserEntity user) => UserModel(
+    uid: user.uid,
+    name: user.name,
+    email: user.email,
+    isVerified: user.isVerified,
+  );
+
   factory UserModel.fromJson(Map<String, dynamic> map) => UserModel(
     uid: map['uid'],
     name: map['name'],
