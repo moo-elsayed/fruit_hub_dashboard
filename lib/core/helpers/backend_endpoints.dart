@@ -1,6 +1,6 @@
 class BackendEndpoints {
   static const addProduct = 'products';
-  static const uploadImage = 'products';
+  static const bucketName = 'products';
   static const checkIfProductExists = 'products';
   static const addUserData = 'users';
   static const checkIfUserExists = 'users';

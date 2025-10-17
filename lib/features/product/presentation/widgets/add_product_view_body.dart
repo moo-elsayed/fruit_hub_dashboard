@@ -154,7 +154,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                     child: TextFormFieldHelper(
                       controller: _unitAmountController,
                       labelText: "unit amount per gram",
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.number,
                       onValidate: (value) => Validator.validateName(
                         val: value,
                         type: "number of calories",

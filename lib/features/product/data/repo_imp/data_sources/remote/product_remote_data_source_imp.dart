@@ -26,7 +26,7 @@ class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
 
     try {
       imageUrl = await _storageService.uploadCompressedImage(
-        bucketName: BackendEndpoints.uploadImage,
+        bucketName: BackendEndpoints.bucketName,
         path: imagePath,
         image: fruitEntity.image!,
       );
@@ -76,7 +76,7 @@ class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
     );
     if (imageUrl != null) {
       await _storageService.deleteFile(
-        bucketName: BackendEndpoints.uploadImage,
+        bucketName: BackendEndpoints.bucketName,
         path: imagePath,
       );
     }
