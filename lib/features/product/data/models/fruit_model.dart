@@ -31,7 +31,9 @@ class FruitModel extends FruitEntity {
     monthsUntilExpiration: json['monthsUntilExpiration'],
     unitAmount: json['unitAmount'],
     numberOfCalories: json['numberOfCalories'],
-    reviews: json['reviews'],
+    reviews: json['reviews']
+        .map<ReviewModel>((reviewJson) => ReviewModel.fromJson(reviewJson))
+        .toList(),
   );
 
   factory FruitModel.fromEntity(FruitEntity fruitEntity) => FruitModel(

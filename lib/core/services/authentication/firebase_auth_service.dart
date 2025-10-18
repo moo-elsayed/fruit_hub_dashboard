@@ -49,7 +49,7 @@ class FirebaseAuthService implements AuthService {
 
     if (googleUser == null) {
       errorLogger(
-        functionName: 'AuthFirebase.googleSignIn',
+        functionName: 'FirebaseAuthService.googleSignIn',
         error: 'User canceled sign in',
       );
       throw Exception("The sign-in process was canceled.");
@@ -59,7 +59,7 @@ class FirebaseAuthService implements AuthService {
 
     if (googleAuth.idToken == null) {
       errorLogger(
-        functionName: 'AuthFirebase.googleSignIn',
+        functionName: 'FirebaseAuthService.googleSignIn',
         error: 'No idToken received from Google',
       );
       throw Exception(
