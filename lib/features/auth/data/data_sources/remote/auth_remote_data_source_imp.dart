@@ -4,7 +4,7 @@ import 'package:fruit_hub_dashboard/core/services/authentication/auth_service.da
 import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
-import 'package:fruit_hub_dashboard/features/auth/domain/repo_contract/data_sources/remote/auth_remote_data_source.dart';
+import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_hub_dashboard/core/helpers/failures.dart';
 import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
 import 'package:fruit_hub_dashboard/core/helpers/functions.dart';
@@ -32,7 +32,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
 
       await _authService.sendEmailVerification();
 
-      return NetworkSuccess(userModel);
+      return NetworkSuccess(userModel.toUserEntity());
     } on FirebaseAuthException catch (e) {
       if (e.code != "email-already-in-use") {
         await _authService.deleteCurrentUser();
@@ -130,7 +130,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
     } else {
       await _addUserData(userModel);
     }
-    return userModel;
+    return userModel.toUserEntity();
   }
 
   Future<void> _addUserData(UserModel user) async =>

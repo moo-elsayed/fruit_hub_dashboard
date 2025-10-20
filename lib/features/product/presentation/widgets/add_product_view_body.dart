@@ -30,7 +30,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
   late TextEditingController _descriptionController;
   late TextEditingController _numberOfCaloriesController;
   late TextEditingController _unitAmountController;
-  late TextEditingController _monthsUntilExpirationController;
+  late TextEditingController _daysUntilExpirationController;
   XFile? _image;
   bool _isFeatured = false;
   bool _isOrganic = false;
@@ -45,7 +45,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
     _descriptionController = TextEditingController();
     _numberOfCaloriesController = TextEditingController();
     _unitAmountController = TextEditingController();
-    _monthsUntilExpirationController = TextEditingController();
+    _daysUntilExpirationController = TextEditingController();
   }
 
   @override
@@ -56,7 +56,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
     _descriptionController.dispose();
     _numberOfCaloriesController.dispose();
     _unitAmountController.dispose();
-    _monthsUntilExpirationController.dispose();
+    _daysUntilExpirationController.dispose();
     super.dispose();
   }
 
@@ -112,12 +112,12 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                 children: [
                   Expanded(
                     child: TextFormFieldHelper(
-                      controller: _monthsUntilExpirationController,
-                      labelText: "months until expiration",
+                      controller: _daysUntilExpirationController,
+                      labelText: "days until expiration",
                       keyboardType: TextInputType.number,
                       onValidate: (value) => Validator.validateName(
                         val: value,
-                        type: "months until expiration",
+                        type: "days until expiration",
                       ),
                       action: TextInputAction.next,
                     ),
@@ -215,8 +215,8 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                             _numberOfCaloriesController.text,
                           ),
                           unitAmount: int.parse(_unitAmountController.text),
-                          monthsUntilExpiration: int.parse(
-                            _monthsUntilExpirationController.text,
+                          daysUntilExpiration: int.parse(
+                            _daysUntilExpirationController.text,
                           ),
                         );
                         context.read<AddProductCubit>().addProduct(fruitEntity);

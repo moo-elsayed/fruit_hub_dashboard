@@ -12,6 +12,7 @@ abstract class StorageService {
     required String bucketName,
     required String path,
     required XFile image,
+    CompressFormat compressFormat = CompressFormat.png,
     int quality = 60,
   });
 

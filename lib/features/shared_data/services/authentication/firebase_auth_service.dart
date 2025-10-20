@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../helpers/firebase_keys.dart';
-import '../../helpers/functions.dart';
-import 'auth_service.dart';
+import '../../../../core/helpers/firebase_keys.dart';
+import '../../../../core/helpers/functions.dart';
+import '../../../../core/services/authentication/auth_service.dart';
 
 class FirebaseAuthService implements AuthService {
   final FirebaseAuth _auth;
@@ -21,7 +21,7 @@ class FirebaseAuthService implements AuthService {
       email: email,
       password: password,
     );
-    return UserModel.fromFirebaseUser(credential.user!);
+    return UserModel.fromFirebaseUser(credential.user!).toUserEntity();
   }
 
   @override
@@ -33,11 +33,30 @@ class FirebaseAuthService implements AuthService {
       email: email,
       password: password,
     );
-    return UserModel.fromFirebaseUser(credential.user!);
+    return UserModel.fromFirebaseUser(credential.user!).toUserEntity();
   }
 
   @override
   Future<UserEntity> googleSignIn() async {
+    final User user = await _googleSignInInternal();
+    return UserModel.fromFirebaseUser(user).toUserEntity();
+  }
+
+  @override
+  Future<void> deleteCurrentUser() async => await _auth.currentUser?.delete();
+
+  @override
+  Future<void> forgetPassword(String email) async =>
+      await _auth.sendPasswordResetEmail(email: email);
+
+  @override
+  Future<void> sendEmailVerification() async =>
+      await _auth.currentUser!.sendEmailVerification();
+
+  @override
+  Future<void> signOut() async => await _auth.signOut();
+
+  Future<User> _googleSignInInternal() async {
     await _googleSignIn.signOut();
 
     await _googleSignIn.initialize(
@@ -72,20 +91,6 @@ class FirebaseAuthService implements AuthService {
     );
 
     var userCredential = await _auth.signInWithCredential(credential);
-    return UserModel.fromFirebaseUser(userCredential.user!);
+    return userCredential.user!;
   }
-
-  @override
-  Future<void> deleteCurrentUser() async => await _auth.currentUser?.delete();
-
-  @override
-  Future<void> forgetPassword(String email) async =>
-      await _auth.sendPasswordResetEmail(email: email);
-
-  @override
-  Future<void> sendEmailVerification() async =>
-      await _auth.currentUser!.sendEmailVerification();
-
-  @override
-  Future<void> signOut() async => await _auth.signOut();
 }

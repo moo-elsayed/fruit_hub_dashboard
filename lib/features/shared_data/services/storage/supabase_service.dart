@@ -27,12 +27,13 @@ class SupabaseService implements StorageService {
     required String bucketName,
     required String path,
     required XFile image,
+    CompressFormat compressFormat = CompressFormat.png,
     int quality = 60,
   }) async {
     final compressedBytes = await FlutterImageCompress.compressWithFile(
       image.path,
       quality: quality,
-      format: CompressFormat.jpeg,
+      format: compressFormat,
     );
 
     if (compressedBytes == null) {

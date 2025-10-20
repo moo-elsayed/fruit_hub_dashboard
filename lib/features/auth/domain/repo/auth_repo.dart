@@ -1,7 +1,7 @@
-import '../../../../../../core/helpers/network_response.dart';
-import '../../../entities/user_entity.dart';
+import '../../../../../core/helpers/network_response.dart';
+import '../entities/user_entity.dart';
 
-abstract class AuthRemoteDataSource {
+abstract class AuthRepo {
   Future<NetworkResponse<UserEntity>> signInWithEmailAndPassword({
     required String email,
     required String password,

@@ -1,4 +1,5 @@
-import '../repo_contract/repo/auth_repo.dart';
+
+import '../repo/auth_repo.dart';
 
 class SignOutUseCase {
   SignOutUseCase(this._authRepo);

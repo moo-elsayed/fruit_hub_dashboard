@@ -1,13 +1,19 @@
 import 'package:fruit_hub_dashboard/features/product/domain/entities/review_entity.dart';
 
-class ReviewModel extends ReviewEntity {
+class ReviewModel {
   ReviewModel({
-    super.name,
-    super.description,
-    super.rating,
-    super.date,
-    super.image,
+    required this.name,
+    required this.image,
+    required this.description,
+    required this.date,
+    required this.rating,
   });
+
+  final String name;
+  final String image;
+  final String description;
+  final String date;
+  final double rating;
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
@@ -36,4 +42,12 @@ class ReviewModel extends ReviewEntity {
       'image': image,
     };
   }
+
+  ReviewEntity toEntity() => ReviewEntity(
+    name: name,
+    description: description,
+    rating: rating,
+    date: date,
+    image: image,
+  );
 }

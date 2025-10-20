@@ -1,5 +1,5 @@
 import '../../../../core/helpers/network_response.dart';
-import '../repo_contract/repo/auth_repo.dart';
+import '../repo/auth_repo.dart';
 
 class ForgetPasswordUseCase {
   ForgetPasswordUseCase(this._authRepo);

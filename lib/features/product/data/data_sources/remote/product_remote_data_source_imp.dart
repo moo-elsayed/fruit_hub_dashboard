@@ -2,12 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
 import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
 import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
+import 'package:fruit_hub_dashboard/features/product/data/data_sources/remote/product_remote_data_source.dart';
 import 'package:fruit_hub_dashboard/features/product/data/models/fruit_model.dart';
 import '../../../../../../core/helpers/backend_endpoints.dart';
 import '../../../../../../core/helpers/failures.dart';
 import '../../../../../../core/helpers/functions.dart';
-import '../../../../domain/entities/fruit_entity.dart';
-import '../../../../domain/repo_contarct/data_sources/remote/product_remote_data_source.dart';
+import '../../../domain/entities/fruit_entity.dart';
 
 class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
   final DatabaseService _databaseService;
@@ -25,10 +25,10 @@ class ProductRemoteDataSourceImp implements ProductRemoteDataSource {
     String? imageUrl;
 
     try {
-      imageUrl = await _storageService.uploadCompressedImage(
+      imageUrl = await _storageService.uploadFile(
         bucketName: BackendEndpoints.bucketName,
         path: imagePath,
-        image: fruitEntity.image!,
+        data: await fruitEntity.image!.readAsBytes(),
       );
 
       final fruitModel = FruitModel.fromEntity(fruitEntity)
