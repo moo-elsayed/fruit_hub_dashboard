@@ -68,7 +68,7 @@ class _CustomProductImageState extends State<CustomProductImage> {
                       image: _image != null
                           ? DecorationImage(
                               image: FileImage(File(_image!.path)),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                             )
                           : null,
                     ),

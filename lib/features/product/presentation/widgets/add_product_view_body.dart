@@ -126,7 +126,7 @@ class _AddProductViewBodyState extends State<AddProductViewBody> {
                     child: TextFormFieldHelper(
                       controller: _codeController,
                       labelText: "code",
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.number,
                       onValidate: Validator.validateCode,
                       action: TextInputAction.next,
                     ),
