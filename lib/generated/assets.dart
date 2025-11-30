@@ -9,7 +9,9 @@ class Assets {
   static const String iconsArrowBack = 'assets/svgs/icons/arrow_back.svg';
   static const String iconsCheck = 'assets/svgs/icons/Check.svg';
   static const String iconsGoogleIcon = 'assets/svgs/icons/google_icon.svg';
+  static const String iconsIconCancel = 'assets/svgs/icons/icon-cancel.svg';
   static const String imagesSplashAndroid12 = 'assets/images/splash_android_12.png';
+  static const String imagesWatermelonTest = 'assets/images/watermelon_test.png';
   static const String svgsPlant = 'assets/svgs/plant.svg';
   static const String svgsSplashBottom = 'assets/svgs/splash-bottom.svg';
   static const String svgsSuccess = 'assets/svgs/success.svg';

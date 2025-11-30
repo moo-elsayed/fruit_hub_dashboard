@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../domain/entities/user_entity.dart';
 
 class UserModel {
@@ -14,27 +15,6 @@ class UserModel {
   final String email;
   final bool isVerified;
 
-  factory UserModel.fromFirebaseUser(User user) => UserModel(
-    uid: user.uid,
-    name: user.displayName ?? '',
-    email: user.email ?? '',
-    isVerified: user.emailVerified,
-  );
-
-  factory UserModel.fromUserEntity(UserEntity user) => UserModel(
-    uid: user.uid,
-    name: user.name ?? '',
-    email: user.email ?? '',
-    isVerified: user.isVerified,
-  );
-
-  factory UserModel.fromJson(Map<String, dynamic> map) => UserModel(
-    uid: map['uid'],
-    name: map['name'],
-    email: map['email'],
-    isVerified: map['isVerified'],
-  );
-
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'name': name,
@@ -44,4 +24,25 @@ class UserModel {
 
   UserEntity toUserEntity() =>
       UserEntity(uid: uid, name: name, email: email, isVerified: isVerified);
+
+  factory UserModel.fromFirebaseUser(User user) => UserModel(
+    uid: user.uid,
+    name: user.displayName ?? '',
+    email: user.email ?? '',
+    isVerified: user.emailVerified,
+  );
+
+  factory UserModel.fromJson(Map<String, dynamic> map) => UserModel(
+    uid: map['uid'],
+    name: map['name'],
+    email: map['email'],
+    isVerified: map['isVerified'],
+  );
+
+  factory UserModel.fromUserEntity(UserEntity user) => UserModel(
+    uid: user.uid,
+    name: user.name,
+    email: user.email,
+    isVerified: user.isVerified,
+  );
 }

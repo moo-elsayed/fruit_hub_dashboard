@@ -7,13 +7,18 @@ import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.da
 import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_hub_dashboard/core/helpers/failures.dart';
 import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
-import 'package:fruit_hub_dashboard/core/helpers/functions.dart';
+import '../../../../../core/helpers/app_logger.dart';
 
 class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
+  AuthRemoteDataSourceImp(
+    this._authService,
+    this._databaseService,
+    this._signOutService,
+  );
+
   final AuthService _authService;
   final DatabaseService _databaseService;
-
-  AuthRemoteDataSourceImp(this._authService, this._databaseService);
+  final SignOutService _signOutService;
 
   @override
   Future<NetworkResponse<UserEntity>> createUserWithEmailAndPassword({
@@ -55,10 +60,16 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
         password: password,
       );
 
-      if (!userEntity.isVerified) {
-        await _authService.sendEmailVerification();
+      // if (!userEntity.isVerified) {
+      //   await _authService.sendEmailVerification();
+      //   return NetworkFailure(
+      //     Exception("Please verify your email. A new link has been sent."),
+      //   );
+      // }
+
+      if (!await _checkIfIsAdmin(userEntity.uid)) {
         return NetworkFailure(
-          Exception("Please verify your email. A new link has been sent."),
+          Exception("Access Denied: You are not an admin."),
         );
       }
 
@@ -84,7 +95,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   Future<NetworkResponse<void>> forgetPassword(String email) async {
     if (await _checkIfEmailExists(email)) {
       await _authService.forgetPassword(email);
-      return NetworkSuccess();
+      return const NetworkSuccess();
     } else {
       return NetworkFailure(
         Exception("No user found with that email address."),
@@ -95,8 +106,8 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   @override
   Future<NetworkResponse<void>> signOut() async {
     try {
-      await _authService.signOut();
-      return NetworkSuccess();
+      await _signOutService.signOut();
+      return const NetworkSuccess();
     } catch (e) {
       return _handleAuthError(e, "signOut");
     }
@@ -107,30 +118,30 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   // -------------------------------------------------------------------
 
   NetworkFailure<T> _handleAuthError<T>(Object e, String functionName) {
-    errorLogger(
-      functionName: 'AuthRemoteDataSourceImp.$functionName',
-      error: e.toString(),
-    );
+    AppLogger.error("error occurred in $functionName", error: e);
     if (e is FirebaseAuthException) {
       return NetworkFailure(
         Exception(ServerFailure.fromFirebaseException(e).errorMessage),
       );
     }
-    return NetworkFailure(
-      Exception("An unexpected error occurred: ${e.toString()}"),
-    );
+    return NetworkFailure(Exception(e.toString()));
   }
 
   Future<UserEntity> _getOrUpdateUserFromDB(UserEntity user) async {
     final userExists = await _checkIfUserExists(user.uid);
-    final userModel = UserModel.fromUserEntity(user);
 
     if (userExists) {
-      await _updateUserData(userModel);
+      await _updateUserData(UserModel.fromUserEntity(user));
+      final storedUserData = await _databaseService.getData(
+        path: BackendEndpoints.getUserData,
+        documentId: user.uid,
+      );
+      return UserModel.fromJson(storedUserData).toUserEntity();
     } else {
+      final userModel = UserModel.fromUserEntity(user);
       await _addUserData(userModel);
+      return userModel.toUserEntity();
     }
-    return userModel.toUserEntity();
   }
 
   Future<void> _addUserData(UserModel user) async =>
@@ -159,4 +170,12 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
         fieldName: 'email',
         fieldValue: email,
       );
+
+  Future<bool> _checkIfIsAdmin(String uid) async {
+    final Map<String, dynamic> userData = await _databaseService.getData(
+      path: BackendEndpoints.getUserData,
+      documentId: uid,
+    );
+    return userData['userRole'] == 'admin';
+  }
 }

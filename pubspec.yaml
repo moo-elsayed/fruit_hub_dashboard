@@ -15,11 +15,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
+# of the products and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.10.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -52,6 +52,10 @@ dependencies:
   google_sign_in: ^7.2.0
   animate_do: ^4.2.0
   animated_text_kit: ^4.3.0
+  logger: ^2.6.2
+  equatable: ^2.0.7
+  skeletonizer: ^2.1.1
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

@@ -15,7 +15,7 @@ abstract class AuthRepo {
 
   Future<NetworkResponse<UserEntity>> googleSignIn();
 
-  Future<NetworkResponse> forgetPassword(String email);
+  Future<NetworkResponse<void>> forgetPassword(String email);
 
-  Future<void> signOut();
+  Future<NetworkResponse<void>> signOut();
 }

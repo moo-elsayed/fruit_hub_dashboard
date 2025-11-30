@@ -29,7 +29,7 @@ class AuthRepoImp implements AuthRepo {
   );
 
   @override
-  Future<void> signOut() async => await _authRemoteDataSource.signOut();
+  Future<NetworkResponse<void>> signOut() async => await _authRemoteDataSource.signOut();
 
   @override
   Future<NetworkResponse<UserEntity>> googleSignIn() async =>

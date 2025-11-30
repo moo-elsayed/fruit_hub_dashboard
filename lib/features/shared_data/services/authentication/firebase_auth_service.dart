@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
-import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../../../core/helpers/app_logger.dart';
 import '../../../../core/helpers/firebase_keys.dart';
-import '../../../../core/helpers/functions.dart';
 import '../../../../core/services/authentication/auth_service.dart';
+import '../../../auth/data/models/user_model.dart';
+import '../../../auth/domain/entities/user_entity.dart';
 
-class FirebaseAuthService implements AuthService {
+class FirebaseAuthService implements AuthService, SignOutService {
+  FirebaseAuthService(this._auth, this._googleSignIn);
+
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
-
-  FirebaseAuthService(this._auth, this._googleSignIn);
 
   @override
   Future<UserEntity> createUserWithEmailAndPassword({
@@ -21,7 +21,7 @@ class FirebaseAuthService implements AuthService {
       email: email,
       password: password,
     );
-    return UserModel.fromFirebaseUser(credential.user!).toUserEntity();
+    return _returnUserEntity(credential);
   }
 
   @override
@@ -33,7 +33,7 @@ class FirebaseAuthService implements AuthService {
       email: email,
       password: password,
     );
-    return UserModel.fromFirebaseUser(credential.user!).toUserEntity();
+    return _returnUserEntity(credential);
   }
 
   @override
@@ -51,14 +51,20 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<void> sendEmailVerification() async =>
-      await _auth.currentUser!.sendEmailVerification();
+      await _auth.currentUser?.sendEmailVerification();
 
   @override
-  Future<void> signOut() async => await _auth.signOut();
+  Future<void> signOut() async {
+    await _auth.signOut();
+    try {
+      await _googleSignIn.disconnect();
+    } catch (e) {}
+    try {
+      await _googleSignIn.signOut();
+    } catch (e) {}
+  }
 
   Future<User> _googleSignInInternal() async {
-    await _googleSignIn.signOut();
-
     await _googleSignIn.initialize(
       clientId: FirebaseKeys.clientId,
       serverClientId: FirebaseKeys.serverClientId,
@@ -67,18 +73,15 @@ class FirebaseAuthService implements AuthService {
         .attemptLightweightAuthentication();
 
     if (googleUser == null) {
-      errorLogger(
-        functionName: 'FirebaseAuthService.googleSignIn',
-        error: 'User canceled sign in',
-      );
+      AppLogger.error("error in google sign in", error: 'No user found');
       throw Exception("The sign-in process was canceled.");
     }
 
     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
     if (googleAuth.idToken == null) {
-      errorLogger(
-        functionName: 'FirebaseAuthService.googleSignIn',
+      AppLogger.error(
+        "error in google sign in",
         error: 'No idToken received from Google',
       );
       throw Exception(
@@ -91,6 +94,22 @@ class FirebaseAuthService implements AuthService {
     );
 
     var userCredential = await _auth.signInWithCredential(credential);
-    return userCredential.user!;
+    return _returnUser(userCredential);
+  }
+
+  User _returnUser(UserCredential userCredential) {
+    final user = userCredential.user;
+    if (user == null) {
+      throw Exception('Firebase user object is null after sign in.');
+    }
+    return user;
+  }
+
+  UserEntity _returnUserEntity(UserCredential credential) {
+    final user = credential.user;
+    if (user == null) {
+      throw Exception('Firebase user object is null after sign in.');
+    }
+    return UserModel.fromFirebaseUser(user).toUserEntity();
   }
 }

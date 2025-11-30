@@ -1,4 +1,4 @@
-import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
+import '../../../features/auth/domain/entities/user_entity.dart';
 
 abstract class AuthService {
   Future<UserEntity> signInWithEmailAndPassword({
@@ -18,6 +18,8 @@ abstract class AuthService {
   Future<void> sendEmailVerification();
 
   Future<void> forgetPassword(String email);
+}
 
+abstract class SignOutService {
   Future<void> signOut();
 }
