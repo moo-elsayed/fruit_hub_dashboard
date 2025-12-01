@@ -10,13 +10,13 @@ import '../../../domain/entities/fruit_entity.dart';
 import '../../models/fruit_model.dart';
 
 class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
+  ProductsRemoteDataSourceImp(this._databaseService, this._storageService);
+
   final DatabaseService _databaseService;
   final StorageService _storageService;
 
-  ProductsRemoteDataSourceImp(this._databaseService, this._storageService);
-
   @override
-  Future<NetworkResponse> addProduct(FruitEntity fruitEntity) async {
+  Future<NetworkResponse<void>> addProduct(FruitEntity fruitEntity) async {
     if (await _checkIfProductExists(fruitEntity.code)) {
       return NetworkFailure(Exception('Product with this code already exists'));
     }
@@ -70,12 +70,73 @@ class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
 
       return NetworkSuccess(fruits);
     } on FirebaseException catch (e) {
-      _logError(e: e);
+      AppLogger.error('error occurred in getAllProducts', error: e.toString());
       return NetworkFailure(
         Exception(ServerFailure.fromFirebaseException(e).errorMessage),
       );
     } catch (e) {
-      _logError(e: e);
+      AppLogger.error('error occurred in getAllProducts', error: e.toString());
+      return NetworkFailure(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<NetworkResponse<void>> deleteProduct(String code) async {
+    final folderPath = 'images/$code';
+    try {
+      await _storageService.deleteFolder(
+        bucketName: BackendEndpoints.bucketName,
+        path: folderPath,
+      );
+      await _databaseService.deleteData(
+        path: BackendEndpoints.deleteProduct,
+        documentId: code,
+      );
+      return const NetworkSuccess();
+    } on FirebaseException catch (e) {
+      AppLogger.error('error occurred in deleteProduct', error: e.toString());
+      return NetworkFailure(
+        Exception(ServerFailure.fromFirebaseException(e).errorMessage),
+      );
+    } catch (e) {
+      AppLogger.error('error occurred in deleteProduct', error: e.toString());
+      return NetworkFailure(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<NetworkResponse<void>> updateProduct(FruitEntity fruitEntity) async {
+    String? imageUrl;
+    try {
+      if (fruitEntity.image != null) {
+        final folderPath = 'images/${fruitEntity.code}';
+        final imagePath =
+            'images/${fruitEntity.code}/${fruitEntity.image!.name}';
+        await _storageService.deleteFolder(
+          bucketName: BackendEndpoints.bucketName,
+          path: folderPath,
+        );
+        imageUrl = await _storageService.uploadFile(
+          bucketName: BackendEndpoints.bucketName,
+          path: imagePath,
+          data: await fruitEntity.image!.readAsBytes(),
+        );
+      }
+      await _databaseService.updateData(
+        path: BackendEndpoints.updateProduct,
+        documentId: fruitEntity.code,
+        data: FruitModel.fromEntity(
+          fruitEntity,
+        ).copyWith(imagePath: imageUrl).toJson(),
+      );
+      return const NetworkSuccess();
+    } on FirebaseException catch (e) {
+      AppLogger.error('error occurred in deleteProduct', error: e.toString());
+      return NetworkFailure(
+        Exception(ServerFailure.fromFirebaseException(e).errorMessage),
+      );
+    } catch (e) {
+      AppLogger.error('error occurred in deleteProduct', error: e.toString());
       return NetworkFailure(Exception(e.toString()));
     }
   }
@@ -83,11 +144,6 @@ class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
   // -------------------------------------------------------------------
   // Private Helper Methods
   // -------------------------------------------------------------------
-
-  void _logError({
-    required Object e,
-    String functionName = "ProductRemoteDataSourceImp.getAllProducts",
-  }) => AppLogger.error("error occurred in $functionName", error: e.toString());
 
   Future<bool> _checkIfProductExists(String code) async {
     return await _databaseService.checkIfDataExists(

@@ -20,7 +20,7 @@ class ProductsGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: EdgeInsetsGeometry.symmetric(horizontal: 16.w),
-      physics: const AlwaysScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: itemCount ?? fruits?.length ?? 0,
       gridDelegate: buildSliverGridDelegateWithFixedCrossAxisCount(),
       itemBuilder: (context, index) {

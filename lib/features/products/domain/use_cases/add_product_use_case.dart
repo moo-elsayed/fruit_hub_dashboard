@@ -7,6 +7,6 @@ class AddProductUseCase {
 
   final ProductsRepo _repo;
 
-  Future<NetworkResponse> call(FruitEntity fruitEntity) async =>
+  Future<NetworkResponse<void>> call(FruitEntity fruitEntity) async =>
       await _repo.addProduct(fruitEntity);
 }

@@ -18,15 +18,15 @@ class DashboardItemEntity {
 
 List<DashboardItemEntity> getDashboardItems(BuildContext context) => [
   DashboardItemEntity(
-    title: "Add Product",
-    icon: Icons.add_box_rounded,
+    title: "Users",
+    icon: Icons.people_alt_rounded,
     color: Colors.green,
-    onTap: () => context.pushNamed(Routes.productView),
+    onTap: () => context.pushNamed(Routes.usersView),
   ),
 
   DashboardItemEntity(
-    title: "All Products",
-    icon: Icons.inventory_2_rounded,
+    title: "Products",
+    icon: Icons.shopping_bag_rounded,
     color: Colors.blue,
     onTap: () => context.pushNamed(Routes.productsView),
   ),

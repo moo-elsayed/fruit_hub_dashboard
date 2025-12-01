@@ -1,5 +1,7 @@
 class BackendEndpoints {
   static const addProduct = 'products';
+  static const deleteProduct = 'products';
+  static const updateProduct = 'products';
   static const bucketName = 'products';
   static const checkIfProductExists = 'products';
   static const getAllProducts = 'products';

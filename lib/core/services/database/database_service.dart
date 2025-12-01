@@ -1,4 +1,4 @@
-import '../storage/query_parameters.dart';
+import 'query_parameters.dart';
 
 abstract class DatabaseService {
   Future<void> addData({
@@ -35,4 +35,6 @@ abstract class DatabaseService {
     required String documentId,
     required Map<String, dynamic> data,
   });
+
+  Future<void> deleteData({required String path, required String documentId});
 }

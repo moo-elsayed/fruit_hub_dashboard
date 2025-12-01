@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_colors.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toastification/toastification.dart';
 import '../../../../core/theming/app_text_styles.dart';
@@ -15,10 +16,14 @@ class CustomProductImage extends StatefulWidget {
     super.key,
     required this.onImageSelected,
     required this.size,
+    required this.imagePath,
+    required this.onShowMyImageChanged,
   });
 
   final ValueChanged<XFile?> onImageSelected;
+  final ValueChanged<bool> onShowMyImageChanged;
   final Size size;
+  final String imagePath;
 
   @override
   State<CustomProductImage> createState() => _CustomProductImageState();
@@ -26,6 +31,7 @@ class CustomProductImage extends StatefulWidget {
 
 class _CustomProductImageState extends State<CustomProductImage> {
   XFile? _image;
+  late bool showMyImage = widget.imagePath != '';
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,7 @@ class _CustomProductImageState extends State<CustomProductImage> {
                 GestureDetector(
                   onTap: () {
                     if (_image == null) {
-                      BlocProvider.of<PickImageCubit>(context).pickImage();
+                      context.read<PickImageCubit>().pickImage();
                     }
                   },
                   child: Container(
@@ -59,8 +65,8 @@ class _CustomProductImageState extends State<CustomProductImage> {
                     width: (widget.size.width / 2),
                     decoration: BoxDecoration(
                       color: AppColors.colorEEEEEE,
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
+                      borderRadius: .circular(12.r),
+                      border: .all(
                         color: state is ImageNotPicked
                             ? AppColors.red
                             : AppColors.grey,
@@ -72,7 +78,9 @@ class _CustomProductImageState extends State<CustomProductImage> {
                             )
                           : null,
                     ),
-                    child: _image == null
+                    child: _image == null && showMyImage
+                        ? CustomNetworkImage(image: widget.imagePath)
+                        : _image == null
                         ? Icon(
                             Icons.add_a_photo,
                             size: 40,
@@ -82,18 +90,22 @@ class _CustomProductImageState extends State<CustomProductImage> {
                   ),
                 ),
                 Visibility(
-                  visible: _image != null,
+                  visible: _image != null || showMyImage,
                   child: Positioned(
                     top: 2.h,
                     right: 2.w,
                     child: GestureDetector(
                       onTap: () {
+                        if (showMyImage) {
+                          showMyImage = false;
+                          widget.onShowMyImageChanged(showMyImage);
+                        }
                         _image = null;
                         widget.onImageSelected(null);
                         context.read<PickImageCubit>().unpickImage();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(6.r),
+                        padding: .all(6.r),
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.red,
@@ -112,7 +124,7 @@ class _CustomProductImageState extends State<CustomProductImage> {
             Visibility(
               visible: state is ImageNotPicked,
               child: Padding(
-                padding: EdgeInsetsGeometry.only(top: 8.h),
+                padding: .only(top: 8.h),
                 child: Text(
                   'Please select an image',
                   style: AppTextStyles.font13color0C0D0DSemiBold.copyWith(

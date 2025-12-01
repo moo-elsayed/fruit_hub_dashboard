@@ -19,7 +19,7 @@ class ProductArgs {
   XFile? image;
   String? imageUrl;
 
-  bool get isValid => formKey.currentState!.validate() && image != null;
+  bool get isValid => formKey.currentState!.validate();
 
   void dispose() {
     nameController.dispose();

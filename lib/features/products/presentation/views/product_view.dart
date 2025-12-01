@@ -46,7 +46,7 @@ class _ProductViewState extends State<ProductView> {
         create: (_) => PickImageCubit(),
         child: ProductViewBody(
           productArgs: _productArgs,
-          isEdit: widget.fruitEntity != null,
+          imagePath: widget.fruitEntity?.imagePath ?? '',
         ),
       ),
     );

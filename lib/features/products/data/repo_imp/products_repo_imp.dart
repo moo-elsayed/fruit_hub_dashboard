@@ -4,15 +4,23 @@ import '../../domain/repo/products_repo.dart';
 import '../data_sources/remote/products_remote_data_source.dart';
 
 class ProductsRepoImp implements ProductsRepo {
-  ProductsRepoImp(this._addRemoteDataSource);
+  ProductsRepoImp(this._productsRemoteDataSource);
 
-  final ProductsRemoteDataSource _addRemoteDataSource;
+  final ProductsRemoteDataSource _productsRemoteDataSource;
 
   @override
-  Future<NetworkResponse> addProduct(FruitEntity fruitEntity) async =>
-      await _addRemoteDataSource.addProduct(fruitEntity);
+  Future<NetworkResponse<void>> addProduct(FruitEntity fruitEntity) async =>
+      await _productsRemoteDataSource.addProduct(fruitEntity);
 
   @override
   Future<NetworkResponse<List<FruitEntity>>> getAllProducts() async =>
-      await _addRemoteDataSource.getAllProducts();
+      await _productsRemoteDataSource.getAllProducts();
+
+  @override
+  Future<NetworkResponse<void>> deleteProduct(String code) async =>
+      _productsRemoteDataSource.deleteProduct(code);
+
+  @override
+  Future<NetworkResponse<void>> updateProduct(FruitEntity fruitEntity) async =>
+      _productsRemoteDataSource.updateProduct(fruitEntity);
 }

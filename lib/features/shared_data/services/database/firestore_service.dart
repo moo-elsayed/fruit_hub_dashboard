@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/services/database/database_service.dart';
-import '../../../../core/services/storage/query_parameters.dart';
+import '../../../../core/services/database/query_parameters.dart';
 
 class FirestoreService implements DatabaseService {
   FirestoreService(this._firestore);
@@ -88,5 +88,15 @@ class FirestoreService implements DatabaseService {
 
     final querySnapshot = await collection.get();
     return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  @override
+  Future<void> deleteData({
+    required String path,
+    required String documentId,
+  }) async {
+    final collection = _firestore.collection(path);
+    final docRef = collection.doc(documentId);
+    await docRef.delete();
   }
 }

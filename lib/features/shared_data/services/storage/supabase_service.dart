@@ -1,13 +1,15 @@
 import 'dart:typed_data';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:fruit_hub_dashboard/core/helpers/functions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_logger.dart';
 import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../core/helpers/image_compressor.dart';
 
 class SupabaseService implements StorageService {
-  SupabaseService(this._supabaseClient);
+  SupabaseService(this._supabaseClient, this._imageCompressor);
 
   final SupabaseClient _supabaseClient;
+  final ImageCompressor _imageCompressor;
 
   @override
   Future<String> uploadFile({
@@ -30,15 +32,15 @@ class SupabaseService implements StorageService {
     CompressFormat compressFormat = CompressFormat.png,
     int quality = 60,
   }) async {
-    final compressedBytes = await FlutterImageCompress.compressWithFile(
+    final compressedBytes = await _imageCompressor.compressWithFile(
       image.path,
       quality: quality,
       format: compressFormat,
     );
 
     if (compressedBytes == null) {
-      errorLogger(
-        functionName: "SupabaseService.uploadCompressedImage",
+      AppLogger.error(
+        "SupabaseService.uploadCompressedImage",
         error:
             "Failed to compress image at path: ${image.path}. The result was null.",
       );
@@ -59,4 +61,17 @@ class SupabaseService implements StorageService {
     required String bucketName,
     required String path,
   }) async => await _supabaseClient.storage.from(bucketName).remove([path]);
+
+  @override
+  Future<void> deleteFolder({
+    required String bucketName,
+    required String path,
+  }) async {
+    final files = await _supabaseClient.storage
+        .from(bucketName)
+        .list(path: path);
+    if (files.isEmpty) return;
+    final pathsToDelete = files.map((file) => '$path/${file.name}').toList();
+    await _supabaseClient.storage.from(bucketName).remove(pathsToDelete);
+  }
 }

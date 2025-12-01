@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fruit_hub_dashboard/core/helpers/image_compressor.dart';
 import 'package:fruit_hub_dashboard/core/services/authentication/auth_service.dart';
+import 'package:fruit_hub_dashboard/features/products/domain/use_cases/update_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/shared_data/services/database/firestore_service.dart';
 import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
 import 'package:fruit_hub_dashboard/features/shared_data/services/storage/supabase_service.dart';
@@ -19,6 +21,7 @@ import '../../features/auth/domain/use_cases/sign_out_use_case.dart';
 import '../../features/products/data/data_sources/remote/products_remote_data_source_imp.dart';
 import '../../features/products/data/repo_imp/products_repo_imp.dart';
 import '../../features/products/domain/use_cases/add_product_use_case.dart';
+import '../../features/products/domain/use_cases/delete_product_use_case.dart';
 import '../../features/products/domain/use_cases/get_products_use_case.dart';
 import '../../features/shared_data/services/authentication/firebase_auth_service.dart';
 import '../../features/shared_data/services/local_storage/shared_preferences_manager.dart';
@@ -41,8 +44,11 @@ void setupServiceLocator() {
   getIt.registerSingleton<DatabaseService>(
     FirestoreService(FirebaseFirestore.instance),
   );
+
+  getIt.registerSingleton<ImageCompressor>(ImageCompressor());
+
   getIt.registerSingleton<StorageService>(
-    SupabaseService(Supabase.instance.client),
+    SupabaseService(Supabase.instance.client, getIt.get<ImageCompressor>()),
   );
 
   getIt.registerSingleton<SignOutService>(
@@ -107,11 +113,16 @@ void setupServiceLocator() {
     ),
   );
 
+  getIt.registerSingleton<GetProductsUseCase>(
+    GetProductsUseCase(getIt.get<ProductsRepoImp>()),
+  );
   getIt.registerSingleton<AddProductUseCase>(
     AddProductUseCase(getIt.get<ProductsRepoImp>()),
   );
-
-  getIt.registerSingleton<GetProductsUseCase>(
-    GetProductsUseCase(getIt.get<ProductsRepoImp>()),
+  getIt.registerSingleton<DeleteProductUseCase>(
+    DeleteProductUseCase(getIt.get<ProductsRepoImp>()),
+  );
+  getIt.registerSingleton<UpdateProductUseCase>(
+    UpdateProductUseCase(getIt.get<ProductsRepoImp>()),
   );
 }
