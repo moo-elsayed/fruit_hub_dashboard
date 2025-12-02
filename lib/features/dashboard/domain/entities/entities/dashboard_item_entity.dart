@@ -37,10 +37,18 @@ List<DashboardItemEntity> getDashboardItems(BuildContext context) => [
     color: Colors.orange,
     onTap: () {},
   ),
+
   DashboardItemEntity(
     title: "Analytics",
     icon: Icons.bar_chart_rounded,
     color: Colors.purple,
     onTap: () {},
+  ),
+
+  DashboardItemEntity(
+    title: "Settings",
+    icon: Icons.settings_rounded,
+    color: Colors.pink,
+    onTap: () => context.pushNamed(Routes.settingsView),
   ),
 ];

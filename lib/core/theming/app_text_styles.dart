@@ -18,6 +18,13 @@ abstract class AppTextStyles {
     fontWeight: FontWeightHelper.regular,
   );
 
+  static TextStyle font13GreyRegular = TextStyle(
+    fontSize: 13.sp,
+    color: AppColors.grey,
+    fontFamily: "Cairo",
+    fontWeight: FontWeightHelper.regular,
+  );
+
   static TextStyle font13WhiteRegular = TextStyle(
     fontSize: 13.sp,
     color: AppColors.white,
@@ -132,6 +139,13 @@ abstract class AppTextStyles {
 
   static TextStyle font16color0C0D0DBold = TextStyle(
     fontSize: 16.sp,
+    color: AppColors.color0C0D0D,
+    fontFamily: "Cairo",
+    fontWeight: FontWeightHelper.bold,
+  );
+
+  static TextStyle font18color0C0D0DBold = TextStyle(
+    fontSize: 18.sp,
     color: AppColors.color0C0D0D,
     fontFamily: "Cairo",
     fontWeight: FontWeightHelper.bold,

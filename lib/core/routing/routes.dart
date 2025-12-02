@@ -7,4 +7,5 @@ class Routes {
   static const productsView = '/productsView';
   static const productView = '/productView';
   static const usersView = '/usersView';
+  static const settingsView = '/settingsView';
 }

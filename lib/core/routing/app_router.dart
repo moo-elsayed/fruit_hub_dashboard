@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
+import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
 import '../../features/products/presentation/managers/products_cubit/products_cubit.dart';
 import '../../features/products/presentation/views/product_view.dart';
@@ -50,6 +51,8 @@ class AppRouter {
         );
       case Routes.usersView:
         return CupertinoPageRoute(builder: (_) => const UsersView());
+      case Routes.settingsView:
+        return CupertinoPageRoute(builder: (_) => const SettingsView());
       default:
         return null;
     }

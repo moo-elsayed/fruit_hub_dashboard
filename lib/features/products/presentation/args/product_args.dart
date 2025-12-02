@@ -3,16 +3,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 
 class ProductArgs {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  ProductArgs()
+    : formKey = GlobalKey<FormState>(),
+      nameController = TextEditingController(),
+      priceController = TextEditingController(),
+      codeController = TextEditingController(),
+      descriptionController = TextEditingController(),
+      caloriesController = TextEditingController(),
+      unitAmountController = TextEditingController(),
+      daysUntilExpirationController = TextEditingController();
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
-  final TextEditingController codeController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController caloriesController = TextEditingController();
-  final TextEditingController unitAmountController = TextEditingController();
-  final TextEditingController daysUntilExpirationController =
-      TextEditingController();
+  final GlobalKey<FormState> formKey;
+  final TextEditingController nameController;
+  final TextEditingController priceController;
+  final TextEditingController codeController;
+  final TextEditingController descriptionController;
+  final TextEditingController caloriesController;
+  final TextEditingController unitAmountController;
+  final TextEditingController daysUntilExpirationController;
 
   bool isFeatured = false;
   bool isOrganic = false;

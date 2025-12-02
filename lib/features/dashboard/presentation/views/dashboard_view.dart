@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/dependency_injection.dart';
@@ -31,10 +32,11 @@ class DashboardView extends StatelessWidget {
           crossAxisSpacing: 16.w,
           childAspectRatio: 1.1,
         ),
-        itemBuilder: (context, index) {
-          var item = dashboardItems[index];
-          return DashboardItem(entity: item);
-        },
+        itemBuilder: (context, index) =>
+            DashboardItem(entity: dashboardItems[index])
+                .animate(delay: Duration(milliseconds: 50 * index))
+                .slideY(begin: 0.2, duration: 300.ms)
+                .fadeIn(duration: 300.ms),
       ),
     );
   }

@@ -10,4 +10,9 @@ class BackendEndpoints {
   static const checkIfEmailExists = 'users';
   static const getUserData = 'users';
   static const updateUserData = 'users';
+  static const fetchShippingCost = 'constants';
+  static const updateShippingCost = 'constants';
+
+  // -------------------------------------------
+  static const shippingConfigId = 'shipping_config';
 }

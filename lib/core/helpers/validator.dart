@@ -50,6 +50,14 @@ abstract class Validator {
     }
   }
 
+  static String? validateNumber(String? val) {
+    if (val == null || val.trim().isEmpty) {
+      return 'Number cannot be empty';
+    } else {
+      return null;
+    }
+  }
+
   static String? validatePhoneNumber(String? val) {
     if (val == null || val.trim().isEmpty) {
       return 'Phone number cannot be empty';
