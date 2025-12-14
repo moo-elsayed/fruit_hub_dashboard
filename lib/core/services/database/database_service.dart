@@ -14,6 +14,8 @@ abstract class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getAllData(String path);
 
+  Stream<List<Map<String, dynamic>>> streamAllData(String path);
+
   Future<List<Map<String, dynamic>>> queryData({
     required String path,
     required QueryParameters query,

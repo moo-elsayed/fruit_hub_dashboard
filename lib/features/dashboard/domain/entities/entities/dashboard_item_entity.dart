@@ -35,7 +35,7 @@ List<DashboardItemEntity> getDashboardItems(BuildContext context) => [
     title: "Orders",
     icon: Icons.shopping_cart_checkout_rounded,
     color: Colors.orange,
-    onTap: () {},
+    onTap: () => context.pushNamed(Routes.ordersView),
   ),
 
   DashboardItemEntity(

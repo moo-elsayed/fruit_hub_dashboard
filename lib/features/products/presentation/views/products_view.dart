@@ -6,7 +6,7 @@ import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/delete_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/widgets/products_grid_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../../../core/helpers/dependency_injection.dart';
+import '../../../../core/helpers/di.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_dialogs.dart';

@@ -138,7 +138,7 @@ class _TextFormFieldHelperState extends State<TextFormFieldHelper> {
                       ? Icons.remove_red_eye
                       : Icons.remove_red_eye_outlined,
                   color: AppColors.colorC9CECF,
-                  size: 24.r,
+                  size: 24.sp,
                 ),
               )
             : widget.suffixWidget,

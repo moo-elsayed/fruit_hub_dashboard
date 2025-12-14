@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/helpers/dependency_injection.dart';
+import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/sign_out_use_case.dart';
 import 'package:fruit_hub_dashboard/features/auth/presentation/managers/signout_cubit/sign_out_cubit.dart';
 import 'package:fruit_hub_dashboard/features/dashboard/domain/entities/entities/dashboard_item_entity.dart';

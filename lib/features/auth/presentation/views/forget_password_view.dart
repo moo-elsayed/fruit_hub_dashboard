@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extentions.dart';
 import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
-import '../../../../core/helpers/dependency_injection.dart';
+import '../../../../core/helpers/di.dart';
 import '../../../../core/helpers/validator.dart';
 import '../../../../core/theming/app_text_styles.dart';
 import '../../../../core/widgets/app_toasts.dart';

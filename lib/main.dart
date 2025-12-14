@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/env.dart';
 import 'package:fruit_hub_dashboard/simple_bloc_observer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'core/helpers/dependency_injection.dart';
+import 'core/helpers/di.dart';
 import 'core/routing/app_router.dart';
 import 'firebase_options.dart';
 import 'fruit_hub_dashboard.dart';

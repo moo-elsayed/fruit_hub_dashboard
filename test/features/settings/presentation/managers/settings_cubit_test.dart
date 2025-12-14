@@ -57,7 +57,7 @@ void main() {
           isA<FetchingShippingConfigLoading>(),
           isA<FetchingShippingConfigSuccess>().having(
             (state) => state.shippingConfigEntity.shippingCost,
-            'amount',
+            'shipping_cost',
             50.0,
           ),
         ],

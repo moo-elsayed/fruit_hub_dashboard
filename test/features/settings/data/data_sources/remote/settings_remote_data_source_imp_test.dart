@@ -13,14 +13,14 @@ void main() {
   late SettingsRemoteDataSourceImp sut;
   late MockDatabaseService mockDatabaseService;
 
-  final tShippingConfigMap = {'amount': 50.0};
+  final tShippingConfigMap = {'shipping_cost': 50.0};
 
   final tShippingConfigEntity = const ShippingConfigEntity(shippingCost: 50.0);
 
   final tShippingConfigEntityForUpdate = const ShippingConfigEntity(
     shippingCost: 70.0,
   );
-  final tExpectedJson = {'amount': 70.0};
+  final tExpectedJson = {'shipping_cost': 70.0};
 
   setUp(() {
     mockDatabaseService = MockDatabaseService();

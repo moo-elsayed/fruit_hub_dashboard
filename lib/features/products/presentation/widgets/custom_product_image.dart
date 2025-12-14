@@ -112,7 +112,7 @@ class _CustomProductImageState extends State<CustomProductImage> {
                         ),
                         child: Icon(
                           CupertinoIcons.clear,
-                          size: 12.r,
+                          size: 12.sp,
                           color: AppColors.white,
                         ),
                       ),

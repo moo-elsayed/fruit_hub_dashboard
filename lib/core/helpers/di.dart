@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_hub_dashboard/core/helpers/image_compressor.dart';
 import 'package:fruit_hub_dashboard/core/services/authentication/auth_service.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/repo/orders_repo.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/update_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/data_sources/remote/settings_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/repo_imp/settings_repo_imp.dart';
@@ -21,6 +23,8 @@ import '../../features/auth/domain/use_cases/google_sign_in_use_case.dart';
 import '../../features/auth/domain/use_cases/save_user_session_use_case.dart';
 import '../../features/auth/domain/use_cases/sign_in_with_email_and_password_use_case.dart';
 import '../../features/auth/domain/use_cases/sign_out_use_case.dart';
+import '../../features/orders/data/data_sources/remote/orders_remote_data_source_imp.dart';
+import '../../features/orders/data/repo_imp/orders_repo_imp.dart';
 import '../../features/products/data/data_sources/remote/products_remote_data_source_imp.dart';
 import '../../features/products/data/repo_imp/products_repo_imp.dart';
 import '../../features/products/domain/use_cases/add_product_use_case.dart';
@@ -141,5 +145,14 @@ void setupServiceLocator() {
 
   getIt.registerSingleton<FetchShippingConfigUseCase>(
     FetchShippingConfigUseCase(getIt.get<SettingsRepoImp>()),
+  );
+
+  /// orders
+
+  getIt.registerSingleton<OrdersRepo>(
+    OrdersRepoImp(OrdersRemoteDataSourceImp(getIt.get<DatabaseService>())),
+  );
+  getIt.registerSingleton<GetOrdersUseCase>(
+    GetOrdersUseCase(getIt.get<OrdersRepo>()),
   );
 }

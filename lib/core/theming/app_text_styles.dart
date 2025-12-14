@@ -10,6 +10,18 @@ abstract class AppTextStyles {
     fontFamily: "Cairo",
     fontWeight: FontWeightHelper.semiBold,
   );
+  static TextStyle font12GreyRegular = TextStyle(
+    fontSize: 12.sp,
+    color: AppColors.grey,
+    fontFamily: "Cairo",
+    fontWeight: FontWeightHelper.regular,
+  );
+  static TextStyle font12BlueGreyBold = TextStyle(
+    fontSize: 12.sp,
+    color: AppColors.blueGrey,
+    fontFamily: "Cairo",
+    fontWeight: FontWeightHelper.bold,
+  );
 
   static TextStyle font13color949D9ERegular = TextStyle(
     fontSize: 13.sp,

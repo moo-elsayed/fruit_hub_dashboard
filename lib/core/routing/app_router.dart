@@ -5,6 +5,7 @@ import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_enti
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
+import '../../features/orders/presentation/views/orders_view.dart';
 import '../../features/products/presentation/managers/products_cubit/products_cubit.dart';
 import '../../features/products/presentation/views/product_view.dart';
 import '../../features/splash/presentation/views/animated_splash_view.dart';
@@ -53,6 +54,10 @@ class AppRouter {
         return CupertinoPageRoute(builder: (_) => const UsersView());
       case Routes.settingsView:
         return CupertinoPageRoute(builder: (_) => const SettingsView());
+      case Routes.ordersView:
+        return CupertinoPageRoute(builder: (_) => const OrdersView());
+      // case Routes.analyticsView:
+      //   return CupertinoPageRoute(builder: (_) => const OrdersView());
       default:
         return null;
     }

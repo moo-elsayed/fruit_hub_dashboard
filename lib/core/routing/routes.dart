@@ -8,4 +8,6 @@ class Routes {
   static const productView = '/productView';
   static const usersView = '/usersView';
   static const settingsView = '/settingsView';
+  static const ordersView = '/ordersView';
+  static const analyticsView = '/analyticsView';
 }
