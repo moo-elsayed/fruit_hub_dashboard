@@ -74,7 +74,7 @@ dev_dependencies:
 
   # --- Testing ---
   mocktail: ^1.0.4
-  fake_cloud_firestore: ^4.0.0
+  fake_cloud_firestore: ^4.0.1
   bloc_test: ^10.0.0
 
   # --- Code Generation ---

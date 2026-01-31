@@ -19,8 +19,7 @@ class CustomActionButton extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return Opacity(
+  Widget build(BuildContext context) => Opacity(
       opacity: opacity ?? 1,
       child: GestureDetector(
         onTap: onTap,
@@ -31,5 +30,4 @@ class CustomActionButton extends StatelessWidget {
         ),
       ),
     );
-  }
 }

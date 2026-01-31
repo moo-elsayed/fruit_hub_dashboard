@@ -13,7 +13,7 @@ class BackendEndpoints {
   static const fetchShippingCost = 'constants';
   static const updateShippingCost = 'constants';
   static const streamOrders = 'orders';
-
+  static const updateOrderStatus = 'orders';
 
   // -------------------------------------------
   static const shippingConfigId = 'shipping_config';

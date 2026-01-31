@@ -28,8 +28,7 @@ class _ProductsViewState extends State<ProductsView> {
   List<FruitEntity> _fruits = [];
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (context) => ProductsCubit(
         getIt.get<AddProductUseCase>(),
         getIt.get<GetProductsUseCase>(),
@@ -37,10 +36,9 @@ class _ProductsViewState extends State<ProductsView> {
         getIt.get<UpdateProductUseCase>(),
       )..getProducts(),
       child: Builder(
-        builder: (context) {
-          return Scaffold(
+        builder: (context) => Scaffold(
             appBar: CustomAppBar(
-              title: "Products",
+              title: 'Products',
               showArrowBack: true,
               onTap: () => context.pop(),
             ),
@@ -56,10 +54,10 @@ class _ProductsViewState extends State<ProductsView> {
                       AppToast.showToast(
                         context: context,
                         title: state.newItemAdded
-                            ? "product added"
+                            ? 'product added'
                             : state.itemUpdated
-                            ? "product updated"
-                            : "product removed",
+                            ? 'product updated'
+                            : 'product removed',
                         type: .success,
                       );
                     }
@@ -86,7 +84,7 @@ class _ProductsViewState extends State<ProductsView> {
                       child: ProductsGridView(itemCount: 6),
                     );
                   } else {
-                    return const Center(child: Text("error"));
+                    return const Center(child: Text('error'));
                   }
                 },
               ),
@@ -102,9 +100,7 @@ class _ProductsViewState extends State<ProductsView> {
               shape: const CircleBorder(),
               child: const Icon(Icons.add),
             ),
-          );
-        },
+          ),
       ),
     );
-  }
 }

@@ -51,13 +51,12 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (context) =>
           SignupCubit(getIt.get<CreateUserWithEmailAndPasswordUseCase>()),
       child: Scaffold(
         appBar: CustomAppBar(
-          title: "New Account",
+          title: 'New Account',
           showArrowBack: true,
           onTap: () => context.pop(),
         ),
@@ -73,15 +72,15 @@ class _RegisterViewState extends State<RegisterView> {
                   Gap(24.h),
                   TextFormFieldHelper(
                     controller: _nameController,
-                    hint: "Full Name",
+                    hint: 'Full Name',
                     keyboardType: TextInputType.name,
-                    onValidate: (value) => Validator.validateName(type: "Name",val: value),
+                    onValidate: (value) => Validator.validateName(type: 'Name',val: value),
                     action: TextInputAction.next,
                   ),
                   Gap(16.h),
                   TextFormFieldHelper(
                     controller: _emailController,
-                    hint: "Email",
+                    hint: 'Email',
                     keyboardType: TextInputType.emailAddress,
                     onValidate: Validator.validateEmail,
                     action: TextInputAction.next,
@@ -89,7 +88,7 @@ class _RegisterViewState extends State<RegisterView> {
                   Gap(16.h),
                   TextFormFieldHelper(
                     controller: _passwordController,
-                    hint: "Password",
+                    hint: 'Password',
                     isPassword: true,
                     obscuringCharacter: '●',
                     keyboardType: TextInputType.visiblePassword,
@@ -106,17 +105,17 @@ class _RegisterViewState extends State<RegisterView> {
                       if (state is SignUpSuccess) {
                         AppToast.showToast(
                           context: context,
-                          title: "Account created successfully",
+                          title: 'Account created successfully',
                           type: ToastificationType.success,
                         );
                         showCupertinoDialog(
                           context: context,
                           builder: (context) => CustomDialog(
                             text:
-                                "A verification email has been sent to your inbox. Please check your email and verify your account to continue",
+                                'A verification email has been sent to your inbox. Please check your email and verify your account to continue',
                             onPressed: () {
                               context.pop();
-                              var loginArgs = LoginArgs(
+                              final loginArgs = LoginArgs(
                                 email: _emailController.text.trim(),
                                 password: _passwordController.text.trim(),
                               );
@@ -133,14 +132,13 @@ class _RegisterViewState extends State<RegisterView> {
                         );
                       }
                     },
-                    builder: (context, state) {
-                      return CustomMaterialButton(
+                    builder: (context, state) => CustomMaterialButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             if (!_agreeToTerms) {
                               AppToast.showToast(
                                 context: context,
-                                title: "You should accept terms and conditions",
+                                title: 'You should accept terms and conditions',
                                 type: ToastificationType.error,
                               );
                             } else {
@@ -156,15 +154,14 @@ class _RegisterViewState extends State<RegisterView> {
                         },
                         maxWidth: true,
                         isLoading: state is SignUpLoading,
-                        text: "Login",
+                        text: 'Login',
                         textStyle: AppTextStyles.font16WhiteBold,
-                      );
-                    },
+                      ),
                   ),
                   Gap(33.h),
                   AuthRedirectText(
-                    question: "Already have an account?",
-                    action: "Login",
+                    question: 'Already have an account?',
+                    action: 'Login',
                     onTap: () => context.pop(),
                   ),
                 ],
@@ -174,5 +171,4 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
-  }
 }

@@ -20,21 +20,6 @@ class FruitModel {
     required this.name,
   });
 
-  final String imagePath;
-  final String name;
-  final String code;
-  final String description;
-  final double price;
-  final bool isFeatured;
-  final bool isOrganic;
-  final int daysUntilExpiration;
-  final int numberOfCalories;
-  final int unitAmount;
-  final int ratingCount;
-  final int sellingCount;
-  final num avgRating;
-  final List<ReviewModel> reviews;
-
   factory FruitModel.fromJson(Map<String, dynamic> json) => FruitModel(
     name: json['name'],
     description: json['description'],
@@ -54,23 +39,6 @@ class FruitModel {
     sellingCount: json['sellingCount'],
   );
 
-  Map<String, dynamic> toJson() => {
-    'name': name,
-    'description': description,
-    'price': price,
-    'imagePath': imagePath,
-    'code': code,
-    'isFeatured': isFeatured,
-    'avgRating': avgRating,
-    'ratingCount': ratingCount,
-    'isOrganic': isOrganic,
-    'daysUntilExpiration': daysUntilExpiration,
-    'unitAmount': unitAmount,
-    'numberOfCalories': numberOfCalories,
-    'reviews': reviews.map((review) => review.toJson()).toList(),
-    'sellingCount': sellingCount,
-  };
-
   factory FruitModel.fromEntity(FruitEntity entity) => FruitModel(
     name: entity.name,
     description: entity.description,
@@ -89,6 +57,38 @@ class FruitModel {
         .toList(),
     sellingCount: 0,
   );
+
+  final String imagePath;
+  final String name;
+  final String code;
+  final String description;
+  final double price;
+  final bool isFeatured;
+  final bool isOrganic;
+  final int daysUntilExpiration;
+  final int numberOfCalories;
+  final int unitAmount;
+  final int ratingCount;
+  final int sellingCount;
+  final num avgRating;
+  final List<ReviewModel> reviews;
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'description': description,
+    'price': price,
+    'imagePath': imagePath,
+    'code': code,
+    'isFeatured': isFeatured,
+    'avgRating': avgRating,
+    'ratingCount': ratingCount,
+    'isOrganic': isOrganic,
+    'daysUntilExpiration': daysUntilExpiration,
+    'unitAmount': unitAmount,
+    'numberOfCalories': numberOfCalories,
+    'reviews': reviews.map((review) => review.toJson()).toList(),
+    'sellingCount': sellingCount,
+  };
 
   FruitEntity toEntity() => FruitEntity(
     name: name,

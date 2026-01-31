@@ -3,8 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/helpers/app_logger.dart';
 import '../../../../core/helpers/firebase_keys.dart';
 import '../../../../core/services/authentication/auth_service.dart';
-import '../../../auth/data/models/user_model.dart';
-import '../../../auth/domain/entities/user_entity.dart';
+import '../../../features/auth/data/models/user_model.dart';
+import '../../../features/auth/domain/entities/user_entity.dart';
 
 class FirebaseAuthService implements AuthService, SignOutService {
   FirebaseAuthService(this._auth, this._googleSignIn);
@@ -58,10 +58,14 @@ class FirebaseAuthService implements AuthService, SignOutService {
     await _auth.signOut();
     try {
       await _googleSignIn.disconnect();
-    } catch (e) {}
+    } catch (e) {
+      // ignore: avoid_print
+    }
     try {
       await _googleSignIn.signOut();
-    } catch (e) {}
+    } catch (e) {
+      // ignore: avoid_print
+    }
   }
 
   Future<User> _googleSignInInternal() async {
@@ -73,19 +77,19 @@ class FirebaseAuthService implements AuthService, SignOutService {
         .attemptLightweightAuthentication();
 
     if (googleUser == null) {
-      AppLogger.error("error in google sign in", error: 'No user found');
-      throw Exception("The sign-in process was canceled.");
+      AppLogger.error('error in google sign in', error: 'No user found');
+      throw Exception('The sign-in process was canceled.');
     }
 
     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
     if (googleAuth.idToken == null) {
       AppLogger.error(
-        "error in google sign in",
+        'error in google sign in',
         error: 'No idToken received from Google',
       );
       throw Exception(
-        "Could not retrieve authentication details from Google. Please try again.",
+        'Could not retrieve authentication details from Google. Please try again.',
       );
     }
 
@@ -93,7 +97,7 @@ class FirebaseAuthService implements AuthService, SignOutService {
       idToken: googleAuth.idToken,
     );
 
-    var userCredential = await _auth.signInWithCredential(credential);
+    final userCredential = await _auth.signInWithCredential(credential);
     return _returnUser(userCredential);
   }
 

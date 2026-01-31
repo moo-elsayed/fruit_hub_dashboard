@@ -1,29 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_colors.dart';
-import 'enums.dart';
+import '../enums/order_status.dart';
+import '../enums/payment_methods.dart';
 
 extension Navigation on BuildContext {
-  Future<dynamic> pushNamed(String routeName, {Object? arguments}) {
-    return Navigator.of(this).pushNamed(routeName, arguments: arguments);
-  }
+  Future<dynamic> pushNamed(String routeName, {Object? arguments}) =>
+      Navigator.of(this).pushNamed(routeName, arguments: arguments);
 
-  Future<dynamic> pushReplacementNamed(String routeName, {Object? arguments}) {
-    return Navigator.of(
-      this,
-    ).pushReplacementNamed(routeName, arguments: arguments);
-  }
+  Future<dynamic> pushReplacementNamed(String routeName, {Object? arguments}) =>
+      Navigator.of(this).pushReplacementNamed(routeName, arguments: arguments);
 
   Future<dynamic> pushNamedAndRemoveUntil(
     String routeName, {
     Object? arguments,
     required RoutePredicate predicate,
     bool rootNavigator = false,
-  }) {
-    return Navigator.of(
-      this,
-      rootNavigator: rootNavigator,
-    ).pushNamedAndRemoveUntil(routeName, predicate, arguments: arguments);
-  }
+  }) => Navigator.of(
+    this,
+    rootNavigator: rootNavigator,
+  ).pushNamedAndRemoveUntil(routeName, predicate, arguments: arguments);
 
   void pop<T extends Object?>([T? result]) => Navigator.of(this).pop(result);
 }
@@ -42,7 +37,7 @@ extension PaymentMethodTypeExtension on PaymentMethodType {
 }
 
 extension OrderStatusExtension on OrderStatus {
-  String get name {
+  String get getName {
     switch (this) {
       case .pending:
         return 'Pending';
@@ -73,4 +68,23 @@ extension OrderStatusExtension on OrderStatus {
   }
 
   Color get containerColor => color.withValues(alpha: 0.1);
+}
+
+extension OrderStatusFromStringExtension on String {
+  OrderStatus get toOrderStatus {
+    switch (this) {
+      case 'Pending':
+        return .pending;
+      case 'Processing':
+        return .processing;
+      case 'Shipped':
+        return .shipped;
+      case 'Delivered':
+        return .delivered;
+      case 'Cancelled':
+        return .cancelled;
+      default:
+        return .pending;
+    }
+  }
 }

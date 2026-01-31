@@ -20,8 +20,7 @@ class CustomDashboardAppBar extends StatelessWidget
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<SignOutCubit, SignOutState>(
+  Widget build(BuildContext context) => BlocListener<SignOutCubit, SignOutState>(
       listener: (context, state) {
         if (state is SignOutSuccess) {
           AppToast.showToast(
@@ -61,7 +60,7 @@ class CustomDashboardAppBar extends StatelessWidget
                   textConfirmButton: 'Yes',
                   textCancelButton: 'No',
                   onConfirm: () async {
-                    SignOutService signOutService = context
+                    final SignOutService signOutService = context
                         .read<SignOutCubit>();
                     signOutService.signOut();
                   },
@@ -74,5 +73,4 @@ class CustomDashboardAppBar extends StatelessWidget
         ],
       ),
     );
-  }
 }

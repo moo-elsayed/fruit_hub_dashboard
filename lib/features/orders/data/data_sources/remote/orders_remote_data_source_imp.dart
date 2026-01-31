@@ -1,3 +1,5 @@
+import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extentions.dart';
 import 'package:fruit_hub_dashboard/core/helpers/functions.dart';
 import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
 import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
@@ -14,16 +16,36 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
   @override
   Stream<NetworkResponse<List<OrderEntity>>> getOrders() async* {
     try {
-      yield* _databaseService.streamAllData(BackendEndpoints.streamOrders).map((
-        orders,
-      ) {
+      final stream = _databaseService.streamAllData(
+        path: BackendEndpoints.streamOrders,
+        includeDocId: true,
+      );
+
+      await for (final orders in stream) {
         final orderEntities = orders
             .map((e) => OrderModel.fromJson(e).toEntity())
             .toList();
-        return NetworkSuccess<List<OrderEntity>>(orderEntities);
-      });
+        yield NetworkSuccess<List<OrderEntity>>(orderEntities);
+      }
     } catch (e) {
       yield handleError<List<OrderEntity>>(e, 'getOrders');
+    }
+  }
+
+  @override
+  Future<NetworkResponse<void>> updateOrderStatus(
+    String docId,
+    OrderStatus status,
+  ) async {
+    try {
+      await _databaseService.updateData(
+        path: BackendEndpoints.updateOrderStatus,
+        documentId: docId,
+        data: {'status': status.getName},
+      );
+      return const NetworkSuccess<void>();
+    } catch (e) {
+      return handleError<void>(e, 'updateOrderStatus');
     }
   }
 }

@@ -3,15 +3,15 @@ import '../../../../core/services/local_storage/local_storage_service.dart';
 import '../entities/user_entity.dart';
 
 class SaveUserSessionUseCase {
-  final LocalStorageService _localStorageService;
 
   SaveUserSessionUseCase(this._localStorageService);
+  final LocalStorageService _localStorageService;
 
   Future<void> call(UserEntity user) async {
     try {
       await _localStorageService.setLoggedIn(true);
     } catch (e) {
-      AppLogger.error("error in save user session", error: e.toString());
+      AppLogger.error('error in save user session', error: e.toString());
       throw Exception('Failed to save user session');
     }
   }

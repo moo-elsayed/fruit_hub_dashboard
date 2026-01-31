@@ -21,8 +21,7 @@ class SocialLoginButton extends StatelessWidget {
   final String text;
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
+  Widget build(BuildContext context) => Stack(
       alignment: AlignmentDirectional.centerStart,
       children: [
         CustomMaterialButton(
@@ -38,5 +37,4 @@ class SocialLoginButton extends StatelessWidget {
         if (!isLoading) Positioned(left: 16.w, child: socialIcon),
       ],
     );
-  }
 }

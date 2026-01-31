@@ -20,7 +20,7 @@ void main() {
   late MockFetchShippingConfigUseCase mockFetchShippingConfigUseCase;
   late MockUpdateShippingConfigUseCase mockUpdateShippingConfigUseCase;
 
-  final tShippingConfig = const ShippingConfigEntity(shippingCost: 50.0);
+  const tShippingConfig = ShippingConfigEntity(shippingCost: 50.0);
   final tException = Exception('Something went wrong');
 
   setUpAll(() {
@@ -49,7 +49,7 @@ void main() {
         build: () => sut,
         setUp: () {
           when(() => mockFetchShippingConfigUseCase.call()).thenAnswer(
-            (_) async => NetworkSuccess<ShippingConfigEntity>(tShippingConfig),
+            (_) async => const NetworkSuccess<ShippingConfigEntity>(tShippingConfig),
           );
         },
         act: (cubit) => cubit.fetchShippingConfig(),

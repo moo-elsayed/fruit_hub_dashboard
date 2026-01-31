@@ -10,9 +10,9 @@ void main() {
   late DeleteProductUseCase sut;
   late MockProductsRepo mockProductsRepo;
 
-  final tCode = '004029';
+  const tCode = '004029';
   final tException = Exception('DataSource error');
-  final tSuccessResponseOfTypeVoid = const NetworkSuccess<void>(null);
+  const tSuccessResponseOfTypeVoid = NetworkSuccess<void>(null);
   final tFailureResponseOfTypeVoid = NetworkFailure<void>(tException);
 
   setUp(() {

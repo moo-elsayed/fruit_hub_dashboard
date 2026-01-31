@@ -16,7 +16,7 @@ class SocialSignInCubit extends Cubit<SocialSignInState> {
 
   Future<void> googleSignIn() async {
     emit(GoogleLoading());
-    var result = await _googleSignInUseCase.call();
+    final result = await _googleSignInUseCase.call();
     switch (result) {
       case NetworkSuccess<UserEntity>():
         emit(GoogleSuccess());

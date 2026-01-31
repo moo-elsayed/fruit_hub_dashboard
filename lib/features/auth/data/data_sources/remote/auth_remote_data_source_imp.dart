@@ -39,13 +39,13 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
 
       return NetworkSuccess(userModel.toUserEntity());
     } on FirebaseAuthException catch (e) {
-      if (e.code != "email-already-in-use") {
+      if (e.code != 'email-already-in-use') {
         await _authService.deleteCurrentUser();
       }
-      return _handleAuthError(e, "createUserWithEmailAndPassword");
+      return _handleAuthError(e, 'createUserWithEmailAndPassword');
     } catch (e) {
       await _authService.deleteCurrentUser();
-      return _handleAuthError(e, "createUserWithEmailAndPassword");
+      return _handleAuthError(e, 'createUserWithEmailAndPassword');
     }
   }
 
@@ -69,14 +69,14 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
 
       if (!await _checkIfIsAdmin(userEntity.uid)) {
         return NetworkFailure(
-          Exception("Access Denied: You are not an admin."),
+          Exception('Access Denied: You are not an admin.'),
         );
       }
 
       final updatedUser = await _getOrUpdateUserFromDB(userEntity);
       return NetworkSuccess(updatedUser);
     } catch (e) {
-      return _handleAuthError(e, "signInWithEmailAndPassword");
+      return _handleAuthError(e, 'signInWithEmailAndPassword');
     }
   }
 
@@ -87,7 +87,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       final updatedUser = await _getOrUpdateUserFromDB(userEntity);
       return NetworkSuccess(updatedUser);
     } catch (e) {
-      return _handleAuthError(e, "googleSignIn");
+      return _handleAuthError(e, 'googleSignIn');
     }
   }
 
@@ -98,7 +98,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       return const NetworkSuccess();
     } else {
       return NetworkFailure(
-        Exception("No user found with that email address."),
+        Exception('No user found with that email address.'),
       );
     }
   }
@@ -109,7 +109,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       await _signOutService.signOut();
       return const NetworkSuccess();
     } catch (e) {
-      return _handleAuthError(e, "signOut");
+      return _handleAuthError(e, 'signOut');
     }
   }
 
@@ -118,7 +118,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   // -------------------------------------------------------------------
 
   NetworkFailure<T> _handleAuthError<T>(Object e, String functionName) {
-    AppLogger.error("error occurred in $functionName", error: e);
+    AppLogger.error('error occurred in $functionName', error: e);
     if (e is FirebaseAuthException) {
       return NetworkFailure(
         Exception(ServerFailure.fromFirebaseException(e).errorMessage),

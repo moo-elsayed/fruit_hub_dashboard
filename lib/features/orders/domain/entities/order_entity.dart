@@ -1,11 +1,12 @@
-import 'package:fruit_hub_dashboard/core/helpers/enums.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_item_entity.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/payment_option_entity.dart';
+import '../../../../core/enums/order_status.dart';
 import 'address_entity.dart';
 
 class OrderEntity {
   OrderEntity({
     this.uid = '',
+    this.docId = '',
     this.orderId = 0,
     this.products = const [],
     this.address = const AddressEntity(),
@@ -15,6 +16,7 @@ class OrderEntity {
   });
 
   final String uid;
+  final String docId;
   final int orderId;
   final List<OrderItemEntity> products;
   final AddressEntity address;

@@ -10,7 +10,7 @@ class MockProductsRepo extends Mock implements ProductsRepo {}
 void main() {
   late AddProductUseCase sut;
   late MockProductsRepo mockProductsRepo;
-  var fruitEntity = const FruitEntity(
+  const fruitEntity = FruitEntity(
     code: '004029',
     name: 'Fruit',
     price: 10.0,
@@ -19,7 +19,7 @@ void main() {
   );
 
   final tException = Exception('DataSource error');
-  final tSuccessResponseOfTypeVoid = const NetworkSuccess<void>(null);
+  const tSuccessResponseOfTypeVoid = NetworkSuccess<void>(null);
   final tFailureResponseOfTypeVoid = NetworkFailure<void>(tException);
 
   setUpAll(() {

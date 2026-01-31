@@ -8,20 +8,18 @@ class PricePerKilo extends StatelessWidget {
   final double price;
 
   @override
-  Widget build(BuildContext context) {
-    return RichText(
+  Widget build(BuildContext context) => RichText(
       text: TextSpan(
         children: [
           TextSpan(
-            text: "${getPrice(price)} pounds",
+            text: '${getPrice(price)} pounds',
             style: AppTextStyles.font13colorF4A91FSemiBold,
           ),
           TextSpan(
-            text: " / kilo",
+            text: ' / kilo',
             style: AppTextStyles.font13colorF8C76DSemiBold,
           ),
         ],
       ),
     );
-  }
 }

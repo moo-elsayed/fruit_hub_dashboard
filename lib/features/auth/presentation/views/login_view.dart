@@ -74,8 +74,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
+  Widget build(BuildContext context) => MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) =>
@@ -87,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
         ),
       ],
       child: Scaffold(
-        appBar: const CustomAppBar(title: "Login"),
+        appBar: const CustomAppBar(title: 'Login'),
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
           behavior: HitTestBehavior.opaque,
@@ -100,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
                   Gap(24.h),
                   TextFormFieldHelper(
                     controller: _emailController,
-                    hint: "Email",
+                    hint: 'Email',
                     keyboardType: TextInputType.emailAddress,
                     onValidate: Validator.validateEmail,
                     action: TextInputAction.next,
@@ -108,7 +107,7 @@ class _LoginViewState extends State<LoginView> {
                   Gap(16.h),
                   TextFormFieldHelper(
                     controller: _passwordController,
-                    hint: "Password",
+                    hint: 'Password',
                     isPassword: true,
                     obscuringCharacter: '●',
                     keyboardType: TextInputType.visiblePassword,
@@ -128,7 +127,7 @@ class _LoginViewState extends State<LoginView> {
                       if (state is SignInSuccess) {
                         AppToast.showToast(
                           context: context,
-                          title: "Welcome",
+                          title: 'Welcome',
                           type: ToastificationType.success,
                         );
                         context.pushReplacementNamed(Routes.dashboardView);
@@ -141,8 +140,7 @@ class _LoginViewState extends State<LoginView> {
                         );
                       }
                     },
-                    builder: (context, state) {
-                      return CustomMaterialButton(
+                    builder: (context, state) => CustomMaterialButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             context
@@ -154,16 +152,15 @@ class _LoginViewState extends State<LoginView> {
                           }
                         },
                         maxWidth: true,
-                        text: "Login",
+                        text: 'Login',
                         textStyle: AppTextStyles.font16WhiteBold,
                         isLoading: state is SignInLoading,
-                      );
-                    },
+                      ),
                   ),
                   Gap(33.h),
                   AuthRedirectText(
                     question: "Don't have an account?",
-                    action: "Create an account",
+                    action: 'Create an account',
                     onTap: () async => await _navigate(
                       context: context,
                       routeName: Routes.registerView,
@@ -177,7 +174,7 @@ class _LoginViewState extends State<LoginView> {
                       if (state is GoogleSuccess) {
                         AppToast.showToast(
                           context: context,
-                          title: "Welcome",
+                          title: 'Welcome',
                           type: ToastificationType.success,
                         );
                         context.pushReplacementNamed(Routes.dashboardView);
@@ -194,15 +191,13 @@ class _LoginViewState extends State<LoginView> {
                         current is GoogleSuccess ||
                         current is GoogleFailure ||
                         current is GoogleLoading,
-                    builder: (context, state) {
-                      return SocialLoginButton(
+                    builder: (context, state) => SocialLoginButton(
                         onPressed: () =>
                             context.read<SocialSignInCubit>().googleSignIn(),
                         isLoading: state is GoogleLoading,
-                        text: "Sign in with Google",
+                        text: 'Sign in with Google',
                         socialIcon: SvgPicture.asset(Assets.iconsGoogleIcon),
-                      );
-                    },
+                      ),
                   ),
                 ],
               ),
@@ -211,5 +206,4 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
-  }
 }

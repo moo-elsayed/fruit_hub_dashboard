@@ -10,8 +10,7 @@ class DashboardItem extends StatelessWidget {
   final DashboardItemEntity entity;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: entity.onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -34,5 +33,4 @@ class DashboardItem extends StatelessWidget {
         ),
       ),
     );
-  }
 }

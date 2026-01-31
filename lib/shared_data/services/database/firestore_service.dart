@@ -69,10 +69,21 @@ class FirestoreService implements DatabaseService {
   }
 
   @override
-  Stream<List<Map<String, dynamic>>> streamAllData(String path) =>
-      _firestore.collection(path).snapshots().map((snapshot) {
-        return snapshot.docs.map((doc) => doc.data()).toList();
-      });
+  Stream<List<Map<String, dynamic>>> streamAllData({
+    required String path,
+    bool includeDocId = false,
+  }) => _firestore
+      .collection(path)
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs.map((doc) {
+          final data = doc.data();
+          if (includeDocId) {
+            data['docId'] = doc.id;
+          }
+          return data;
+        }).toList(),
+      );
 
   @override
   Future<List<Map<String, dynamic>>> queryData({

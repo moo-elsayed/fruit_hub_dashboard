@@ -14,17 +14,17 @@ void main() {
   late SettingsRepoImp sut;
   late MockSettingsRemoteDataSource mockSettingsRemoteDataSource;
 
-  final tShippingConfigEntity = const ShippingConfigEntity(shippingCost: 50.0);
-  final tShippingConfigEntityForUpdate = const ShippingConfigEntity(
+  const tShippingConfigEntity = ShippingConfigEntity(shippingCost: 50.0);
+  const tShippingConfigEntityForUpdate = ShippingConfigEntity(
     shippingCost: 70.0,
   );
 
-  final tSuccessResponseOfTypeShippingConfigEntity =
+  const tSuccessResponseOfTypeShippingConfigEntity =
       NetworkSuccess<ShippingConfigEntity>(tShippingConfigEntity);
   final tFailureResponseOfTypeShippingConfigEntity =
-      NetworkFailure<ShippingConfigEntity>(Exception("permission-denied"));
+      NetworkFailure<ShippingConfigEntity>(Exception('permission-denied'));
 
-  final tSuccessResponseOfTypeVoid = const NetworkSuccess<void>(null);
+  const tSuccessResponseOfTypeVoid = NetworkSuccess<void>(null);
   final tFailureResponseOfTypeVoid = NetworkFailure<void>(
     FirebaseException(plugin: '', message: 'Permission denied'),
   );
@@ -38,8 +38,8 @@ void main() {
     sut = SettingsRepoImp(mockSettingsRemoteDataSource);
   });
 
-  group("SettingsRepoImp", () {
-    group("fetchShippingConfig", () {
+  group('SettingsRepoImp', () {
+    group('fetchShippingConfig', () {
       test(
         'should return NetworkSuccess when fetchShippingConfig is successful',
         () async {
@@ -76,7 +76,7 @@ void main() {
         },
       );
     });
-    group("updateShippingConfig", () {
+    group('updateShippingConfig', () {
       test(
         'should return NetworkSuccess when updateShippingConfig is successful',
         () async {

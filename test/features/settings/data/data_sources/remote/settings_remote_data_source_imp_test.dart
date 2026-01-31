@@ -15,9 +15,9 @@ void main() {
 
   final tShippingConfigMap = {'shipping_cost': 50.0};
 
-  final tShippingConfigEntity = const ShippingConfigEntity(shippingCost: 50.0);
+  const tShippingConfigEntity = ShippingConfigEntity(shippingCost: 50.0);
 
-  final tShippingConfigEntityForUpdate = const ShippingConfigEntity(
+  const tShippingConfigEntityForUpdate = ShippingConfigEntity(
     shippingCost: 70.0,
   );
   final tExpectedJson = {'shipping_cost': 70.0};
@@ -27,8 +27,8 @@ void main() {
     sut = SettingsRemoteDataSourceImp(mockDatabaseService);
   });
 
-  group("SettingsRemoteDataSourceImp", () {
-    group("fetchShippingConfig", () {
+  group('SettingsRemoteDataSourceImp', () {
+    group('fetchShippingConfig', () {
       test(
         'should return ShippingConfigEntity when database call is successful',
         () async {
@@ -80,7 +80,7 @@ void main() {
         ).called(1);
       });
     });
-    group("updateShippingConfig", () {
+    group('updateShippingConfig', () {
       test(
         'should return NetworkSuccess when database update is successful',
         () async {

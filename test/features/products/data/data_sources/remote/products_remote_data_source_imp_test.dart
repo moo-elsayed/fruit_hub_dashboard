@@ -376,7 +376,7 @@ void main() {
     });
 
     group('updateProduct', () {
-      final tFruitEntityNoImage = const FruitEntity(
+      const tFruitEntityNoImage = FruitEntity(
         code: tCode,
         name: 'Updated Name',
         price: 150,

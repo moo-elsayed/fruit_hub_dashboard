@@ -11,13 +11,13 @@ void main() {
   late UpdateShippingConfigUseCase sut;
   late MockSettingsRepo mockSettingsRepo;
 
-  final tShippingConfigEntityForUpdate = const ShippingConfigEntity(
+  const tShippingConfigEntityForUpdate = ShippingConfigEntity(
     shippingCost: 70.0,
   );
 
-  final tSuccessResponseOfTypeVoid = const NetworkSuccess<void>(null);
+  const tSuccessResponseOfTypeVoid = NetworkSuccess<void>(null);
   final tFailureResponseOfTypeVoid = NetworkFailure<void>(
-    Exception("permission-denied"),
+    Exception('permission-denied'),
   );
 
   setUpAll(() {
@@ -29,7 +29,7 @@ void main() {
     sut = UpdateShippingConfigUseCase(mockSettingsRepo);
   });
 
-  group("UpdateShippingConfigUseCase", () {
+  group('UpdateShippingConfigUseCase', () {
     test(
       'should return NetworkSuccess when updateShippingConfig is successful',
       () async {

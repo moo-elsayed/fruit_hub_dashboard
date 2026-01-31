@@ -1,4 +1,4 @@
-import '../../../../core/helpers/enums.dart';
+import '../../../../core/enums/payment_methods.dart';
 
 class PaymentOptionEntity {
   const PaymentOptionEntity({

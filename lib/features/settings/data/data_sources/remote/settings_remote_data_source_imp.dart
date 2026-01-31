@@ -20,7 +20,7 @@ class SettingsRemoteDataSourceImp implements SettingsRemoteDataSource {
         path: BackendEndpoints.fetchShippingCost,
         documentId: BackendEndpoints.shippingConfigId,
       );
-      var shippingConfigEntity = ShippingConfigModel.fromJson(
+      final shippingConfigEntity = ShippingConfigModel.fromJson(
         response,
       ).toEntity();
       return NetworkSuccess(shippingConfigEntity);
@@ -46,7 +46,7 @@ class SettingsRemoteDataSourceImp implements SettingsRemoteDataSource {
     ShippingConfigEntity shippingConfigEntity,
   ) async {
     try {
-      var shippingConfigModel = ShippingConfigModel.fromEntity(
+      final shippingConfigModel = ShippingConfigModel.fromEntity(
         shippingConfigEntity,
       );
       await _databaseService.updateData(

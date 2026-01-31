@@ -14,7 +14,10 @@ abstract class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getAllData(String path);
 
-  Stream<List<Map<String, dynamic>>> streamAllData(String path);
+  Stream<List<Map<String, dynamic>>> streamAllData({
+    required String path,
+    bool includeDocId = false,
+  });
 
   Future<List<Map<String, dynamic>>> queryData({
     required String path,

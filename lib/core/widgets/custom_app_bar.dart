@@ -23,8 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  Widget build(BuildContext context) {
-    return AppBar(
+  Widget build(BuildContext context) => AppBar(
       leading: showArrowBack
           ? Padding(
               padding: EdgeInsetsDirectional.only(start: 16.w),
@@ -34,5 +33,4 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title, style: AppTextStyles.font19color0C0D0DBold),
       centerTitle: centerTitle,
     );
-  }
 }

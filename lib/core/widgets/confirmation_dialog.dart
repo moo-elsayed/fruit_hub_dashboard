@@ -19,8 +19,7 @@ class ConfirmationDialog extends StatelessWidget {
   final String? textOkButton;
 
   @override
-  Widget build(BuildContext context) {
-    return CupertinoAlertDialog(
+  Widget build(BuildContext context) => CupertinoAlertDialog(
       title: Text(
         delete ? 'Delete Confirmation' : 'Confirmation',
         style: GoogleFonts.lato(),
@@ -55,5 +54,4 @@ class ConfirmationDialog extends StatelessWidget {
         ),
       ],
     );
-  }
 }

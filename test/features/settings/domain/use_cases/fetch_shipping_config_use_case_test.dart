@@ -11,18 +11,18 @@ void main() {
   late FetchShippingConfigUseCase sut;
   late MockSettingsRepo mockSettingsRepo;
 
-  final tShippingConfigEntity = const ShippingConfigEntity(shippingCost: 50.0);
-  final tSuccessResponseOfTypeShippingConfigEntity =
+  const tShippingConfigEntity = ShippingConfigEntity(shippingCost: 50.0);
+  const tSuccessResponseOfTypeShippingConfigEntity =
       NetworkSuccess<ShippingConfigEntity>(tShippingConfigEntity);
   final tFailureResponseOfTypeShippingConfigEntity =
-      NetworkFailure<ShippingConfigEntity>(Exception("permission-denied"));
+      NetworkFailure<ShippingConfigEntity>(Exception('permission-denied'));
 
   setUp(() {
     mockSettingsRepo = MockSettingsRepo();
     sut = FetchShippingConfigUseCase(mockSettingsRepo);
   });
 
-  group("FetchShippingConfigUseCase", () {
+  group('FetchShippingConfigUseCase', () {
     test(
       'should return NetworkSuccess when fetchShippingConfig is successful',
       () async {

@@ -27,7 +27,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   Future<void> addProduct(FruitEntity fruit) async {
     emit(ProductsLoading(newItemAdded: true));
-    var networkResponse = await _addProductUseCase.call(fruit);
+    final networkResponse = await _addProductUseCase.call(fruit);
     switch (networkResponse) {
       case NetworkSuccess():
         await getProducts(newItemAdded: true, needLoading: false);
@@ -45,7 +45,7 @@ class ProductsCubit extends Cubit<ProductsState> {
     if (needLoading) {
       emit(ProductsLoading());
     }
-    var networkResponse = await _getAllProductsUseCase.call();
+    final networkResponse = await _getAllProductsUseCase.call();
     switch (networkResponse) {
       case NetworkSuccess<List<FruitEntity>>():
         _fruits = networkResponse.data!;
@@ -57,7 +57,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   Future<void> deleteProduct(String code) async {
     emit(ProductsLoading(itemRemoved: true));
-    var networkResponse = await _deleteProductUseCase.call(code);
+    final networkResponse = await _deleteProductUseCase.call(code);
     switch (networkResponse) {
       case NetworkSuccess():
         await getProducts(itemRemoved: true, needLoading: false);
@@ -68,7 +68,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   Future<void> updateProduct(FruitEntity fruit) async {
     emit(ProductsLoading(itemUpdated: true));
-    var networkResponse = await _updateProductUseCase.call(fruit);
+    final networkResponse = await _updateProductUseCase.call(fruit);
     switch (networkResponse) {
       case NetworkSuccess():
         await getProducts(itemUpdated: true, needLoading: false);

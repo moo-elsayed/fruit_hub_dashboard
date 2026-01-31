@@ -42,10 +42,9 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: CustomAppBar(
-        title: "Password Reset",
+        title: 'Password Reset',
         showArrowBack: true,
         onTap: () => context.pop(),
       ),
@@ -69,7 +68,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   Gap(30.h),
                   TextFormFieldHelper(
                     controller: _emailController,
-                    hint: "Email",
+                    hint: 'Email',
                     keyboardType: TextInputType.emailAddress,
                     onValidate: Validator.validateEmail,
                     action: TextInputAction.done,
@@ -80,19 +79,19 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                       if (state is ForgetPasswordSuccess) {
                         AppToast.showToast(
                           context: context,
-                          title: "Email Sent Successfully",
+                          title: 'Email Sent Successfully',
                           type: ToastificationType.success,
                         );
                         showCupertinoDialog(
                           context: context,
                           builder: (context) => CustomDialog(
                             text:
-                                "An email has been sent to your address with instructions to reset your password.",
+                                'An email has been sent to your address with instructions to reset your password.',
                             onPressed: () {
                               context.pop();
-                              var loginArgs = LoginArgs(
+                              final loginArgs = LoginArgs(
                                 email: _emailController.text.trim(),
-                                password: "",
+                                password: '',
                               );
                               context.pop(loginArgs);
                             },
@@ -107,8 +106,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                         );
                       }
                     },
-                    builder: (context, state) {
-                      return CustomMaterialButton(
+                    builder: (context, state) => CustomMaterialButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             context.read<ForgetPasswordCubit>().forgetPassword(
@@ -117,11 +115,10 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           }
                         },
                         maxWidth: true,
-                        text: "Reset Password",
+                        text: 'Reset Password',
                         textStyle: AppTextStyles.font16WhiteBold,
                         isLoading: state is ForgetPasswordLoading,
-                      );
-                    },
+                      ),
                   ),
                 ],
               ),
@@ -130,5 +127,4 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
         ),
       ),
     );
-  }
 }

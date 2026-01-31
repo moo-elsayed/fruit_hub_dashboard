@@ -14,8 +14,7 @@ class TermsAndConditions extends StatefulWidget {
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 16.w,
       children: [
@@ -25,12 +24,12 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "By creating an account, you agree to",
+                  text: 'By creating an account, you agree to',
                   style: AppTextStyles.font13color949D9ESemiBold,
                 ),
                 const TextSpan(text: ' '),
                 TextSpan(
-                  text: "Our Terms and Conditions",
+                  text: 'Our Terms and Conditions',
                   style: AppTextStyles.font13color2D9F5DSemiBold,
                 ),
               ],
@@ -39,5 +38,4 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         ),
       ],
     );
-  }
 }

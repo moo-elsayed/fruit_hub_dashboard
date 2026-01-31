@@ -49,8 +49,7 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
       behavior: .opaque,
       child: Container(
@@ -72,23 +71,21 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
             crossAxisAlignment: .start,
             spacing: 16.h,
             children: [
-              Text("Delivery Fees", style: AppTextStyles.font16color0C0D0DBold),
+              Text('Delivery Fees', style: AppTextStyles.font16color0C0D0DBold),
               ValueListenableBuilder<double>(
                 valueListenable: _shippingCostNotifier,
-                builder: (context, value, child) {
-                  return TextFormFieldHelper(
+                builder: (context, value, child) => TextFormFieldHelper(
                     controller: _shippingCostController,
                     onValidate: Validator.validateNumber,
                     hint: value.toString(),
                     suffixWidget: Column(
                       mainAxisAlignment: .center,
                       children: [
-                        Text("EGP", style: AppTextStyles.font13GreyRegular),
+                        Text('EGP', style: AppTextStyles.font13GreyRegular),
                       ],
                     ),
                     keyboardType: const .numberWithOptions(decimal: true),
-                  );
-                },
+                  ),
               ),
               Gap(8.h),
               Align(
@@ -99,7 +96,7 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
                       _updateCurrentShippingCost();
                       AppToast.showToast(
                         context: context,
-                        title: "Success",
+                        title: 'Success',
                         type: .success,
                       );
                     }
@@ -108,11 +105,10 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
                       current is UpdatingShippingConfigSuccess ||
                       current is UpdatingShippingConfigFailure ||
                       current is UpdatingShippingConfigLoading,
-                  builder: (context, state) {
-                    return CustomMaterialButton(
+                  builder: (context, state) => CustomMaterialButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          var cost = double.parse(_shippingCostController.text);
+                          final cost = double.parse(_shippingCostController.text);
                           if (cost == currentShippingCost) {
                             return;
                           }
@@ -122,10 +118,9 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
                         }
                       },
                       isLoading: state is UpdatingShippingConfigLoading,
-                      text: "Save Changes",
+                      text: 'Save Changes',
                       textStyle: AppTextStyles.font16WhiteBold,
-                    );
-                  },
+                    ),
                 ),
               ),
             ],
@@ -133,5 +128,4 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
         ),
       ),
     );
-  }
 }

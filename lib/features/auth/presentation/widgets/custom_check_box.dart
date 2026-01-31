@@ -17,8 +17,7 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
   bool _agreeToTerms = false;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: () {
         setState(() {
           _agreeToTerms = !_agreeToTerms;
@@ -51,5 +50,4 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
             : null,
       ),
     );
-  }
 }

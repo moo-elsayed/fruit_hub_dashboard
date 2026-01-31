@@ -14,8 +14,7 @@ class CustomDialog extends StatelessWidget {
   final void Function() onPressed;
 
   @override
-  Widget build(BuildContext context) {
-    return PopScope(
+  Widget build(BuildContext context) => PopScope(
       canPop: false,
       child: Dialog(
         elevation: 0,
@@ -40,7 +39,7 @@ class CustomDialog extends StatelessWidget {
               Gap(16.h),
               CustomMaterialButton(
                 onPressed: onPressed,
-                text: "OK",
+                text: 'OK',
                 maxWidth: true,
                 textStyle: AppTextStyles.font16WhiteBold,
               ),
@@ -49,5 +48,4 @@ class CustomDialog extends StatelessWidget {
         ),
       ),
     );
-  }
 }

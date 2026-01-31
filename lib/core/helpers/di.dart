@@ -8,9 +8,7 @@ import 'package:fruit_hub_dashboard/features/products/domain/use_cases/update_pr
 import 'package:fruit_hub_dashboard/features/settings/data/data_sources/remote/settings_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/repo_imp/settings_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/update_shipping_config_use_case.dart';
-import 'package:fruit_hub_dashboard/features/shared_data/services/database/firestore_service.dart';
 import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
-import 'package:fruit_hub_dashboard/features/shared_data/services/storage/supabase_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,14 +23,17 @@ import '../../features/auth/domain/use_cases/sign_in_with_email_and_password_use
 import '../../features/auth/domain/use_cases/sign_out_use_case.dart';
 import '../../features/orders/data/data_sources/remote/orders_remote_data_source_imp.dart';
 import '../../features/orders/data/repo_imp/orders_repo_imp.dart';
+import '../../features/orders/domain/use_cases/update_order_status_use_case.dart';
 import '../../features/products/data/data_sources/remote/products_remote_data_source_imp.dart';
 import '../../features/products/data/repo_imp/products_repo_imp.dart';
 import '../../features/products/domain/use_cases/add_product_use_case.dart';
 import '../../features/products/domain/use_cases/delete_product_use_case.dart';
 import '../../features/products/domain/use_cases/get_products_use_case.dart';
 import '../../features/settings/domain/use_cases/fetch_shipping_config_use_case.dart';
-import '../../features/shared_data/services/authentication/firebase_auth_service.dart';
-import '../../features/shared_data/services/local_storage/shared_preferences_manager.dart';
+import '../../shared_data/services/authentication/firebase_auth_service.dart';
+import '../../shared_data/services/database/firestore_service.dart';
+import '../../shared_data/services/local_storage/shared_preferences_manager.dart';
+import '../../shared_data/services/storage/supabase_service.dart';
 import '../services/database/database_service.dart';
 import '../services/local_storage/local_storage_service.dart';
 
@@ -152,7 +153,12 @@ void setupServiceLocator() {
   getIt.registerSingleton<OrdersRepo>(
     OrdersRepoImp(OrdersRemoteDataSourceImp(getIt.get<DatabaseService>())),
   );
+
   getIt.registerSingleton<GetOrdersUseCase>(
     GetOrdersUseCase(getIt.get<OrdersRepo>()),
+  );
+
+  getIt.registerSingleton<UpdateOrderStatusUseCase>(
+    UpdateOrderStatusUseCase(getIt.get<OrdersRepo>()),
   );
 }

@@ -9,11 +9,11 @@ class PickImageCubit extends Cubit<PickImageState> {
 
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
-    var xFile = await picker.pickImage(source: ImageSource.gallery);
+    final xFile = await picker.pickImage(source: ImageSource.gallery);
     if (xFile != null) {
       emit(PickImageSuccess(xFile));
     } else {
-      emit(PickImageFailure("No image selected."));
+      emit(PickImageFailure('No image selected.'));
     }
   }
 

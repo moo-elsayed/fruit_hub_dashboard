@@ -11,21 +11,21 @@ void main() {
   late GetProductsUseCase sut;
   late MockProductsRepo mockProductsRepo;
 
-  final fruit1 = const FruitEntity(
+  const fruit1 = FruitEntity(
     name: 'Apple',
     price: 20,
     code: '1',
     description: '',
     imagePath: '',
   );
-  final fruit2 = const FruitEntity(
+  const fruit2 = FruitEntity(
     name: 'Orange',
     price: 30,
     code: '3',
     description: '',
     imagePath: '',
   );
-  final fruit3 = const FruitEntity(
+  const fruit3 = FruitEntity(
     name: 'Banana',
     price: 10,
     code: '2',
@@ -33,11 +33,11 @@ void main() {
     imagePath: '',
   );
 
-  List<FruitEntity> fruits = [fruit1, fruit2, fruit3];
+  final List<FruitEntity> fruits = [fruit1, fruit2, fruit3];
 
   final tSuccessResponse = NetworkSuccess<List<FruitEntity>>(fruits);
   final tFailureResponse = NetworkFailure<List<FruitEntity>>(
-    Exception("permission-denied"),
+    Exception('permission-denied'),
   );
 
   setUp(() {

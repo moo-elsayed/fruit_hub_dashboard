@@ -40,9 +40,9 @@ class SupabaseService implements StorageService {
 
     if (compressedBytes == null) {
       AppLogger.error(
-        "SupabaseService.uploadCompressedImage",
+        'SupabaseService.uploadCompressedImage',
         error:
-            "Failed to compress image at path: ${image.path}. The result was null.",
+            'Failed to compress image at path: ${image.path}. The result was null.',
       );
       const String error =
           "Couldn't upload image. Please try again or choose a different one.";

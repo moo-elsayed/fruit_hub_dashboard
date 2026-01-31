@@ -30,8 +30,7 @@ class _CustomSwitchContainerState extends State<CustomSwitchContainer> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: .symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
         border: .all(color: buildColor(_isChecked)),
@@ -56,7 +55,6 @@ class _CustomSwitchContainerState extends State<CustomSwitchContainer> {
         ],
       ),
     );
-  }
 
   Color buildColor(bool isChecked) =>
       isChecked ? AppColors.color2D9F5D : AppColors.color949D9E;

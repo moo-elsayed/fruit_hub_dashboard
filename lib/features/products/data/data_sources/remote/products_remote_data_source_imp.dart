@@ -52,7 +52,7 @@ class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
         e: e,
         imageUrl: imageUrl,
         imagePath: imagePath,
-        errorMessage: "Failed to add products: ${e.toString()}",
+        errorMessage: 'Failed to add products: ${e.toString()}',
       );
     }
   }
@@ -145,12 +145,10 @@ class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
   // Private Helper Methods
   // -------------------------------------------------------------------
 
-  Future<bool> _checkIfProductExists(String code) async {
-    return await _databaseService.checkIfDataExists(
+  Future<bool> _checkIfProductExists(String code) async => await _databaseService.checkIfDataExists(
       path: BackendEndpoints.checkIfProductExists,
       documentId: code,
     );
-  }
 
   Future<NetworkFailure> _handelAddProductError({
     required Object e,

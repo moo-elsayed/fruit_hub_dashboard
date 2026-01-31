@@ -34,8 +34,7 @@ class _CustomProductImageState extends State<CustomProductImage> {
   late bool showMyImage = widget.imagePath != '';
 
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<PickImageCubit, PickImageState>(
+  Widget build(BuildContext context) => BlocConsumer<PickImageCubit, PickImageState>(
       listener: (context, state) {
         if (state is PickImageSuccess) {
           _image = state.xFile;
@@ -49,8 +48,7 @@ class _CustomProductImageState extends State<CustomProductImage> {
           );
         }
       },
-      builder: (context, state) {
-        return Column(
+      builder: (context, state) => Column(
           children: [
             Stack(
               children: [
@@ -134,8 +132,6 @@ class _CustomProductImageState extends State<CustomProductImage> {
               ),
             ),
           ],
-        );
-      },
+        ),
     );
-  }
 }

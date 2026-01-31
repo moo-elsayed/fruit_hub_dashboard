@@ -24,7 +24,7 @@ void main() {
   late MockDeleteProductUseCase mockDeleteProductUseCase;
   late MockUpdateProductUseCase mockUpdateProductUseCase;
 
-  final tFruit = const FruitEntity(
+  const tFruit = FruitEntity(
     code: '123',
     name: 'Mango',
     price: 50,
@@ -92,7 +92,7 @@ void main() {
         setUp: () {
           when(
             () => mockAddProductUseCase.call(tFruit),
-          ).thenAnswer((_) async => NetworkFailure<void>(Exception("error")));
+          ).thenAnswer((_) async => NetworkFailure<void>(Exception('error')));
         },
         act: (cubit) => cubit.addProduct(tFruit),
         expect: () => [
@@ -182,7 +182,7 @@ void main() {
         build: () => sut,
         setUp: () {
           when(() => mockGetProductsUseCase.call()).thenAnswer(
-            (_) async => NetworkFailure<List<FruitEntity>>(Exception("error")),
+            (_) async => NetworkFailure<List<FruitEntity>>(Exception('error')),
           );
         },
         act: (cubit) => cubit.getProducts(),
@@ -238,7 +238,7 @@ void main() {
         setUp: () {
           when(
             () => mockDeleteProductUseCase.call(tFruit.code),
-          ).thenAnswer((_) async => NetworkFailure<void>(Exception("error")));
+          ).thenAnswer((_) async => NetworkFailure<void>(Exception('error')));
         },
         act: (cubit) => cubit.deleteProduct(tFruit.code),
         expect: () => [
@@ -297,7 +297,7 @@ void main() {
         setUp: () {
           when(
             () => mockUpdateProductUseCase.call(tFruit),
-          ).thenAnswer((_) async => NetworkFailure<void>(Exception("error")));
+          ).thenAnswer((_) async => NetworkFailure<void>(Exception('error')));
         },
         act: (cubit) => cubit.updateProduct(tFruit),
         expect: () => [

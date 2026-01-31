@@ -31,7 +31,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.sizeOf(context);
+    final size = MediaQuery.sizeOf(context);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
       behavior: .opaque,
@@ -51,7 +51,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
               Gap(24.h),
               TextFormFieldHelper(
                 controller: widget.productArgs.nameController,
-                labelText: "name",
+                labelText: 'name',
                 keyboardType: .name,
                 onValidate: (value) => Validator.validateName(val: value),
                 action: .next,
@@ -59,19 +59,19 @@ class _ProductViewBodyState extends State<ProductViewBody> {
               Gap(16.h),
               TextFormFieldHelper(
                 controller: widget.productArgs.priceController,
-                labelText: "price",
+                labelText: 'price',
                 keyboardType: .number,
                 onValidate: (value) =>
-                    Validator.validateName(val: value, type: "Price"),
+                    Validator.validateName(val: value, type: 'Price'),
                 action: .next,
               ),
               Gap(16.h),
               TextFormFieldHelper(
                 controller: widget.productArgs.descriptionController,
-                labelText: "description",
+                labelText: 'description',
                 keyboardType: .name,
                 onValidate: (value) =>
-                    Validator.validateName(val: value, type: "Description"),
+                    Validator.validateName(val: value, type: 'Description'),
                 maxLines: 5,
                 minLines: 5,
                 action: .next,
@@ -85,11 +85,11 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                     child: TextFormFieldHelper(
                       controller:
                           widget.productArgs.daysUntilExpirationController,
-                      labelText: "days until expiration",
+                      labelText: 'days until expiration',
                       keyboardType: .number,
                       onValidate: (value) => Validator.validateName(
                         val: value,
-                        type: "days until expiration",
+                        type: 'days until expiration',
                       ),
                       action: .next,
                     ),
@@ -97,7 +97,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: widget.productArgs.codeController,
-                      labelText: "code",
+                      labelText: 'code',
                       keyboardType: .number,
                       onValidate: Validator.validateCode,
                       action: .next,
@@ -113,11 +113,11 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: widget.productArgs.caloriesController,
-                      labelText: "number of calories",
+                      labelText: 'number of calories',
                       keyboardType: .number,
                       onValidate: (value) => Validator.validateName(
                         val: value,
-                        type: "number of calories",
+                        type: 'number of calories',
                       ),
                       action: .next,
                     ),
@@ -125,11 +125,11 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: widget.productArgs.unitAmountController,
-                      labelText: "unit amount per gram",
+                      labelText: 'unit amount per gram',
                       keyboardType: .number,
                       onValidate: (value) => Validator.validateName(
                         val: value,
-                        type: "number of calories",
+                        type: 'number of calories',
                       ),
                       action: .done,
                     ),
@@ -145,7 +145,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                       isChecked: widget.productArgs.isOrganic,
                       onChanged: (value) =>
                           widget.productArgs.isOrganic = value,
-                      text: "Organic",
+                      text: 'Organic',
                     ),
                   ),
                   Expanded(
@@ -153,7 +153,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                       isChecked: widget.productArgs.isFeatured,
                       onChanged: (value) =>
                           widget.productArgs.isFeatured = value,
-                      text: "Featured",
+                      text: 'Featured',
                     ),
                   ),
                 ],
@@ -163,8 +163,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                 buildWhen: (previous, current) =>
                     current is ProductsLoading &&
                     (current.newItemAdded || current.itemUpdated),
-                builder: (context, state) {
-                  return CustomMaterialButton(
+                builder: (context, state) => CustomMaterialButton(
                     onPressed: () {
                       if (widget.productArgs.isValid &&
                           (widget.productArgs.image != null || _showMyImage)) {
@@ -188,11 +187,10 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                         (state.newItemAdded || state.itemUpdated),
                     maxWidth: true,
                     text: widget.imagePath != ''
-                        ? "Edit Product"
-                        : "Add Product",
+                        ? 'Edit Product'
+                        : 'Add Product',
                     textStyle: AppTextStyles.font16WhiteBold,
-                  );
-                },
+                  ),
               ),
               Gap(24.h),
             ],

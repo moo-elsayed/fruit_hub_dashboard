@@ -35,10 +35,9 @@ class _ProductViewState extends State<ProductView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: CustomAppBar(
-        title: widget.fruitEntity == null ? "Add Product" : "Edit Product",
+        title: widget.fruitEntity == null ? 'Add Product' : 'Edit Product',
         showArrowBack: true,
         onTap: () => context.pop(),
       ),
@@ -50,5 +49,4 @@ class _ProductViewState extends State<ProductView> {
         ),
       ),
     );
-  }
 }

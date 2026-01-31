@@ -10,7 +10,7 @@ class ClearUserSessionUseCase {
     try {
       await _localStorageService.setLoggedIn(false);
     } catch (e) {
-      AppLogger.error("error in clear user session", error: e.toString());
+      AppLogger.error('error in clear user session', error: e.toString());
       throw Exception('Failed to clear user session');
     }
   }

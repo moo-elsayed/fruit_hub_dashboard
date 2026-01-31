@@ -1,4 +1,5 @@
-import 'package:fruit_hub_dashboard/core/helpers/enums.dart';
+import 'package:fruit_hub_dashboard/core/enums/payment_methods.dart';
+import '../../../../core/helpers/extentions.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/payment_option_entity.dart';
 import 'address_model.dart';
@@ -7,6 +8,7 @@ import 'order_item_model.dart';
 class OrderModel {
   OrderModel({
     required this.uId,
+    required this.docId,
     required this.orderId,
     required this.totalPrice,
     required this.status,
@@ -16,17 +18,9 @@ class OrderModel {
     required this.date,
   });
 
-  final String uId;
-  final int orderId;
-  final num totalPrice;
-  final String status;
-  final String paymentMethod;
-  final AddressModel shippingAddress;
-  final List<OrderItemModel> orderItems;
-  final String date;
-
   factory OrderModel.fromJson(Map<String, dynamic> map) => OrderModel(
     uId: map['uId'] ?? '',
+    docId: map['docId'] ?? '',
     orderId: map['orderId'] ?? 0,
     totalPrice: map['totalPrice'] ?? 0,
     status: map['status'] ?? '',
@@ -38,8 +32,19 @@ class OrderModel {
     date: map['date'] ?? '',
   );
 
+  final String uId;
+  final String docId;
+  final int orderId;
+  final num totalPrice;
+  final String status;
+  final String paymentMethod;
+  final AddressModel shippingAddress;
+  final List<OrderItemModel> orderItems;
+  final String date;
+
   OrderEntity toEntity() => OrderEntity(
     uid: uId,
+    docId: docId,
     orderId: orderId,
     address: shippingAddress.toEntity(),
     products: orderItems.map((e) => e.toEntity()).toList(),
@@ -54,23 +59,6 @@ class OrderModel {
           orderItems.fold(0, (sum, item) => sum + (item.price * item.quantity)),
     ),
     date: date,
-    status: _getOrderStatus(status),
+    status: status.toOrderStatus,
   );
-
-  OrderStatus _getOrderStatus(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
-        return OrderStatus.pending;
-      case 'processing':
-        return OrderStatus.processing;
-      case 'shipped':
-        return OrderStatus.shipped;
-      case 'delivered':
-        return OrderStatus.delivered;
-      case 'cancelled':
-        return OrderStatus.cancelled;
-      default:
-        return OrderStatus.pending;
-    }
-  }
 }

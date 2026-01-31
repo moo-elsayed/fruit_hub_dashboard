@@ -19,8 +19,7 @@ class CustomProductItem extends StatelessWidget {
   final FruitEntity fruitEntity;
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
+  Widget build(BuildContext context) => Stack(
       children: [
         Container(
           padding: .symmetric(vertical: 20.h, horizontal: 10.w),
@@ -84,5 +83,4 @@ class CustomProductItem extends StatelessWidget {
         ),
       ],
     );
-  }
 }

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/core/helpers/image_compressor.dart';
-import 'package:fruit_hub_dashboard/features/shared_data/services/storage/supabase_service.dart';
+import 'package:fruit_hub_dashboard/shared_data/services/storage/supabase_service.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -81,7 +81,7 @@ void main() {
             any(),
             fileOptions: any(named: 'fileOptions'),
           ),
-        ).thenAnswer((_) async => "path/to/file");
+        ).thenAnswer((_) async => 'path/to/file');
         when(() => mockStorageFileApi.getPublicUrl(any())).thenReturn(tUrl);
         // Act
         final result = await sut.uploadFile(
@@ -120,7 +120,7 @@ void main() {
               any(),
               fileOptions: any(named: 'fileOptions'),
             ),
-          ).thenAnswer((_) async => "path/to/file");
+          ).thenAnswer((_) async => 'path/to/file');
           when(() => mockStorageFileApi.getPublicUrl(any())).thenReturn(tUrl);
           // Act
           final result = await sut.uploadCompressedImage(

@@ -4,9 +4,9 @@ abstract class Validator {
   static String? validateEmail(String? val) {
     final RegExp emailRegex = RegExp(AppKeys.emailRegex);
     if (val == null || val.trim().isEmpty) {
-      return "Email cannot be empty";
+      return 'Email cannot be empty';
     } else if (!emailRegex.hasMatch(val)) {
-      return "Enter a valid email address";
+      return 'Enter a valid email address';
     } else {
       return null;
     }
@@ -14,19 +14,19 @@ abstract class Validator {
 
   static String? validatePassword(String? val) {
     if (val == null || val.isEmpty) {
-      return "Password cannot be empty";
+      return 'Password cannot be empty';
     }
 
     if (!RegExp(r'^[A-Za-z\d]+$').hasMatch(val)) {
-      return "Password must contain only letters and numbers";
+      return 'Password must contain only letters and numbers';
     }
 
     if (val.length < 6) {
-      return "Password must be at least 6 characters long";
+      return 'Password must be at least 6 characters long';
     }
 
     if (!RegExp(r'\d').hasMatch(val)) {
-      return "Password must contain at least one number";
+      return 'Password must contain at least one number';
     }
 
     return null;
@@ -42,9 +42,9 @@ abstract class Validator {
     }
   }
 
-  static String? validateName({String? val, String type = "Name"}) {
+  static String? validateName({String? val, String type = 'Name'}) {
     if (val == null || val.isEmpty) {
-      return "$type cannot be empty";
+      return '$type cannot be empty';
     } else {
       return null;
     }

@@ -10,8 +10,7 @@ class FruitHubDashboard extends StatelessWidget {
   final AppRouter appRouter;
 
   @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
+  Widget build(BuildContext context) => ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -28,5 +27,4 @@ class FruitHubDashboard extends StatelessWidget {
         initialRoute: Routes.splashView,
       ),
     );
-  }
 }

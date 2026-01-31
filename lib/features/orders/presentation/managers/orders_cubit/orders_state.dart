@@ -1,20 +1,28 @@
 part of 'orders_cubit.dart';
 
+enum OrderState { getOrders, updateOrderStatus }
+
 @immutable
 sealed class OrdersState {}
 
 final class OrdersInitial extends OrdersState {}
 
-final class OrdersLoading extends OrdersState {}
+final class OrdersLoading extends OrdersState {
+  OrdersLoading(this.orderState);
+
+  final OrderState orderState;
+}
 
 final class OrdersSuccess extends OrdersState {
-  OrdersSuccess(this.orders);
+  OrdersSuccess({required this.orders, required this.orderState});
 
   final List<OrderEntity> orders;
+  final OrderState orderState;
 }
 
 final class OrdersFailure extends OrdersState {
-  final String message;
+  OrdersFailure({required this.message, required this.orderState});
 
-  OrdersFailure(this.message);
+  final String message;
+  final OrderState orderState;
 }

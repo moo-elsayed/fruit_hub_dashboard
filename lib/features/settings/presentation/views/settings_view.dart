@@ -17,15 +17,14 @@ class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (context) => SettingsCubit(
         getIt.get<FetchShippingConfigUseCase>(),
         getIt.get<UpdateShippingConfigUseCase>(),
       )..fetchShippingConfig(),
       child: Scaffold(
         appBar: CustomAppBar(
-          title: "Settings",
+          title: 'Settings',
           showArrowBack: true,
           onTap: () => context.pop(),
         ),
@@ -42,7 +41,7 @@ class SettingsView extends StatelessWidget {
                   crossAxisAlignment: .start,
                   children: [
                     Text(
-                      "General Configuration",
+                      'General Configuration',
                       style: AppTextStyles.font18color0C0D0DBold,
                     ),
                     Gap(20.h),
@@ -64,7 +63,7 @@ class SettingsView extends StatelessWidget {
                     crossAxisAlignment: .start,
                     children: [
                       Text(
-                        "General Configuration",
+                        'General Configuration',
                         style: AppTextStyles.font18color0C0D0DBold,
                       ),
                       Gap(20.h),
@@ -78,5 +77,4 @@ class SettingsView extends StatelessWidget {
         ),
       ),
     );
-  }
 }

@@ -10,21 +10,6 @@ class UserModel {
     required this.isVerified,
   });
 
-  final String uid;
-  String name;
-  final String email;
-  final bool isVerified;
-
-  Map<String, dynamic> toJson() => {
-    'uid': uid,
-    'name': name,
-    'email': email,
-    'isVerified': isVerified,
-  };
-
-  UserEntity toUserEntity() =>
-      UserEntity(uid: uid, name: name, email: email, isVerified: isVerified);
-
   factory UserModel.fromFirebaseUser(User user) => UserModel(
     uid: user.uid,
     name: user.displayName ?? '',
@@ -45,4 +30,19 @@ class UserModel {
     email: user.email,
     isVerified: user.isVerified,
   );
+
+  final String uid;
+  String name;
+  final String email;
+  final bool isVerified;
+
+  Map<String, dynamic> toJson() => {
+    'uid': uid,
+    'name': name,
+    'email': email,
+    'isVerified': isVerified,
+  };
+
+  UserEntity toUserEntity() =>
+      UserEntity(uid: uid, name: name, email: email, isVerified: isVerified);
 }

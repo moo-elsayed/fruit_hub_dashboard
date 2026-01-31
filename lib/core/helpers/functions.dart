@@ -14,7 +14,7 @@ String getErrorMessage(result) =>
 num getPrice(double price) => price.toInt() == price ? price.toInt() : price;
 
 NetworkFailure<T> handleError<T>(Object e, String functionName) {
-  AppLogger.error("error occurred in $functionName", error: e);
+  AppLogger.error('error occurred in $functionName', error: e);
   if (e is FirebaseException) {
     return NetworkFailure(
       Exception(ServerFailure.fromFirebaseException(e).errorMessage),

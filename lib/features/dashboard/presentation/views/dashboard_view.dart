@@ -14,7 +14,7 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var dashboardItems = getDashboardItems(context);
+    final dashboardItems = getDashboardItems(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),

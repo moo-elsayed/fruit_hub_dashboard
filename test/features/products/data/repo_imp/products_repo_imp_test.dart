@@ -11,7 +11,7 @@ class MockProductsRemoteDataSource extends Mock
 void main() {
   late ProductsRepoImp sut;
   late MockProductsRemoteDataSource mockProductsRemoteDataSource;
-  var fruitEntity = const FruitEntity(
+  const fruitEntity = FruitEntity(
     code: '004029',
     name: 'Fruit',
     price: 10.0,
@@ -19,24 +19,24 @@ void main() {
     isOrganic: true,
   );
   final tException = Exception('DataSource error');
-  final tSuccessResponseOfTypeVoid = const NetworkSuccess<void>(null);
+  const tSuccessResponseOfTypeVoid = NetworkSuccess<void>(null);
   final tFailureResponseOfTypeVoid = NetworkFailure<void>(tException);
 
-  final fruit1 = const FruitEntity(
+  const fruit1 = FruitEntity(
     name: 'Apple',
     price: 20,
     code: '1',
     description: '',
     imagePath: '',
   );
-  final fruit2 = const FruitEntity(
+  const fruit2 = FruitEntity(
     name: 'Orange',
     price: 30,
     code: '3',
     description: '',
     imagePath: '',
   );
-  final fruit3 = const FruitEntity(
+  const fruit3 = FruitEntity(
     name: 'Banana',
     price: 10,
     code: '2',
@@ -44,11 +44,11 @@ void main() {
     imagePath: '',
   );
 
-  List<FruitEntity> fruits = [fruit1, fruit2, fruit3];
+  final List<FruitEntity> fruits = [fruit1, fruit2, fruit3];
 
   final tSuccessResponse = NetworkSuccess<List<FruitEntity>>(fruits);
   final tFailureResponse = NetworkFailure<List<FruitEntity>>(
-    Exception("permission-denied"),
+    Exception('permission-denied'),
   );
 
   setUpAll(() {
