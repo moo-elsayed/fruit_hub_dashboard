@@ -5,15 +5,15 @@ import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_enti
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
-import '../../features/orders/presentation/views/orders_view.dart';
-import '../../features/products/presentation/managers/products_cubit/products_cubit.dart';
-import '../../features/products/presentation/views/product_view.dart';
-import '../../features/splash/presentation/views/animated_splash_view.dart';
 import '../../features/auth/presentation/args/login_args.dart';
 import '../../features/auth/presentation/views/forget_password_view.dart';
 import '../../features/auth/presentation/views/login_view.dart';
 import '../../features/auth/presentation/views/register_view.dart';
 import '../../features/dashboard/presentation/views/dashboard_view.dart';
+import '../../features/orders/presentation/views/orders_view.dart';
+import '../../features/products/presentation/managers/products_cubit/products_cubit.dart';
+import '../../features/products/presentation/views/product_view.dart';
+import '../../features/splash/presentation/views/animated_splash_view.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {

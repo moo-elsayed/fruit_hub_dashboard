@@ -62,7 +62,7 @@ class CustomDashboardAppBar extends StatelessWidget
                   onConfirm: () async {
                     final SignOutService signOutService = context
                         .read<SignOutCubit>();
-                    signOutService.signOut();
+                    await signOutService.signOut();
                   },
                 ),
               );

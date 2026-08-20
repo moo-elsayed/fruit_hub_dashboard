@@ -7,7 +7,7 @@ import 'network_response.dart';
 void errorLogger({required String functionName, required String error}) =>
     log('exception in function $functionName $error');
 
-String getErrorMessage(result) =>
+String getErrorMessage(NetworkFailure result) =>
     ((result.exception as dynamic).message ?? result.exception.toString())
         .replaceAll('Exception: ', '');
 

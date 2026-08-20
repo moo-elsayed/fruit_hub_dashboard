@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/helpers/validator.dart';
 import '../../../../core/theming/app_text_styles.dart';
 import '../../../../core/widgets/custom_material_button.dart';
 import '../../../../core/widgets/text_form_field_helper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../managers/products_cubit/products_cubit.dart';
 import '../managers/pick_image_cubit/pick_image_cubit.dart';
+import '../managers/products_cubit/products_cubit.dart';
 import 'custom_product_image.dart';
 import 'custom_switch_container.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductArgs {
   ProductArgs()

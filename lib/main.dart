@@ -14,7 +14,7 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
   await Future.wait([
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
-    Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnonKey),
+    Supabase.initialize(url: Env.supabaseUrl, publishableKey: Env.supabaseAnonKey),
   ]);
   setupServiceLocator();
   await getIt.allReady();

@@ -1,4 +1,4 @@
-package com.example.fruit_hub_dashboard
+package com.fruithubdashboard.app
 
 import io.flutter.embedding.android.FlutterActivity
 

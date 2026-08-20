@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
+import 'package:fruit_hub_dashboard/core/helpers/failures.dart';
 import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
 import 'package:fruit_hub_dashboard/core/services/authentication/auth_service.dart';
 import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
+import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
-import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
-import 'package:fruit_hub_dashboard/core/helpers/failures.dart';
-import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
 import '../../../../../core/helpers/app_logger.dart';
 
 class AuthRemoteDataSourceImp implements AuthRemoteDataSource {

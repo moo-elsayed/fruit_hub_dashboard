@@ -18,8 +18,8 @@ class AnimatedSplashViewBody extends StatefulWidget {
 class _AnimatedSplashViewBodyState extends State<AnimatedSplashViewBody> {
   void navigate(Widget view) => Navigator.of(context).pushReplacement(
     PageRouteBuilder(
-      pageBuilder: (_, __, ___) => view,
-      transitionsBuilder: (_, animation, __, child) => FadeTransition(
+      pageBuilder: (_, _, _) => view,
+      transitionsBuilder: (_, animation, _, child) => FadeTransition(
           opacity: CurvedAnimation(parent: animation, curve: Curves.easeInOut),
           child: child,
         ),

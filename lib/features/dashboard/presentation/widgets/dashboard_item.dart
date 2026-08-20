@@ -12,7 +12,7 @@ class DashboardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GestureDetector(
       onTap: entity.onTap,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: entity.color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16.r),
