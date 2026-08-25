@@ -1,4 +1,4 @@
-import '../../../../core/helpers/network_response.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import '../repo/auth_repo.dart';
 
 class ForgetPasswordUseCase {
@@ -6,6 +6,6 @@ class ForgetPasswordUseCase {
 
   final AuthRepo _authRepo;
 
-  Future<NetworkResponse> forgetPassword(String email) async =>
+  Future<NetworkResponse<void>> call(String email) async =>
       await _authRepo.forgetPassword(email);
 }

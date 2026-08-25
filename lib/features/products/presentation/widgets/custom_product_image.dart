@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_colors.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_network_image.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,21 +35,22 @@ class _CustomProductImageState extends State<CustomProductImage> {
   late bool showMyImage = widget.imagePath != '';
 
   @override
-  Widget build(BuildContext context) => BlocConsumer<PickImageCubit, PickImageState>(
-      listener: (context, state) {
-        if (state is PickImageSuccess) {
-          _image = state.xFile;
-          widget.onImageSelected(state.xFile);
-        }
-        if (state is PickImageFailure) {
-          AppToast.showToast(
-            context: context,
-            title: state.message,
-            type: ToastificationType.error,
-          );
-        }
-      },
-      builder: (context, state) => Column(
+  Widget build(BuildContext context) =>
+      BlocConsumer<PickImageCubit, PickImageState>(
+        listener: (context, state) {
+          if (state is PickImageSuccess) {
+            _image = state.xFile;
+            widget.onImageSelected(state.xFile);
+          }
+          if (state is PickImageFailure) {
+            AppToast.show(
+              context: context,
+              title: state.message,
+              type: ToastificationType.error,
+            );
+          }
+        },
+        builder: (context, state) => Column(
           children: [
             Stack(
               children: [
@@ -122,16 +124,16 @@ class _CustomProductImageState extends State<CustomProductImage> {
             Visibility(
               visible: state is ImageNotPicked,
               child: Padding(
-                padding: .only(top: 8.h),
+                padding: EdgeInsets.only(top: 8.h),
                 child: Text(
                   'Please select an image',
-                  style: AppTextStyles.font13color0C0D0DSemiBold.copyWith(
-                    color: Colors.red,
+                  style: AppTextStyles.font13SemiBold.copyWith(
+                    color: context.colors.error,
                   ),
                 ),
               ),
             ),
           ],
         ),
-    );
+      );
 }

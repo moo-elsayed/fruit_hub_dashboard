@@ -1,12 +1,12 @@
-import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
-import '../entities/fruit_entity.dart';
-import '../repo/products_repo.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
+import 'package:fruit_hub_dashboard/features/products/domain/repo/products_repo.dart';
 
 class AddProductUseCase {
-  AddProductUseCase(this._repo);
+  AddProductUseCase(this._productsRepo);
 
-  final ProductsRepo _repo;
+  final ProductsRepo _productsRepo;
 
   Future<NetworkResponse<void>> call(FruitEntity fruitEntity) async =>
-      await _repo.addProduct(fruitEntity);
+      await _productsRepo.addProduct(fruitEntity);
 }

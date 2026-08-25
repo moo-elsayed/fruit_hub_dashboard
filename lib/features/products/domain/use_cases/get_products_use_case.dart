@@ -1,6 +1,6 @@
-import 'package:fruit_hub_dashboard/features/products/domain/repo/products_repo.dart';
-import '../../../../core/helpers/network_response.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import '../entities/fruit_entity.dart';
+import '../repo/products_repo.dart';
 
 class GetProductsUseCase {
   GetProductsUseCase(this._productsRepo);

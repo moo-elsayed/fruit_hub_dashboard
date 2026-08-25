@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/helpers/extentions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/managers/products_cubit/products_cubit.dart';
 import '../../../../core/theming/app_colors.dart';
@@ -20,67 +20,67 @@ class CustomProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Stack(
-      children: [
-        Container(
-          padding: .symmetric(vertical: 20.h, horizontal: 10.w),
-          decoration: BoxDecoration(
-            borderRadius: .circular(4.r),
-            color: AppColors.colorF3F5F7,
-          ),
-          child: Column(
-            mainAxisAlignment: .spaceBetween,
-            spacing: 8.h,
-            children: [
-              Flexible(child: CustomNetworkImage(image: fruitEntity.imagePath)),
-              Row(
-                mainAxisAlignment: .spaceBetween,
-                crossAxisAlignment: .end,
-                children: [
-                  Column(
-                    crossAxisAlignment: .start,
-                    spacing: 4.h,
-                    children: [
-                      Text(
-                        fruitEntity.name,
-                        style: AppTextStyles.font13color0C0D0DSemiBold,
+    children: [
+      Container(
+        padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.r),
+          color: AppColors.colorF3F5F7,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 8.h,
+          children: [
+            Flexible(child: CustomNetworkImage(image: fruitEntity.imagePath)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 4.h,
+                  children: [
+                    Text(
+                      fruitEntity.name,
+                      style: AppTextStyles.font13SemiBold.copyWith(
+                        color: context.colors.mainText,
                       ),
-                      PricePerKilo(price: fruitEntity.price),
-                    ],
-                  ),
-                  CustomActionButton(
-                    onTap: () => context.pushNamed(
-                      Routes.productView,
-                      arguments: [context.read<ProductsCubit>(), fruitEntity],
                     ),
-                    child: Icon(Icons.edit, color: AppColors.white, size: 20.sp),
+                    PricePerKilo(price: fruitEntity.price),
+                  ],
+                ),
+                CustomActionButton(
+                  onTap: () => context.pushNamed(
+                    Routes.productView,
+                    arguments: [context.read<ProductsCubit>(), fruitEntity],
                   ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        PositionedDirectional(
-          start: 8.w,
-          top: 8.h,
-          child: GestureDetector(
-            onTap: () => showCupertinoDialog(
-              context: context,
-              builder: (_) => CustomConfirmationDialog(
-                title: 'Delete Product',
-                subtitle: 'Are you sure you want to delete this product?',
-                textConfirmButton: 'Yes',
-                textCancelButton: 'No',
-                onConfirm: () {
-                  context
-                      .read<ProductsCubit>()
-                      .deleteProduct(fruitEntity.code);
-                  context.pop();
-                },
-              ),
+                  child: Icon(Icons.edit, color: AppColors.white, size: 20.sp),
+                ),
+              ],
             ),
-            child: Icon(Icons.delete, color: AppColors.red, size: 20.sp),
-          ),
+          ],
         ),
-      ],
-    );
+      ),
+      PositionedDirectional(
+        start: 8.w,
+        top: 8.h,
+        child: GestureDetector(
+          onTap: () => showCupertinoDialog(
+            context: context,
+            builder: (_) => CustomConfirmationDialog(
+              title: 'Delete Product',
+              subtitle: 'Are you sure you want to delete this product?',
+              textConfirmButton: 'Yes',
+              textCancelButton: 'No',
+              onConfirm: () {
+                context.read<ProductsCubit>().deleteProduct(fruitEntity.code);
+                context.pop();
+              },
+            ),
+          ),
+          child: Icon(Icons.delete, color: AppColors.red, size: 20.sp),
+        ),
+      ),
+    ],
+  );
 }

@@ -3,15 +3,16 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/di.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_entity.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/update_order_status_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/presentation/widgets/custom_order_item.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../../../core/helpers/extentions.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
+import 'package:toastification/toastification.dart';
 import '../managers/orders_cubit/orders_cubit.dart';
 
 class OrdersView extends StatefulWidget {
@@ -39,10 +40,10 @@ class _OrdersViewState extends State<OrdersView> {
       body: BlocConsumer<OrdersCubit, OrdersState>(
         listener: (context, state) {
           if (state is OrdersFailure) {
-            AppToast.showToast(
+            AppToast.show(
               context: context,
               title: state.message,
-              type: .error,
+              type: ToastificationType.error,
             );
           }
           if (state is OrdersSuccess) {
@@ -51,12 +52,14 @@ class _OrdersViewState extends State<OrdersView> {
         },
         builder: (context, state) {
           if (state is OrdersFailure) {
-            return Center(child: Text(state.message, textAlign: .center));
+            return Center(
+              child: Text(state.message, textAlign: TextAlign.center),
+            );
           }
           if (orders.isNotEmpty) {
             return ListView.separated(
               itemCount: orders.length,
-              padding: .symmetric(horizontal: 16.w),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               separatorBuilder: (context, index) => Gap(12.h),
               itemBuilder: (context, index) {
                 final order = orders[index];

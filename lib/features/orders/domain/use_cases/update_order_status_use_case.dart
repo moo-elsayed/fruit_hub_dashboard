@@ -1,6 +1,6 @@
-import 'package:fruit_hub_dashboard/features/orders/domain/repo/orders_repo.dart';
-import '../../../../core/enums/order_status.dart';
-import '../../../../core/helpers/network_response.dart';
+import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import '../repo/orders_repo.dart';
 
 class UpdateOrderStatusUseCase {
   UpdateOrderStatusUseCase(this._ordersRepo);
@@ -8,5 +8,5 @@ class UpdateOrderStatusUseCase {
   final OrdersRepo _ordersRepo;
 
   Future<NetworkResponse<void>> call(String docId, OrderStatus status) async =>
-      _ordersRepo.updateOrderStatus(docId, status);
+      await _ordersRepo.updateOrderStatus(docId, status);
 }

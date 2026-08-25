@@ -1,48 +1,142 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
+import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
 
-abstract class AppToast {
-  static void showToast({
+class AppToast {
+  static bool isEnabled = true;
+
+  static void show({
     required BuildContext context,
     required String title,
     String? description,
     required ToastificationType type,
+    IconData? icon,
+    VoidCallback? onTap,
   }) {
-    toastification.show(
+    if (!isEnabled) return;
+
+    final statusColor = type.getColor(context);
+
+    toastification.showCustom(
       context: context,
-      type: type,
-      borderSide: BorderSide.none,
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-      closeButton: const ToastCloseButton(showType: CloseButtonShowType.none),
       alignment: Alignment.topCenter,
-      description: description != null
-          ? Text(
-              description,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-            )
-          : null,
-      primaryColor: Colors.white,
       autoCloseDuration: const Duration(seconds: 2, milliseconds: 500),
-      progressBarTheme: ProgressIndicatorThemeData(
-        color: type == ToastificationType.success
-            ? Colors.green
-            : type == ToastificationType.info
-            ? Colors.blue
-            : type == ToastificationType.warning
-            ? Colors.orange
-            : Colors.red,
+      animationBuilder: (context, animation, alignment, child) =>
+          FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0, -0.4),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutBack,
+                    ),
+                  ),
+              child: child,
+            ),
+          ),
+      builder: (BuildContext context, ToastificationItem holder) => Material(
+        type: MaterialType.transparency,
+        child: GestureDetector(
+          onTap: () {
+            toastification.dismiss(holder);
+            onTap?.call();
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              borderRadius: BorderRadius.circular(14.r),
+              border: Border.all(
+                color: statusColor.withValues(alpha: 0.25),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.07),
+                  blurRadius: 16,
+                  offset: const Offset(0, 5),
+                ),
+                BoxShadow(
+                  color: statusColor.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Balanced Icon Badge
+                Container(
+                  padding: EdgeInsets.all(7.r),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Icon(
+                    icon ?? type.stateIcon,
+                    color: statusColor,
+                    size: 20.sp,
+                  ),
+                ),
+                Gap(12.w),
+
+                // Title & Optional Description
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyles.font14Bold.copyWith(
+                          color: context.colors.mainText,
+                          height: 1.25,
+                        ),
+                      ),
+                      if (description != null && description.isNotEmpty) ...[
+                        Gap(3.h),
+                        Text(
+                          description,
+                          style: AppTextStyles.font13Regular.copyWith(
+                            color: context.colors.bodyText,
+                            height: 1.3,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                Gap(8.w),
+
+                // Close Button
+                InkWell(
+                  onTap: () => toastification.dismiss(holder),
+                  borderRadius: BorderRadius.circular(18.r),
+                  child: Padding(
+                    padding: EdgeInsets.all(4.r),
+                    child: Icon(
+                      Icons.close_rounded,
+                      color: context.colors.subText,
+                      size: 18.sp,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      backgroundColor: type == ToastificationType.success
-          ? Colors.green
-          : type == ToastificationType.info
-          ? Colors.blue
-          : type == ToastificationType.warning
-          ? Colors.orange
-          : Colors.red,
-      foregroundColor: Colors.white,
     );
   }
 }

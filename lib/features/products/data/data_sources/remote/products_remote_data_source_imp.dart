@@ -1,168 +1,115 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:fruit_hub_dashboard/core/helpers/app_logger.dart';
-import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
-import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
-import 'package:fruit_hub_dashboard/core/services/storage/storage_service.dart';
+import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fruit_hub_dashboard/core/errors/exceptions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
+import 'package:fruit_hub_dashboard/core/helpers/image_compressor.dart';
+import 'package:fruit_hub_dashboard/core/network/api_helper.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/products/data/data_sources/remote/products_remote_data_source.dart';
-import '../../../../../../core/helpers/backend_endpoints.dart';
-import '../../../../../../core/helpers/failures.dart';
-import '../../../domain/entities/fruit_entity.dart';
-import '../../models/fruit_model.dart';
+import 'package:fruit_hub_dashboard/features/products/data/models/fruit_model.dart';
 
 class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
-  ProductsRemoteDataSourceImp(this._databaseService, this._storageService);
+  ProductsRemoteDataSourceImp({
+    FirebaseFirestore? firestore,
+    FirebaseStorage? firebaseStorage,
+    ImageCompressor? imageCompressor,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+       _storage = firebaseStorage ?? FirebaseStorage.instance,
+       _imageCompressor = imageCompressor ?? ImageCompressor();
 
-  final DatabaseService _databaseService;
-  final StorageService _storageService;
+  final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
+  final ImageCompressor _imageCompressor;
 
   @override
-  Future<NetworkResponse<void>> addProduct(FruitEntity fruitEntity) async {
-    if (await _checkIfProductExists(fruitEntity.code)) {
-      return NetworkFailure(Exception('Product with this code already exists'));
+  Future<NetworkResponse<void>> addProduct(
+    FruitModel fruitModel, {
+    Uint8List? imageBytes,
+    String? imageName,
+  }) async => ApiHelper.executeSafely(() async {
+    final docRef = _firestore
+        .collection(BackendEndpoints.productsCollection)
+        .doc(fruitModel.code);
+
+    final docSnap = await docRef.get();
+    if (docSnap.exists) {
+      throw BusinessException('Product with this code already exists');
     }
 
-    final imagePath = 'images/${fruitEntity.code}/${fruitEntity.image!.name}';
     String? imageUrl;
-
-    try {
-      imageUrl = await _storageService.uploadFile(
-        bucketName: BackendEndpoints.bucketName,
-        path: imagePath,
-        data: await fruitEntity.image!.readAsBytes(),
-      );
-
-      var fruitModel = FruitModel.fromEntity(fruitEntity);
-      fruitModel = fruitModel.copyWith(imagePath: imageUrl);
-      await _databaseService.addData(
-        path: BackendEndpoints.addProduct,
-        data: fruitModel.toJson(),
-        docId: fruitModel.code,
-      );
-
-      return const NetworkSuccess();
-    } on FirebaseException catch (e) {
-      return await _handelAddProductError(
-        e: e,
-        imageUrl: imageUrl,
-        imagePath: imagePath,
-        errorMessage: ServerFailure.fromFirebaseException(e).errorMessage,
-      );
-    } catch (e) {
-      return await _handelAddProductError(
-        e: e,
-        imageUrl: imageUrl,
-        imagePath: imagePath,
-        errorMessage: 'Failed to add products: ${e.toString()}',
-      );
+    if (imageBytes != null && imageName != null) {
+      final compressedBytes = await _imageCompressor.compressImage(imageBytes);
+      final ref = _storage.ref().child('images/${fruitModel.code}/$imageName');
+      await ref.putData(compressedBytes);
+      imageUrl = await ref.getDownloadURL();
     }
-  }
+
+    final modelToSave = fruitModel.copyWith(imagePath: imageUrl);
+    await docRef.set(modelToSave.toJson());
+  }, functionName: 'addProduct');
 
   @override
-  Future<NetworkResponse<List<FruitEntity>>> getAllProducts() async {
-    try {
-      final response = await _databaseService.getAllData(
-        BackendEndpoints.getAllProducts,
-      );
+  Future<NetworkResponse<List<FruitModel>>> getAllProducts() async =>
+      ApiHelper.executeSafely(() async {
+        final querySnapshot = await _firestore
+            .collection(BackendEndpoints.productsCollection)
+            .get();
 
-      final List<FruitEntity> fruits = response
-          .map((e) => FruitModel.fromJson(e).toEntity())
-          .toList();
-
-      return NetworkSuccess(fruits);
-    } on FirebaseException catch (e) {
-      AppLogger.error('error occurred in getAllProducts', error: e.toString());
-      return NetworkFailure(
-        Exception(ServerFailure.fromFirebaseException(e).errorMessage),
-      );
-    } catch (e) {
-      AppLogger.error('error occurred in getAllProducts', error: e.toString());
-      return NetworkFailure(Exception(e.toString()));
-    }
-  }
+        return querySnapshot.docs
+            .map((doc) => FruitModel.fromJson(doc.data()))
+            .toList();
+      }, functionName: 'getAllProducts');
 
   @override
-  Future<NetworkResponse<void>> deleteProduct(String code) async {
-    final folderPath = 'images/$code';
-    try {
-      await _storageService.deleteFolder(
-        bucketName: BackendEndpoints.bucketName,
-        path: folderPath,
-      );
-      await _databaseService.deleteData(
-        path: BackendEndpoints.deleteProduct,
-        documentId: code,
-      );
-      return const NetworkSuccess();
-    } on FirebaseException catch (e) {
-      AppLogger.error('error occurred in deleteProduct', error: e.toString());
-      return NetworkFailure(
-        Exception(ServerFailure.fromFirebaseException(e).errorMessage),
-      );
-    } catch (e) {
-      AppLogger.error('error occurred in deleteProduct', error: e.toString());
-      return NetworkFailure(Exception(e.toString()));
-    }
-  }
+  Future<NetworkResponse<void>> deleteProduct(String code) async =>
+      ApiHelper.executeSafely(() async {
+        try {
+          final listResult = await _storage
+              .ref()
+              .child('images/$code')
+              .listAll();
+          for (final item in listResult.items) {
+            await item.delete();
+          }
+        } catch (_) {}
+
+        await _firestore
+            .collection(BackendEndpoints.productsCollection)
+            .doc(code)
+            .delete();
+      }, functionName: 'deleteProduct');
 
   @override
-  Future<NetworkResponse<void>> updateProduct(FruitEntity fruitEntity) async {
+  Future<NetworkResponse<void>> updateProduct(
+    FruitModel fruitModel, {
+    Uint8List? imageBytes,
+    String? imageName,
+  }) async => ApiHelper.executeSafely(() async {
     String? imageUrl;
-    try {
-      if (fruitEntity.image != null) {
-        final folderPath = 'images/${fruitEntity.code}';
-        final imagePath =
-            'images/${fruitEntity.code}/${fruitEntity.image!.name}';
-        await _storageService.deleteFolder(
-          bucketName: BackendEndpoints.bucketName,
-          path: folderPath,
-        );
-        imageUrl = await _storageService.uploadFile(
-          bucketName: BackendEndpoints.bucketName,
-          path: imagePath,
-          data: await fruitEntity.image!.readAsBytes(),
-        );
-      }
-      await _databaseService.updateData(
-        path: BackendEndpoints.updateProduct,
-        documentId: fruitEntity.code,
-        data: FruitModel.fromEntity(
-          fruitEntity,
-        ).copyWith(imagePath: imageUrl).toJson(),
-      );
-      return const NetworkSuccess();
-    } on FirebaseException catch (e) {
-      AppLogger.error('error occurred in deleteProduct', error: e.toString());
-      return NetworkFailure(
-        Exception(ServerFailure.fromFirebaseException(e).errorMessage),
-      );
-    } catch (e) {
-      AppLogger.error('error occurred in deleteProduct', error: e.toString());
-      return NetworkFailure(Exception(e.toString()));
+    if (imageBytes != null && imageName != null) {
+      try {
+        final listResult = await _storage
+            .ref()
+            .child('images/${fruitModel.code}')
+            .listAll();
+        for (final item in listResult.items) {
+          await item.delete();
+        }
+      } catch (_) {}
+
+      final compressedBytes = await _imageCompressor.compressImage(imageBytes);
+      final ref = _storage.ref().child('images/${fruitModel.code}/$imageName');
+      await ref.putData(compressedBytes);
+      imageUrl = await ref.getDownloadURL();
     }
-  }
 
-  // -------------------------------------------------------------------
-  // Private Helper Methods
-  // -------------------------------------------------------------------
-
-  Future<bool> _checkIfProductExists(String code) async => await _databaseService.checkIfDataExists(
-      path: BackendEndpoints.checkIfProductExists,
-      documentId: code,
+    final modelToSave = fruitModel.copyWith(
+      imagePath: imageUrl ?? fruitModel.imagePath,
     );
-
-  Future<NetworkFailure> _handelAddProductError({
-    required Object e,
-    required String imagePath,
-    required String errorMessage,
-    String? imageUrl,
-  }) async {
-    AppLogger.error('error occurred in addProduct', error: e.toString());
-    if (imageUrl != null) {
-      await _storageService.deleteFile(
-        bucketName: BackendEndpoints.bucketName,
-        path: imagePath,
-      );
-    }
-    return NetworkFailure(Exception(errorMessage));
-  }
+    await _firestore
+        .collection(BackendEndpoints.productsCollection)
+        .doc(modelToSave.code)
+        .update(modelToSave.toJson());
+  }, functionName: 'updateProduct');
 }

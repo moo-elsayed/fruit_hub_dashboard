@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_colors.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 class CustomSwitchContainer extends StatefulWidget {
@@ -31,35 +30,35 @@ class _CustomSwitchContainerState extends State<CustomSwitchContainer> {
 
   @override
   Widget build(BuildContext context) => Container(
-      padding: .symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        border: .all(color: buildColor(_isChecked)),
-        borderRadius: .circular(8.r),
+    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: _isChecked ? context.colors.primary : context.colors.border,
       ),
-      child: Row(
-        mainAxisAlignment: .spaceBetween,
-        children: [
-          Text(widget.text, style: buildTextStyle(_isChecked)),
-          SizedBox(
-            width: 53.w,
-            child: CupertinoSwitch(
-              activeTrackColor: Colors.green,
-              inactiveTrackColor: Colors.grey,
-              value: _isChecked,
-              onChanged: (value) {
-                setState(() => _isChecked = value);
-                widget.onChanged(value);
-              },
-            ),
+      borderRadius: BorderRadius.circular(8.r),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          widget.text,
+          style: AppTextStyles.font13SemiBold.copyWith(
+            color: _isChecked ? context.colors.primary : context.colors.subText,
           ),
-        ],
-      ),
-    );
-
-  Color buildColor(bool isChecked) =>
-      isChecked ? AppColors.color2D9F5D : AppColors.color949D9E;
-
-  TextStyle buildTextStyle(bool isChecked) => isChecked
-      ? AppTextStyles.font13color2D9F5DSemiBold
-      : AppTextStyles.font13color949D9ESemiBold;
+        ),
+        SizedBox(
+          width: 53.w,
+          child: CupertinoSwitch(
+            activeTrackColor: context.colors.primary,
+            inactiveTrackColor: context.colors.border,
+            value: _isChecked,
+            onChanged: (value) {
+              setState(() => _isChecked = value);
+              widget.onChanged(value);
+            },
+          ),
+        ),
+      ],
+    ),
+  );
 }

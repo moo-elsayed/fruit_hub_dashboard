@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/add_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/delete_product_use_case.dart';
+import 'package:fruit_hub_dashboard/features/products/domain/use_cases/get_products_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/update_product_use_case.dart';
-import '../../../../../core/helpers/functions.dart';
-import '../../../../../core/helpers/network_response.dart';
-import '../../../domain/entities/fruit_entity.dart';
-import '../../../domain/use_cases/get_products_use_case.dart';
 
 part 'products_state.dart';
 
@@ -32,7 +31,7 @@ class ProductsCubit extends Cubit<ProductsState> {
       case NetworkSuccess():
         await getProducts(newItemAdded: true, needLoading: false);
       case NetworkFailure():
-        emit(ProductsFailure(getErrorMessage(networkResponse)));
+        emit(ProductsFailure(networkResponse.error));
     }
   }
 
@@ -51,7 +50,7 @@ class ProductsCubit extends Cubit<ProductsState> {
         _fruits = networkResponse.data!;
         _emitSuccess(newItemAdded, itemRemoved, itemUpdated);
       case NetworkFailure<List<FruitEntity>>():
-        emit(ProductsFailure(getErrorMessage(networkResponse)));
+        emit(ProductsFailure(networkResponse.error));
     }
   }
 
@@ -62,7 +61,7 @@ class ProductsCubit extends Cubit<ProductsState> {
       case NetworkSuccess():
         await getProducts(itemRemoved: true, needLoading: false);
       case NetworkFailure():
-        emit(ProductsFailure(getErrorMessage(networkResponse)));
+        emit(ProductsFailure(networkResponse.error));
     }
   }
 
@@ -73,7 +72,7 @@ class ProductsCubit extends Cubit<ProductsState> {
       case NetworkSuccess():
         await getProducts(itemUpdated: true, needLoading: false);
       case NetworkFailure():
-        emit(ProductsFailure(getErrorMessage(networkResponse)));
+        emit(ProductsFailure(networkResponse.error));
     }
   }
 

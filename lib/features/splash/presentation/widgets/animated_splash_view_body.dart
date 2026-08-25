@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fruit_hub_dashboard/features/dashboard/presentation/views/dashboard_view.dart';
-import '../../../../generated/assets.dart';
-import '../../../auth/presentation/views/login_view.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_assets.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/routing/routes.dart';
 import '../managers/splash_cubit/splash_cubit.dart';
 
 class AnimatedSplashViewBody extends StatefulWidget {
@@ -16,16 +16,6 @@ class AnimatedSplashViewBody extends StatefulWidget {
 }
 
 class _AnimatedSplashViewBodyState extends State<AnimatedSplashViewBody> {
-  void navigate(Widget view) => Navigator.of(context).pushReplacement(
-    PageRouteBuilder(
-      pageBuilder: (_, _, _) => view,
-      transitionsBuilder: (_, animation, _, child) => FadeTransition(
-          opacity: CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-          child: child,
-        ),
-    ),
-  );
-
   @override
   void initState() {
     super.initState();
@@ -34,35 +24,40 @@ class _AnimatedSplashViewBodyState extends State<AnimatedSplashViewBody> {
 
   @override
   Widget build(BuildContext context) => BlocListener<SplashCubit, SplashState>(
-      listener: (context, state) {
-        if (state is SplashNavigateToHome) {
-          navigate(const DashboardView());
-        } else if (state is SplashNavigateToLogin) {
-          navigate(const LoginView());
+    listener: (context, state) {
+      if (state is SplashNavigationState) {
+        switch (state.navigation) {
+          case SplashNavigation.home:
+            context.pushReplacementNamed(Routes.dashboardView);
+          case SplashNavigation.login:
+            context.pushReplacementNamed(Routes.loginView);
         }
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          FadeInDown(
-            duration: const Duration(milliseconds: 1000),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset(Assets.svgsPlant),
-            ),
+      }
+    },
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        FadeInDown(
+          duration: const Duration(milliseconds: 1000),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: SvgPicture.asset(AppAssets.svgsPlant),
           ),
-          BounceInDown(
-            duration: const Duration(milliseconds: 1200),
-            child: Image.asset(
-              'assets/images/splash_android_12.png',
-              height: 300.h,
-            ),
+        ),
+        BounceInDown(
+          duration: const Duration(milliseconds: 1200),
+          child: Image.asset(
+            context.isDarkMode
+                ? AppAssets.imagesSplashAndroid12Dark
+                : AppAssets.imagesSplashAndroid12,
+            height: 300.h,
           ),
-          FadeInUp(
-            duration: const Duration(milliseconds: 1000),
-            child: SvgPicture.asset(Assets.svgsSplashBottom),
-          ),
-        ],
-      ),
-    );
+        ),
+        FadeInUp(
+          duration: const Duration(milliseconds: 1000),
+          child: SvgPicture.asset(AppAssets.svgsSplashBottom),
+        ),
+      ],
+    ),
+  );
 }

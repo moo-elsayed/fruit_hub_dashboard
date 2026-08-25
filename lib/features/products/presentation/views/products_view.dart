@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/helpers/extentions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/delete_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/widgets/products_grid_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../core/helpers/di.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/app_colors.dart';
@@ -29,78 +30,78 @@ class _ProductsViewState extends State<ProductsView> {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-      create: (context) => ProductsCubit(
-        getIt.get<AddProductUseCase>(),
-        getIt.get<GetProductsUseCase>(),
-        getIt.get<DeleteProductUseCase>(),
-        getIt.get<UpdateProductUseCase>(),
-      )..getProducts(),
-      child: Builder(
-        builder: (context) => Scaffold(
-            appBar: CustomAppBar(
-              title: 'Products',
-              showArrowBack: true,
-              onTap: () => context.pop(),
-            ),
-            body: Padding(
-              padding: .only(top: 10.h),
-              child: BlocConsumer<ProductsCubit, ProductsState>(
-                listener: (context, state) {
-                  if (state is ProductsSuccess) {
-                    if ((state.itemRemoved ||
-                        state.newItemAdded ||
-                        state.itemUpdated)) {
-                      context.pop();
-                      AppToast.showToast(
-                        context: context,
-                        title: state.newItemAdded
-                            ? 'product added'
-                            : state.itemUpdated
-                            ? 'product updated'
-                            : 'product removed',
-                        type: .success,
-                      );
-                    }
-                    _fruits = state.products;
-                  }
-                  if (state is ProductsLoading && state.itemRemoved) {
-                    AppDialogs.showLoadingDialog(context);
-                  }
-                  if (state is ProductsFailure) {
-                    AppToast.showToast(
-                      context: context,
-                      title: state.errorMessage,
-                      type: .error,
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  if (state is ProductsSuccess ||
-                      (state is ProductsLoading && state.itemRemoved)) {
-                    return ProductsGridView(fruits: _fruits);
-                  } else if (state is ProductsLoading && !state.itemRemoved) {
-                    return const Skeletonizer(
-                      enabled: true,
-                      child: ProductsGridView(itemCount: 6),
-                    );
-                  } else {
-                    return const Center(child: Text('error'));
-                  }
-                },
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => context.pushNamed(
-                Routes.productView,
-                arguments: [context.read<ProductsCubit>()],
-              ),
-              backgroundColor: AppColors.color1B5E37,
-              foregroundColor: AppColors.white,
-              elevation: 0,
-              shape: const CircleBorder(),
-              child: const Icon(Icons.add),
-            ),
+    create: (context) => ProductsCubit(
+      getIt.get<AddProductUseCase>(),
+      getIt.get<GetProductsUseCase>(),
+      getIt.get<DeleteProductUseCase>(),
+      getIt.get<UpdateProductUseCase>(),
+    )..getProducts(),
+    child: Builder(
+      builder: (context) => Scaffold(
+        appBar: CustomAppBar(
+          title: 'Products',
+          showArrowBack: true,
+          onTap: () => context.pop(),
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: BlocConsumer<ProductsCubit, ProductsState>(
+            listener: (context, state) {
+              if (state is ProductsSuccess) {
+                if ((state.itemRemoved ||
+                    state.newItemAdded ||
+                    state.itemUpdated)) {
+                  context.pop();
+                  AppToast.show(
+                    context: context,
+                    title: state.newItemAdded
+                        ? 'product added'
+                        : state.itemUpdated
+                        ? 'product updated'
+                        : 'product removed',
+                    type: ToastificationType.success,
+                  );
+                }
+                _fruits = state.products;
+              }
+              if (state is ProductsLoading && state.itemRemoved) {
+                AppDialogs.showLoadingDialog(context);
+              }
+              if (state is ProductsFailure) {
+                AppToast.show(
+                  context: context,
+                  title: state.errorMessage,
+                  type: ToastificationType.error,
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state is ProductsSuccess ||
+                  (state is ProductsLoading && state.itemRemoved)) {
+                return ProductsGridView(fruits: _fruits);
+              } else if (state is ProductsLoading && !state.itemRemoved) {
+                return const Skeletonizer(
+                  enabled: true,
+                  child: ProductsGridView(itemCount: 6),
+                );
+              } else {
+                return const Center(child: Text('error'));
+              }
+            },
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => context.pushNamed(
+            Routes.productView,
+            arguments: [context.read<ProductsCubit>()],
+          ),
+          backgroundColor: AppColors.color1B5E37,
+          foregroundColor: AppColors.white,
+          elevation: 0,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add),
+        ),
       ),
-    );
+    ),
+  );
 }

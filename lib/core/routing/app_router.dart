@@ -16,34 +16,29 @@ import '../../features/products/presentation/views/product_view.dart';
 import '../../features/splash/presentation/views/animated_splash_view.dart';
 
 class AppRouter {
+  RouteSettings? _currentSettings;
+
   Route? generateRoute(RouteSettings settings) {
-    //this arguments to be passed in any screen like this ( arguments as ClassName )
-    final arguments = settings.arguments;
+    _currentSettings = settings;
 
     switch (settings.name) {
       case Routes.splashView:
-        return CupertinoPageRoute(
-          builder: (context) => const AnimatedSplashView(),
-        );
+        return _route(const AnimatedSplashView());
       case Routes.loginView:
-        final args = arguments as LoginArgs?;
-        return CupertinoPageRoute(
-          builder: (context) => LoginView(loginArgs: args),
-        );
+        final args = _currentSettings!.arguments as LoginArgs?;
+        return _route(LoginView(loginArgs: args));
       case Routes.registerView:
-        return CupertinoPageRoute(builder: (context) => const RegisterView());
+        return _route(const RegisterView());
       case Routes.forgetPasswordView:
-        return CupertinoPageRoute(
-          builder: (context) => const ForgetPasswordView(),
-        );
+        return _route(const ForgetPasswordView());
       case Routes.dashboardView:
-        return CupertinoPageRoute(builder: (_) => const DashboardView());
+        return _route(const DashboardView());
       case Routes.productsView:
-        return CupertinoPageRoute(builder: (_) => const ProductsView());
+        return _route(const ProductsView());
       case Routes.productView:
-        final args = arguments as List;
-        return CupertinoPageRoute(
-          builder: (_) => BlocProvider<ProductsCubit>.value(
+        final args = _currentSettings!.arguments as List;
+        return _route(
+          BlocProvider<ProductsCubit>.value(
             value: args[0] as ProductsCubit,
             child: ProductView(
               fruitEntity: args.length > 1 ? args[1] as FruitEntity? : null,
@@ -62,4 +57,30 @@ class AppRouter {
         return null;
     }
   }
+
+  PageRouteBuilder<dynamic> _route(Widget view) => PageRouteBuilder(
+    settings: _currentSettings,
+    transitionDuration: const Duration(milliseconds: 300),
+    reverseTransitionDuration: const Duration(milliseconds: 250),
+    pageBuilder: (context, animation, secondaryAnimation) => view,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final slideTween = Tween<Offset>(
+        begin: const Offset(0.08, 0.0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOutCubic));
+
+      final fadeTween = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).chain(CurveTween(curve: Curves.easeOutCubic));
+
+      return FadeTransition(
+        opacity: animation.drive(fadeTween),
+        child: SlideTransition(
+          position: animation.drive(slideTween),
+          child: child,
+        ),
+      );
+    },
+  );
 }

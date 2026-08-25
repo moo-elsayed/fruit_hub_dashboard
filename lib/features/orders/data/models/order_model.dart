@@ -1,5 +1,5 @@
 import 'package:fruit_hub_dashboard/core/enums/payment_methods.dart';
-import '../../../../core/helpers/extentions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/payment_option_entity.dart';
 import 'address_model.dart';

@@ -1,4 +1,4 @@
-import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import '../entities/fruit_entity.dart';
 
 abstract class ProductsRepo {

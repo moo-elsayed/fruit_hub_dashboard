@@ -2,11 +2,10 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_entity.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/update_order_status_use_case.dart';
-import '../../../../../core/helpers/functions.dart';
-import '../../../../../core/helpers/network_response.dart';
-import '../../../domain/entities/order_entity.dart';
-import '../../../domain/use_cases/get_orders_use_case.dart';
 
 part 'orders_state.dart';
 
@@ -21,29 +20,39 @@ class OrdersCubit extends Cubit<OrdersState> {
   void streamOrders() {
     _ordersSubscription?.cancel();
 
-    emit(OrdersLoading(.getOrders));
+    emit(OrdersLoading(OrderState.getOrders));
     _ordersSubscription = _getOrdersUseCase().listen(
       (response) {
         switch (response) {
           case NetworkSuccess<List<OrderEntity>>():
-            emit(OrdersSuccess(orders: response.data!, orderState: .getOrders));
+            emit(
+              OrdersSuccess(
+                orders: response.data!,
+                orderState: OrderState.getOrders,
+              ),
+            );
           case NetworkFailure<List<OrderEntity>>():
             emit(
               OrdersFailure(
-                message: getErrorMessage(response),
-                orderState: .getOrders,
+                message: response.error,
+                orderState: OrderState.getOrders,
               ),
             );
         }
       },
       onError: (error) {
-        emit(OrdersFailure(message: error.toString(), orderState: .getOrders));
+        emit(
+          OrdersFailure(
+            message: error.toString(),
+            orderState: OrderState.getOrders,
+          ),
+        );
       },
     );
   }
 
   Future<void> updateOrderStatus(String docId, OrderStatus status) async {
-    emit(OrdersLoading(.updateOrderStatus));
+    emit(OrdersLoading(OrderState.updateOrderStatus));
     final response = await _updateOrderStatusUseCase(docId, status);
     switch (response) {
       case NetworkSuccess<void>():
@@ -51,8 +60,8 @@ class OrdersCubit extends Cubit<OrdersState> {
       case NetworkFailure<void>():
         emit(
           OrdersFailure(
-            message: getErrorMessage(response),
-            orderState: .updateOrderStatus,
+            message: response.error,
+            orderState: OrderState.updateOrderStatus,
           ),
         );
     }

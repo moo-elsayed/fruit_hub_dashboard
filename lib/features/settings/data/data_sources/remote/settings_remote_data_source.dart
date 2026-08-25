@@ -1,8 +1,10 @@
-import '../../../../../core/helpers/network_response.dart';
-import '../../../domain/entities/shipping_config_entity.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import '../../models/shipping_config_model.dart';
 
 abstract class SettingsRemoteDataSource {
-  Future<NetworkResponse<ShippingConfigEntity>> fetchShippingConfig();
+  Future<NetworkResponse<ShippingConfigModel>> fetchShippingConfig();
 
-  Future<NetworkResponse<void>> updateShippingConfig(ShippingConfigEntity shippingConfigEntity);
+  Future<NetworkResponse<void>> updateShippingConfig(
+    ShippingConfigModel shippingConfigModel,
+  );
 }

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../domain/entities/user_entity.dart';
+import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
 
 class UserModel {
   UserModel({
@@ -10,18 +9,55 @@ class UserModel {
     required this.isVerified,
   });
 
-  factory UserModel.fromFirebaseUser(User user) => UserModel(
-    uid: user.uid,
-    name: user.displayName ?? '',
-    email: user.email ?? '',
-    isVerified: user.emailVerified,
-  );
+  factory UserModel.fromFirebaseUser(
+    User user, {
+    String? customName,
+    Map<String, dynamic>? additionalProfile,
+  }) {
+    String resolvedName = (customName ?? user.displayName ?? '').trim();
+
+    if (resolvedName.isEmpty) {
+      for (final profile in user.providerData) {
+        if (profile.displayName != null &&
+            profile.displayName!.trim().isNotEmpty) {
+          resolvedName = profile.displayName!.trim();
+          break;
+        }
+      }
+    }
+
+    if (resolvedName.isEmpty && additionalProfile != null) {
+      final profileName =
+          additionalProfile['name'] ??
+          additionalProfile['displayName'] ??
+          additionalProfile['given_name'];
+      if (profileName != null && profileName.toString().trim().isNotEmpty) {
+        resolvedName = profileName.toString().trim();
+      }
+    }
+
+    if (resolvedName.isEmpty &&
+        user.email != null &&
+        user.email!.contains('@')) {
+      final emailPrefix = user.email!.split('@').first.trim();
+      if (emailPrefix.isNotEmpty) {
+        resolvedName = emailPrefix;
+      }
+    }
+
+    return UserModel(
+      uid: user.uid,
+      name: resolvedName,
+      email: user.email ?? '',
+      isVerified: user.emailVerified,
+    );
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> map) => UserModel(
-    uid: map['uid'],
-    name: map['name'],
-    email: map['email'],
-    isVerified: map['isVerified'],
+    uid: map['uid'] ?? '',
+    name: map['name'] ?? '',
+    email: map['email'] ?? '',
+    isVerified: map['isVerified'] ?? false,
   );
 
   factory UserModel.fromUserEntity(UserEntity user) => UserModel(

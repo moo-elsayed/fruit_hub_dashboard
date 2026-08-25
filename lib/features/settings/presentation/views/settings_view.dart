@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/di.dart';
-import 'package:fruit_hub_dashboard/core/helpers/extentions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/fetch_shipping_config_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/widgets/delivery_fees_container.dart';
@@ -18,63 +18,75 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-      create: (context) => SettingsCubit(
-        getIt.get<FetchShippingConfigUseCase>(),
-        getIt.get<UpdateShippingConfigUseCase>(),
-      )..fetchShippingConfig(),
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Settings',
-          showArrowBack: true,
-          onTap: () => context.pop(),
-        ),
-        body: Padding(
-          padding: .symmetric(horizontal: 20.w, vertical: 24.h),
-          child: BlocBuilder<SettingsCubit, SettingsState>(
-            buildWhen: (previous, current) =>
-                current is FetchingShippingConfigSuccess ||
-                current is FetchingShippingConfigLoading ||
-                current is FetchingShippingConfigFailure,
-            builder: (context, state) {
-              if (state is FetchingShippingConfigSuccess) {
-                return Column(
-                  crossAxisAlignment: .start,
+    create: (context) => SettingsCubit(
+      getIt.get<FetchShippingConfigUseCase>(),
+      getIt.get<UpdateShippingConfigUseCase>(),
+    )..fetchShippingConfig(),
+    child: Scaffold(
+      appBar: CustomAppBar(
+        title: 'Settings',
+        showArrowBack: true,
+        onTap: () => context.pop(),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+        child: BlocBuilder<SettingsCubit, SettingsState>(
+          buildWhen: (previous, current) =>
+              current is FetchingShippingConfigSuccess ||
+              current is FetchingShippingConfigLoading ||
+              current is FetchingShippingConfigFailure,
+          builder: (context, state) {
+            if (state is FetchingShippingConfigSuccess) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'General Configuration',
+                    style: AppTextStyles.font18Bold.copyWith(
+                      color: context.colors.mainText,
+                    ),
+                  ),
+                  Gap(20.h),
+                  DeliveryFeesContainer(
+                        shippingCost: state.shippingConfigEntity.shippingCost,
+                      )
+                      .animate(delay: const Duration(milliseconds: 50))
+                      .slideY(begin: 0.15, duration: 300.ms)
+                      .fadeIn(duration: 300.ms),
+                ],
+              );
+            }
+            if (state is FetchingShippingConfigFailure) {
+              return Center(
+                child: Text(
+                  state.error,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.font14Regular.copyWith(
+                    color: context.colors.error,
+                  ),
+                ),
+              );
+            } else {
+              return Skeletonizer(
+                enabled: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'General Configuration',
-                      style: AppTextStyles.font18color0C0D0DBold,
+                      style: AppTextStyles.font18Bold.copyWith(
+                        color: context.colors.mainText,
+                      ),
                     ),
                     Gap(20.h),
-                    DeliveryFeesContainer(
-                          shippingCost: state.shippingConfigEntity.shippingCost,
-                        )
-                        .animate(delay: const Duration(milliseconds: 50))
-                        .slideY(begin: 0.15, duration: 300.ms)
-                        .fadeIn(duration: 300.ms),
+                    const DeliveryFeesContainer(shippingCost: 0),
                   ],
-                );
-              }
-              if (state is FetchingShippingConfigFailure) {
-                return Center(child: Text(state.error, textAlign: .center));
-              } else {
-                return Skeletonizer(
-                  enabled: true,
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Text(
-                        'General Configuration',
-                        style: AppTextStyles.font18color0C0D0DBold,
-                      ),
-                      Gap(20.h),
-                      const DeliveryFeesContainer(shippingCost: 0),
-                    ],
-                  ),
-                );
-              }
-            },
-          ),
+                ),
+              );
+            }
+          },
         ),
       ),
-    );
+    ),
+  );
 }

@@ -1,181 +1,197 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fruit_hub_dashboard/core/errors/exceptions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
-import 'package:fruit_hub_dashboard/core/helpers/failures.dart';
-import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
-import 'package:fruit_hub_dashboard/core/services/authentication/auth_service.dart';
-import 'package:fruit_hub_dashboard/core/services/database/database_service.dart';
-import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
+import 'package:fruit_hub_dashboard/core/network/api_helper.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
-import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
-import '../../../../../core/helpers/app_logger.dart';
+
+import 'auth_remote_data_source.dart';
 
 class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
-  AuthRemoteDataSourceImp(
-    this._authService,
-    this._databaseService,
-    this._signOutService,
-  );
+  AuthRemoteDataSourceImp({
+    FirebaseAuth? firebaseAuth,
+    FirebaseFirestore? firestore,
+  }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+       _firestore = firestore ?? FirebaseFirestore.instance;
 
-  final AuthService _authService;
-  final DatabaseService _databaseService;
-  final SignOutService _signOutService;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
+  static const String _usersCollection = BackendEndpoints.usersCollection;
 
   @override
-  Future<NetworkResponse<UserEntity>> createUserWithEmailAndPassword({
+  Future<NetworkResponse<UserModel>> createUserWithEmailAndPassword({
     required String email,
     required String password,
     required String username,
-  }) async {
+  }) async => ApiHelper.executeSafely(() async {
     try {
-      final userEntity = await _authService.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      final userModel = UserModel.fromUserEntity(userEntity)..name = username;
-      await _addUserData(userModel);
+      final user = userCredential.user;
+      if (user == null) {
+        throw BusinessException(AppStrings.unexpectedError);
+      }
 
-      await _authService.sendEmailVerification();
+      await user.updateDisplayName(username);
 
-      return NetworkSuccess(userModel.toUserEntity());
+      final userModel = UserModel(
+        uid: user.uid,
+        name: username,
+        email: email,
+        isVerified: user.emailVerified,
+      );
+
+      await _firestore
+          .collection(_usersCollection)
+          .doc(user.uid)
+          .set(userModel.toJson());
+
+      await user.sendEmailVerification();
+      await _firebaseAuth.signOut();
+
+      return userModel;
     } on FirebaseAuthException catch (e) {
       if (e.code != 'email-already-in-use') {
-        await _authService.deleteCurrentUser();
+        await _firebaseAuth.currentUser?.delete();
       }
-      return _handleAuthError(e, 'createUserWithEmailAndPassword');
-    } catch (e) {
-      await _authService.deleteCurrentUser();
-      return _handleAuthError(e, 'createUserWithEmailAndPassword');
+      rethrow;
+    } catch (_) {
+      await _firebaseAuth.currentUser?.delete();
+      rethrow;
     }
-  }
+  }, functionName: 'createUserWithEmailAndPassword');
 
   @override
-  Future<NetworkResponse<UserEntity>> signInWithEmailAndPassword({
+  Future<NetworkResponse<UserModel>> signInWithEmailAndPassword({
     required String email,
     required String password,
-  }) async {
-    try {
-      final userEntity = await _authService.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+  }) async => ApiHelper.executeSafely(() async {
+    final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 
-      // if (!userEntity.isVerified) {
-      //   await _authService.sendEmailVerification();
-      //   return NetworkFailure(
-      //     Exception("Please verify your email. A new link has been sent."),
-      //   );
-      // }
+    final user = userCredential.user;
+    if (user == null) {
+      throw BusinessException(AppStrings.userNotFound);
+    }
 
-      if (!await _checkIfIsAdmin(userEntity.uid)) {
-        return NetworkFailure(
-          Exception('Access Denied: You are not an admin.'),
+    await user.reload();
+    final updatedUser = _firebaseAuth.currentUser ?? user;
+
+    if (!updatedUser.emailVerified) {
+      await _firebaseAuth.signOut();
+      throw BusinessException(AppStrings.pleaseVerifyYourEmail);
+    }
+
+    final userModel = UserModel.fromFirebaseUser(updatedUser);
+    return await _getOrUpdateUserFromDB(userModel);
+  }, functionName: 'signInWithEmailAndPassword');
+
+  @override
+  Future<NetworkResponse<UserModel>> googleSignIn() async =>
+      ApiHelper.executeSafely(() async {
+        final googleProvider = GoogleAuthProvider();
+        final userCredential = await _firebaseAuth.signInWithProvider(
+          googleProvider,
         );
-      }
 
-      final updatedUser = await _getOrUpdateUserFromDB(userEntity);
-      return NetworkSuccess(updatedUser);
-    } catch (e) {
-      return _handleAuthError(e, 'signInWithEmailAndPassword');
-    }
-  }
+        final user = userCredential.user;
+        if (user == null) {
+          throw BusinessException(AppStrings.unexpectedError);
+        }
 
-  @override
-  Future<NetworkResponse<UserEntity>> googleSignIn() async {
-    try {
-      final userEntity = await _authService.googleSignIn();
-      final updatedUser = await _getOrUpdateUserFromDB(userEntity);
-      return NetworkSuccess(updatedUser);
-    } catch (e) {
-      return _handleAuthError(e, 'googleSignIn');
-    }
-  }
+        final profile = userCredential.additionalUserInfo?.profile;
+        final userModel = UserModel.fromFirebaseUser(
+          user,
+          additionalProfile: profile,
+        );
+        return await _getOrUpdateUserFromDB(userModel);
+      }, functionName: 'googleSignIn');
 
   @override
-  Future<NetworkResponse<void>> forgetPassword(String email) async {
-    if (await _checkIfEmailExists(email)) {
-      await _authService.forgetPassword(email);
-      return const NetworkSuccess();
-    } else {
-      return NetworkFailure(
-        Exception('No user found with that email address.'),
-      );
-    }
-  }
+  Future<NetworkResponse<void>> forgetPassword(String email) async =>
+      ApiHelper.executeSafely(() async {
+        final exists = await _checkIfEmailExists(email);
+        if (!exists) {
+          throw BusinessException(AppStrings.noUserFoundForThatEmail);
+        }
+        await _firebaseAuth.sendPasswordResetEmail(email: email);
+      }, functionName: 'forgetPassword');
 
   @override
-  Future<NetworkResponse<void>> signOut() async {
-    try {
-      await _signOutService.signOut();
-      return const NetworkSuccess();
-    } catch (e) {
-      return _handleAuthError(e, 'signOut');
-    }
-  }
+  Future<NetworkResponse<UserModel>> getUserInfo(String uid) async =>
+      ApiHelper.executeSafely(() async {
+        final docSnapshot = await _firestore
+            .collection(_usersCollection)
+            .doc(uid)
+            .get();
+        if (!docSnapshot.exists || docSnapshot.data() == null) {
+          throw BusinessException(AppStrings.userNotFound);
+        }
+        final data = Map<String, dynamic>.from(docSnapshot.data()!);
+        final firebaseUser = _firebaseAuth.currentUser;
+        final bool firestoreVerified = data['isVerified'] == true;
+        final bool authVerified = firebaseUser?.emailVerified ?? false;
+        data['isVerified'] = firestoreVerified || authVerified;
+        return UserModel.fromJson(data);
+      }, functionName: 'getUserInfo');
+
+  @override
+  Future<NetworkResponse<void>> signOut() async =>
+      ApiHelper.executeSafely(() async {
+        await _firebaseAuth.signOut();
+      }, functionName: 'signOut');
 
   // -------------------------------------------------------------------
   // Private Helper Methods
   // -------------------------------------------------------------------
 
-  NetworkFailure<T> _handleAuthError<T>(Object e, String functionName) {
-    AppLogger.error('error occurred in $functionName', error: e);
-    if (e is FirebaseAuthException) {
-      return NetworkFailure(
-        Exception(ServerFailure.fromFirebaseException(e).errorMessage),
-      );
-    }
-    return NetworkFailure(Exception(e.toString()));
-  }
+  Future<UserModel> _getOrUpdateUserFromDB(UserModel userModel) async {
+    final docSnapshot = await _firestore
+        .collection(_usersCollection)
+        .doc(userModel.uid)
+        .get();
 
-  Future<UserEntity> _getOrUpdateUserFromDB(UserEntity user) async {
-    final userExists = await _checkIfUserExists(user.uid);
+    if (docSnapshot.exists && docSnapshot.data() != null) {
+      final storedUserData = Map<String, dynamic>.from(docSnapshot.data()!);
+      final bool firestoreVerified = storedUserData['isVerified'] == true;
+      final bool isVerifiedNow = firestoreVerified || userModel.isVerified;
+      storedUserData['isVerified'] = isVerifiedNow;
 
-    if (userExists) {
-      await _updateUserData(UserModel.fromUserEntity(user));
-      final storedUserData = await _databaseService.getData(
-        path: BackendEndpoints.getUserData,
-        documentId: user.uid,
-      );
-      return UserModel.fromJson(storedUserData).toUserEntity();
+      final String storedName = (storedUserData['name'] ?? '')
+          .toString()
+          .trim();
+      final String resolvedName = storedName.isNotEmpty
+          ? storedName
+          : userModel.name;
+      storedUserData['name'] = resolvedName;
+
+      await _firestore.collection(_usersCollection).doc(userModel.uid).update({
+        'isVerified': isVerifiedNow,
+        if (resolvedName.isNotEmpty) 'name': resolvedName,
+      });
+      return UserModel.fromJson(storedUserData);
     } else {
-      final userModel = UserModel.fromUserEntity(user);
-      await _addUserData(userModel);
-      return userModel.toUserEntity();
+      await _firestore
+          .collection(_usersCollection)
+          .doc(userModel.uid)
+          .set(userModel.toJson());
+      return userModel;
     }
   }
 
-  Future<void> _addUserData(UserModel user) async =>
-      await _databaseService.addData(
-        docId: user.uid,
-        path: BackendEndpoints.addUserData,
-        data: user.toJson(),
-      );
-
-  Future<void> _updateUserData(UserModel user) async =>
-      await _databaseService.updateData(
-        path: BackendEndpoints.updateUserData,
-        documentId: user.uid,
-        data: {'isVerified': user.isVerified},
-      );
-
-  Future<bool> _checkIfUserExists(String uid) async =>
-      await _databaseService.checkIfDataExists(
-        path: BackendEndpoints.checkIfUserExists,
-        documentId: uid,
-      );
-
-  Future<bool> _checkIfEmailExists(String email) async =>
-      await _databaseService.checkIfFieldExists(
-        path: BackendEndpoints.checkIfEmailExists,
-        fieldName: 'email',
-        fieldValue: email,
-      );
-
-  Future<bool> _checkIfIsAdmin(String uid) async {
-    final Map<String, dynamic> userData = await _databaseService.getData(
-      path: BackendEndpoints.getUserData,
-      documentId: uid,
-    );
-    return userData['userRole'] == 'admin';
+  Future<bool> _checkIfEmailExists(String email) async {
+    final query = await _firestore
+        .collection(_usersCollection)
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+    return query.docs.isNotEmpty;
   }
 }

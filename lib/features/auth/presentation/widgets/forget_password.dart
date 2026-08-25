@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import '../../../../core/theming/app_text_styles.dart';
 
 class ForgetPassword extends StatelessWidget {
@@ -8,13 +10,15 @@ class ForgetPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Align(
-      alignment: AlignmentDirectional.centerEnd,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Text(
-          'Forgot Password?',
-          style: AppTextStyles.font13color2D9F5DSemiBold,
+    alignment: AlignmentDirectional.centerEnd,
+    child: GestureDetector(
+      onTap: onTap,
+      child: Text(
+        AppStrings.forgotPassword,
+        style: AppTextStyles.font13SemiBold.copyWith(
+          color: context.colors.primary,
         ),
       ),
-    );
+    ),
+  );
 }

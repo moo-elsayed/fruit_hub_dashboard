@@ -1,21 +1,24 @@
-import 'package:flutter/cupertino.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/helpers/extentions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
+import 'package:fruit_hub_dashboard/core/helpers/di.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/validator.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
+import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_material_button.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_success_dialog.dart';
+import 'package:fruit_hub_dashboard/core/widgets/text_form_field_helper.dart';
+import 'package:fruit_hub_dashboard/features/auth/presentation/managers/forget_password_cubit/forget_password_cubit.dart';
 import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
-import '../../../../core/helpers/di.dart';
-import '../../../../core/helpers/validator.dart';
-import '../../../../core/theming/app_text_styles.dart';
-import '../../../../core/widgets/app_toasts.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/custom_material_button.dart';
-import '../../../../core/widgets/text_form_field_helper.dart';
-import '../../domain/use_cases/forget_password_use_case.dart';
+
 import '../args/login_args.dart';
-import '../managers/forget_password_cubit/forget_password_cubit.dart';
-import '../widgets/custom_dialog.dart';
 
 class ForgetPasswordView extends StatefulWidget {
   const ForgetPasswordView({super.key});
@@ -43,88 +46,130 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: CustomAppBar(
-        title: 'Password Reset',
-        showArrowBack: true,
-        onTap: () => context.pop(),
-      ),
-      body: BlocProvider(
-        create: (context) =>
-            ForgetPasswordCubit(getIt.get<ForgetPasswordUseCase>()),
-        child: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
-          behavior: HitTestBehavior.opaque,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Gap(24.h),
-                  Text(
-                    "Enter your email address and we'll send you a link to reset your password.",
-                    style: AppTextStyles.font16color616A6BSemiBold,
-                  ),
-                  Gap(30.h),
-                  TextFormFieldHelper(
-                    controller: _emailController,
-                    hint: 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                    onValidate: Validator.validateEmail,
-                    action: TextInputAction.done,
-                  ),
-                  Gap(16.h),
-                  BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
-                    listener: (context, state) {
-                      if (state is ForgetPasswordSuccess) {
-                        AppToast.showToast(
-                          context: context,
-                          title: 'Email Sent Successfully',
-                          type: ToastificationType.success,
-                        );
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (context) => CustomDialog(
-                            text:
-                                'An email has been sent to your address with instructions to reset your password.',
-                            onPressed: () {
-                              context.pop();
-                              final loginArgs = LoginArgs(
-                                email: _emailController.text.trim(),
-                                password: '',
-                              );
-                              context.pop(loginArgs);
-                            },
+    appBar: CustomAppBar(
+      title: AppStrings.passwordReset,
+      showArrowBack: true,
+      onTap: () => context.pop(),
+    ),
+    body: BlocProvider(
+      create: (context) => getIt.get<ForgetPasswordCubit>(),
+      child: CustomKeyboardUnfocus(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Gap(16.h),
+                FadeInDown(
+                  duration: const Duration(milliseconds: 500),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 72.r,
+                        height: 72.r,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: context.colors.primary.withValues(alpha: 0.1),
+                          border: Border.all(
+                            color: context.colors.primary.withValues(
+                              alpha: 0.3,
+                            ),
+                            width: 2.w,
                           ),
-                        );
-                      }
-                      if (state is ForgetPasswordFailure) {
-                        AppToast.showToast(
-                          context: context,
-                          title: state.errorMessage,
-                          type: ToastificationType.error,
-                        );
-                      }
-                    },
-                    builder: (context, state) => CustomMaterialButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<ForgetPasswordCubit>().forgetPassword(
-                              _emailController.text,
+                        ),
+                        child: Icon(
+                          Icons.lock_reset_rounded,
+                          size: 34.sp,
+                          color: context.colors.primary,
+                        ),
+                      ),
+                      Gap(16.h),
+                      Text(
+                        AppStrings.passwordReset,
+                        style: AppTextStyles.font24Bold.copyWith(
+                          color: context.colors.mainText,
+                        ),
+                      ),
+                      Gap(8.h),
+                      Text(
+                        AppStrings.sendEmailResetLink,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.font14Regular.copyWith(
+                          color: context.colors.subText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gap(32.h),
+                FadeInUp(
+                  duration: const Duration(milliseconds: 600),
+                  child: Column(
+                    children: [
+                      TextFormFieldHelper(
+                        controller: _emailController,
+                        hint: AppStrings.email,
+                        keyboardType: TextInputType.emailAddress,
+                        onValidate: Validator.validateEmail,
+                        action: TextInputAction.done,
+                      ),
+                      Gap(28.h),
+                      BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
+                        listener: (context, state) {
+                          if (state is ForgetPasswordSuccess) {
+                            AppToast.show(
+                              context: context,
+                              title: AppStrings.emailSent,
+                              type: ToastificationType.success,
+                            );
+                            CustomSuccessDialog.show(
+                              context: context,
+                              text: AppStrings.emailSentToReset,
+                              onPressed: () {
+                                context.pop();
+                                final loginArgs = LoginArgs(
+                                  email: _emailController.text.trim(),
+                                  password: '',
+                                );
+                                context.pop(loginArgs);
+                              },
+                            );
+                          }
+                          if (state is ForgetPasswordFailure) {
+                            AppToast.show(
+                              context: context,
+                              title: state.errorMessage,
+                              type: ToastificationType.error,
                             );
                           }
                         },
-                        maxWidth: true,
-                        text: 'Reset Password',
-                        textStyle: AppTextStyles.font16WhiteBold,
-                        isLoading: state is ForgetPasswordLoading,
+                        builder: (context, state) => CustomMaterialButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context
+                                  .read<ForgetPasswordCubit>()
+                                  .forgetPassword(_emailController.text);
+                            }
+                          },
+                          maxWidth: true,
+                          text: AppStrings.sendPasswordResetLink,
+                          textStyle: AppTextStyles.font16Bold.copyWith(
+                            color: AppPalette.white,
+                          ),
+                          isLoading: state is ForgetPasswordLoading,
+                        ),
                       ),
+                      Gap(24.h),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
-    );
+    ),
+  );
 }

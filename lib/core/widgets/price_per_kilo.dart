@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../helpers/functions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import '../theming/app_text_styles.dart';
 
 class PricePerKilo extends StatelessWidget {
@@ -9,17 +10,21 @@ class PricePerKilo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: '${getPrice(price)} pounds',
-            style: AppTextStyles.font13colorF4A91FSemiBold,
+    text: TextSpan(
+      children: [
+        TextSpan(
+          text: price.formattedPrice.toString(),
+          style: AppTextStyles.font13SemiBold.copyWith(
+            color: context.colors.secondary,
           ),
-          TextSpan(
-            text: ' / kilo',
-            style: AppTextStyles.font13colorF8C76DSemiBold,
+        ),
+        TextSpan(
+          text: ' / ${AppStrings.kilo}',
+          style: AppTextStyles.font13SemiBold.copyWith(
+            color: context.colors.subText,
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 }

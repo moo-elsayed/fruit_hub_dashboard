@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import '../../../../core/theming/app_text_styles.dart';
 
 class AuthRedirectText extends StatelessWidget {
@@ -16,19 +17,23 @@ class AuthRedirectText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: question,
-            style: AppTextStyles.font16color949D9ESemiBold,
+    text: TextSpan(
+      children: [
+        TextSpan(
+          text: question,
+          style: AppTextStyles.font16SemiBold.copyWith(
+            color: context.colors.subText,
           ),
-          const TextSpan(text: ' '),
-          TextSpan(
-            text: action,
-            style: AppTextStyles.font16color1B5E37ESemiBold,
-            recognizer: TapGestureRecognizer()..onTap = onTap,
+        ),
+        const TextSpan(text: ' '),
+        TextSpan(
+          text: action,
+          style: AppTextStyles.font16SemiBold.copyWith(
+            color: context.colors.primary,
           ),
-        ],
-      ),
-    );
+          recognizer: TapGestureRecognizer()..onTap = onTap,
+        ),
+      ],
+    ),
+  );
 }

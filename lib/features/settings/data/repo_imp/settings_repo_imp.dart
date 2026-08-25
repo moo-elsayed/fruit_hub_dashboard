@@ -1,7 +1,8 @@
-import 'package:fruit_hub_dashboard/core/helpers/network_response.dart';
-import 'package:fruit_hub_dashboard/features/settings/data/data_sources/remote/settings_remote_data_source.dart';
-import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_config_entity.dart';
-import 'package:fruit_hub_dashboard/features/settings/domain/settings_repo/settings_repo.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import 'package:fruit_hub_dashboard/features/settings/data/models/shipping_config_model.dart';
+import '../../domain/entities/shipping_config_entity.dart';
+import '../../domain/settings_repo/settings_repo.dart';
+import '../data_sources/remote/settings_remote_data_source.dart';
 
 class SettingsRepoImp implements SettingsRepo {
   SettingsRepoImp(this._settingsRemoteDataSource);
@@ -9,12 +10,20 @@ class SettingsRepoImp implements SettingsRepo {
   final SettingsRemoteDataSource _settingsRemoteDataSource;
 
   @override
-  Future<NetworkResponse<ShippingConfigEntity>> fetchShippingConfig() async =>
-      _settingsRemoteDataSource.fetchShippingConfig();
+  Future<NetworkResponse<ShippingConfigEntity>> fetchShippingConfig() async {
+    final response = await _settingsRemoteDataSource.fetchShippingConfig();
+    switch (response) {
+      case NetworkSuccess<ShippingConfigModel>():
+        return NetworkSuccess(response.data?.toEntity());
+      case NetworkFailure<ShippingConfigModel>():
+        return NetworkFailure(response.failure);
+    }
+  }
 
   @override
   Future<NetworkResponse<void>> updateShippingConfig(
     ShippingConfigEntity shippingConfigEntity,
-  ) async =>
-      _settingsRemoteDataSource.updateShippingConfig(shippingConfigEntity);
+  ) async => await _settingsRemoteDataSource.updateShippingConfig(
+    ShippingConfigModel.fromEntity(shippingConfigEntity),
+  );
 }

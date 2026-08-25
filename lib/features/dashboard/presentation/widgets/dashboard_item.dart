@@ -11,26 +11,24 @@ class DashboardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-      onTap: entity.onTap,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: entity.color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: entity.color.withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(entity.icon, size: 40.sp, color: entity.color),
-            Gap(12.h),
-            Text(
-              entity.title,
-              style: AppTextStyles.font16WhiteBold.copyWith(
-                color: entity.color,
-              ),
-            ),
-          ],
-        ),
+    onTap: entity.onTap,
+    child: DecoratedBox(
+      decoration: BoxDecoration(
+        color: entity.color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: entity.color.withValues(alpha: 0.3)),
       ),
-    );
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(entity.icon, size: 40.sp, color: entity.color),
+          Gap(12.h),
+          Text(
+            entity.title,
+            style: AppTextStyles.font16Bold.copyWith(color: entity.color),
+          ),
+        ],
+      ),
+    ),
+  );
 }

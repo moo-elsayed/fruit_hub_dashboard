@@ -1,20 +1,15 @@
-class BackendEndpoints {
-  static const addProduct = 'products';
-  static const deleteProduct = 'products';
-  static const updateProduct = 'products';
-  static const bucketName = 'products';
-  static const checkIfProductExists = 'products';
-  static const getAllProducts = 'products';
-  static const addUserData = 'users';
-  static const checkIfUserExists = 'users';
-  static const checkIfEmailExists = 'users';
-  static const getUserData = 'users';
-  static const updateUserData = 'users';
-  static const fetchShippingCost = 'constants';
-  static const updateShippingCost = 'constants';
-  static const streamOrders = 'orders';
-  static const updateOrderStatus = 'orders';
+abstract class BackendEndpoints {
+  BackendEndpoints._();
 
-  // -------------------------------------------
-  static const shippingConfigId = 'shipping_config';
+  // Firestore Collections
+  static const String productsCollection = 'products';
+  static const String usersCollection = 'users';
+  static const String ordersCollection = 'orders';
+  static const String constantsCollection = 'constants';
+
+  // Storage
+  static const String productsStorageBucket = 'products';
+
+  // Firestore Document IDs
+  static const String shippingConfigDocId = 'shipping_config';
 }

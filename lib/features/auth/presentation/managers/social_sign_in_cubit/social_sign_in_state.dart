@@ -14,3 +14,13 @@ final class GoogleFailure extends SocialSignInState {
 
   final String message;
 }
+
+final class FacebookLoading extends SocialSignInState {}
+
+final class FacebookSuccess extends SocialSignInState {}
+
+final class FacebookFailure extends SocialSignInState {
+  FacebookFailure(this.message);
+
+  final String message;
+}

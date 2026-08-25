@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:gap/gap.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../core/helpers/validator.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/theming/app_text_styles.dart';
@@ -50,82 +53,96 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
-      behavior: .opaque,
-      child: Container(
-        padding: .all(20.r),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: .circular(12.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.07),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: .start,
-            spacing: 16.h,
-            children: [
-              Text('Delivery Fees', style: AppTextStyles.font16color0C0D0DBold),
-              ValueListenableBuilder<double>(
-                valueListenable: _shippingCostNotifier,
-                builder: (context, value, child) => TextFormFieldHelper(
-                    controller: _shippingCostController,
-                    onValidate: Validator.validateNumber,
-                    hint: value.toString(),
-                    suffixWidget: Column(
-                      mainAxisAlignment: .center,
-                      children: [
-                        Text('EGP', style: AppTextStyles.font13GreyRegular),
-                      ],
-                    ),
-                    keyboardType: const .numberWithOptions(decimal: true),
-                  ),
+    onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+    behavior: .opaque,
+    child: Container(
+      padding: .all(20.r),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: .circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.07),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: .start,
+          spacing: 16.h,
+          children: [
+            Text(
+              'Delivery Fees',
+              style: AppTextStyles.font16Bold.copyWith(
+                color: context.colors.mainText,
               ),
-              Gap(8.h),
-              Align(
-                alignment: .center,
-                child: BlocConsumer<SettingsCubit, SettingsState>(
-                  listener: (context, state) {
-                    if (state is UpdatingShippingConfigSuccess) {
-                      _updateCurrentShippingCost();
-                      AppToast.showToast(
-                        context: context,
-                        title: 'Success',
-                        type: .success,
+            ),
+            ValueListenableBuilder<double>(
+              valueListenable: _shippingCostNotifier,
+              builder: (context, value, child) => TextFormFieldHelper(
+                controller: _shippingCostController,
+                onValidate: Validator.validateRequiredField,
+                hint: value.toString(),
+                suffixWidget: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'EGP',
+                      style: AppTextStyles.font13Regular.copyWith(
+                        color: context.colors.subText,
+                      ),
+                    ),
+                  ],
+                ),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+              ),
+            ),
+            Gap(8.h),
+            Align(
+              alignment: Alignment.center,
+              child: BlocConsumer<SettingsCubit, SettingsState>(
+                listener: (context, state) {
+                  if (state is UpdatingShippingConfigSuccess) {
+                    _updateCurrentShippingCost();
+                    AppToast.show(
+                      context: context,
+                      title: 'Success',
+                      type: ToastificationType.success,
+                    );
+                  }
+                },
+                buildWhen: (previous, current) =>
+                    current is UpdatingShippingConfigSuccess ||
+                    current is UpdatingShippingConfigFailure ||
+                    current is UpdatingShippingConfigLoading,
+                builder: (context, state) => CustomMaterialButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final cost = double.parse(_shippingCostController.text);
+                      if (cost == currentShippingCost) {
+                        return;
+                      }
+                      context.read<SettingsCubit>().updateShippingConfig(
+                        ShippingConfigEntity(shippingCost: cost),
                       );
                     }
                   },
-                  buildWhen: (previous, current) =>
-                      current is UpdatingShippingConfigSuccess ||
-                      current is UpdatingShippingConfigFailure ||
-                      current is UpdatingShippingConfigLoading,
-                  builder: (context, state) => CustomMaterialButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          final cost = double.parse(_shippingCostController.text);
-                          if (cost == currentShippingCost) {
-                            return;
-                          }
-                          context.read<SettingsCubit>().updateShippingConfig(
-                            ShippingConfigEntity(shippingCost: cost),
-                          );
-                        }
-                      },
-                      isLoading: state is UpdatingShippingConfigLoading,
-                      text: 'Save Changes',
-                      textStyle: AppTextStyles.font16WhiteBold,
-                    ),
+                  isLoading: state is UpdatingShippingConfigLoading,
+                  text: 'Save Changes',
+                  textStyle: AppTextStyles.font16Bold.copyWith(
+                    color: AppPalette.white,
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
 }

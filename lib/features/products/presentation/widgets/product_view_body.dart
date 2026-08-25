@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/helpers/validator.dart';
+import '../../../../core/theming/app_palette.dart';
 import '../../../../core/theming/app_text_styles.dart';
 import '../../../../core/widgets/custom_material_button.dart';
 import '../../../../core/widgets/text_form_field_helper.dart';
@@ -52,33 +53,31 @@ class _ProductViewBodyState extends State<ProductViewBody> {
               TextFormFieldHelper(
                 controller: widget.productArgs.nameController,
                 labelText: 'name',
-                keyboardType: .name,
-                onValidate: (value) => Validator.validateName(val: value),
-                action: .next,
+                keyboardType: TextInputType.name,
+                onValidate: Validator.validateName,
+                action: TextInputAction.next,
               ),
               Gap(16.h),
               TextFormFieldHelper(
                 controller: widget.productArgs.priceController,
                 labelText: 'price',
-                keyboardType: .number,
-                onValidate: (value) =>
-                    Validator.validateName(val: value, type: 'Price'),
-                action: .next,
+                keyboardType: TextInputType.number,
+                onValidate: Validator.validateRequiredField,
+                action: TextInputAction.next,
               ),
               Gap(16.h),
               TextFormFieldHelper(
                 controller: widget.productArgs.descriptionController,
                 labelText: 'description',
-                keyboardType: .name,
-                onValidate: (value) =>
-                    Validator.validateName(val: value, type: 'Description'),
+                keyboardType: TextInputType.name,
+                onValidate: Validator.validateDescription,
                 maxLines: 5,
                 minLines: 5,
-                action: .next,
+                action: TextInputAction.next,
               ),
               Gap(16.h),
               Row(
-                crossAxisAlignment: .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 16.w,
                 children: [
                   Expanded(
@@ -86,52 +85,43 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                       controller:
                           widget.productArgs.daysUntilExpirationController,
                       labelText: 'days until expiration',
-                      keyboardType: .number,
-                      onValidate: (value) => Validator.validateName(
-                        val: value,
-                        type: 'days until expiration',
-                      ),
-                      action: .next,
+                      keyboardType: TextInputType.number,
+                      onValidate: Validator.validateRequiredField,
+                      action: TextInputAction.next,
                     ),
                   ),
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: widget.productArgs.codeController,
                       labelText: 'code',
-                      keyboardType: .number,
+                      keyboardType: TextInputType.number,
                       onValidate: Validator.validateCode,
-                      action: .next,
+                      action: TextInputAction.next,
                     ),
                   ),
                 ],
               ),
               Gap(16.h),
               Row(
-                crossAxisAlignment: .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 16.w,
                 children: [
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: widget.productArgs.caloriesController,
                       labelText: 'number of calories',
-                      keyboardType: .number,
-                      onValidate: (value) => Validator.validateName(
-                        val: value,
-                        type: 'number of calories',
-                      ),
-                      action: .next,
+                      keyboardType: TextInputType.number,
+                      onValidate: Validator.validateRequiredField,
+                      action: TextInputAction.next,
                     ),
                   ),
                   Expanded(
                     child: TextFormFieldHelper(
                       controller: widget.productArgs.unitAmountController,
                       labelText: 'unit amount per gram',
-                      keyboardType: .number,
-                      onValidate: (value) => Validator.validateName(
-                        val: value,
-                        type: 'number of calories',
-                      ),
-                      action: .done,
+                      keyboardType: TextInputType.number,
+                      onValidate: Validator.validateRequiredField,
+                      action: TextInputAction.done,
                     ),
                   ),
                 ],
@@ -164,33 +154,33 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                     current is ProductsLoading &&
                     (current.newItemAdded || current.itemUpdated),
                 builder: (context, state) => CustomMaterialButton(
-                    onPressed: () {
-                      if (widget.productArgs.isValid &&
-                          (widget.productArgs.image != null || _showMyImage)) {
-                        if (widget.imagePath != '') {
-                          context.read<ProductsCubit>().updateProduct(
-                            widget.productArgs.toEntity(),
-                          );
-                        } else {
-                          context.read<ProductsCubit>().addProduct(
-                            widget.productArgs.toEntity(),
-                          );
-                        }
+                  onPressed: () {
+                    if (widget.productArgs.isValid &&
+                        (widget.productArgs.image != null || _showMyImage)) {
+                      if (widget.imagePath != '') {
+                        context.read<ProductsCubit>().updateProduct(
+                          widget.productArgs.toEntity(),
+                        );
+                      } else {
+                        context.read<ProductsCubit>().addProduct(
+                          widget.productArgs.toEntity(),
+                        );
                       }
-                      if (widget.productArgs.image == null &&
-                          _showMyImage == false) {
-                        context.read<PickImageCubit>().imageNotPicked();
-                      }
-                    },
-                    isLoading:
-                        state is ProductsLoading &&
-                        (state.newItemAdded || state.itemUpdated),
-                    maxWidth: true,
-                    text: widget.imagePath != ''
-                        ? 'Edit Product'
-                        : 'Add Product',
-                    textStyle: AppTextStyles.font16WhiteBold,
+                    }
+                    if (widget.productArgs.image == null &&
+                        _showMyImage == false) {
+                      context.read<PickImageCubit>().imageNotPicked();
+                    }
+                  },
+                  isLoading:
+                      state is ProductsLoading &&
+                      (state.newItemAdded || state.itemUpdated),
+                  maxWidth: true,
+                  text: widget.imagePath != '' ? 'Edit Product' : 'Add Product',
+                  textStyle: AppTextStyles.font16Bold.copyWith(
+                    color: AppPalette.white,
                   ),
+                ),
               ),
               Gap(24.h),
             ],

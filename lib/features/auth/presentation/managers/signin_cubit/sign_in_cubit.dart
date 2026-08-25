@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/helpers/functions.dart';
-import '../../../../../core/helpers/network_response.dart';
-import '../../../domain/entities/user_entity.dart';
-import '../../../domain/use_cases/sign_in_with_email_and_password_use_case.dart';
+import 'package:fruit_hub_dashboard/core/helpers/di.dart';
+import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
+import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/sign_in_with_email_and_password_use_case.dart';
+import 'package:fruit_hub_dashboard/features/auth/presentation/managers/user_info_cubit/user_info_cubit.dart';
 
 part 'sign_in_state.dart';
 
@@ -23,9 +24,12 @@ class SignInCubit extends Cubit<SignInState> {
     );
     switch (result) {
       case NetworkSuccess<UserEntity>():
-        emit(SignInSuccess(result.data!));
+        if (result.data != null) {
+          await getIt<UserInfoCubit>().saveUserLocally(result.data!);
+        }
+        emit(SignInSuccess());
       case NetworkFailure<UserEntity>():
-        emit(SignInFailure(getErrorMessage(result)));
+        emit(SignInFailure(result.error));
     }
   }
 }
