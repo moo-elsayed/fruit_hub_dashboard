@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
-import '../managers/pick_image_cubit/pick_image_cubit.dart';
 import '../widgets/product_view_body.dart';
 
 class ProductView extends StatefulWidget {
@@ -37,16 +36,15 @@ class _ProductViewState extends State<ProductView> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: CustomAppBar(
-      title: widget.fruitEntity == null ? 'Add Product' : 'Edit Product',
+      title: widget.fruitEntity == null
+          ? AppStrings.addProduct
+          : AppStrings.editProduct,
       showArrowBack: true,
       onTap: () => context.pop(),
     ),
-    body: BlocProvider(
-      create: (_) => PickImageCubit(),
-      child: ProductViewBody(
-        productArgs: _productArgs,
-        imagePath: widget.fruitEntity?.imagePath ?? '',
-      ),
+    body: ProductViewBody(
+      productArgs: _productArgs,
+      isEdit: widget.fruitEntity != null,
     ),
   );
 }

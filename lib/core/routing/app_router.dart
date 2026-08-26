@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
+import 'package:fruit_hub_dashboard/core/utils/full_screen_image_gallery_input_item.dart';
+import 'package:fruit_hub_dashboard/core/widgets/full_screen_image_gallery.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
@@ -51,6 +53,10 @@ class AppRouter {
         return CupertinoPageRoute(builder: (_) => const SettingsView());
       case Routes.ordersView:
         return CupertinoPageRoute(builder: (_) => const OrdersView());
+      case Routes.fullScreenImageView:
+        final item =
+            _currentSettings!.arguments as FullScreenImageGalleryInputItem;
+        return _route(FullScreenImageGallery(item: item));
       // case Routes.analyticsView:
       //   return CupertinoPageRoute(builder: (_) => const OrdersView());
       default:

@@ -16,30 +16,26 @@ class FruitHubDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
-        providers: [
-          BlocProvider<AppThemeCubit>.value(
-            value: getIt<AppThemeCubit>(),
-          ),
-          BlocProvider<UserInfoCubit>.value(
-            value: getIt<UserInfoCubit>(),
-          ),
-        ],
-        child: BlocBuilder<AppThemeCubit, ThemeMode>(
-          builder: (context, themeMode) => ScreenUtilInit(
-            designSize: const Size(375, 812),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            child: ToastificationWrapper(
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: themeMode,
-                onGenerateRoute: appRouter.generateRoute,
-                initialRoute: Routes.splashView,
-              ),
-            ),
+    providers: [
+      BlocProvider<AppThemeCubit>.value(value: getIt<AppThemeCubit>()),
+      BlocProvider<UserInfoCubit>.value(value: getIt<UserInfoCubit>()),
+    ],
+    child: BlocBuilder<AppThemeCubit, ThemeMode>(
+      builder: (context, themeMode) => ScreenUtilInit(
+        designSize: const Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        child: ToastificationWrapper(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeMode,
+            onGenerateRoute: appRouter.generateRoute,
+            initialRoute: Routes.splashView,
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_assets.dart';
-import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:gap/gap.dart';
+import '../helpers/extensions.dart';
 import '../theming/app_text_styles.dart';
 import 'custom_material_button.dart';
 
@@ -13,74 +14,126 @@ class CustomConfirmationDialog extends StatelessWidget {
     super.key,
     this.subtitle,
     required this.textConfirmButton,
-    required this.textCancelButton,
+    this.textCancelButton,
     required this.title,
     required this.onConfirm,
     this.onCancel,
+    this.showCancelButton = true,
   });
 
   final String title;
-  final String? subtitle;
   final String textConfirmButton;
-  final String textCancelButton;
+  final bool showCancelButton;
+  final String? subtitle;
+  final String? textCancelButton;
   final void Function()? onCancel;
   final void Function() onConfirm;
 
+  static Future<T?> show<T>({
+    required BuildContext context,
+    required String title,
+    required String textConfirmButton,
+    required void Function() onConfirm,
+    String? subtitle,
+    String? textCancelButton,
+    void Function()? onCancel,
+    bool showCancelButton = true,
+  }) => showCupertinoDialog<T>(
+    context: context,
+    builder: (context) => CustomConfirmationDialog(
+      title: title,
+      textConfirmButton: textConfirmButton,
+      onConfirm: onConfirm,
+      subtitle: subtitle,
+      textCancelButton: textCancelButton,
+      onCancel: onCancel,
+      showCancelButton: showCancelButton,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) => Dialog(
+    alignment: Alignment.center,
+    insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
     backgroundColor: context.colors.surface,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
     child: Padding(
       padding: EdgeInsets.all(20.r),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        spacing: 12.h,
         children: [
           Align(
-            alignment: AlignmentDirectional.centerStart,
+            alignment: AlignmentDirectional.centerEnd,
             child: GestureDetector(
               onTap: () => context.pop(),
-              child: SvgPicture.asset(AppAssets.iconsIconCancel),
+              behavior: HitTestBehavior.opaque,
+              child: SvgPicture.asset(
+                AppAssets.iconsIconCancel,
+                colorFilter: ColorFilter.mode(
+                  context.colors.subText,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
+          Gap(8.h),
           Text(
             title,
-            style: AppTextStyles.font16Bold.copyWith(
+            textAlign: TextAlign.center,
+            style: AppTextStyles.font16SemiBold.copyWith(
               color: context.colors.mainText,
             ),
           ),
-          if (subtitle != null)
+          if (subtitle != null) ...[
+            Gap(8.h),
             Text(
               subtitle!,
-              style: AppTextStyles.font13SemiBold.copyWith(
-                color: context.colors.bodyText,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.font14Regular.copyWith(
+                color: context.colors.subText,
+                height: 1.5,
               ),
             ),
-          Gap(8.h),
-          Row(
-            spacing: 8.w,
-            children: [
-              Expanded(
-                child: CustomMaterialButton(
-                  onPressed: onCancel ?? () => context.pop(),
-                  text: textCancelButton,
-                  textStyle: AppTextStyles.font16Bold.copyWith(
-                    color: context.colors.primary,
-                  ),
-                  backgroundColor: context.colors.surface,
-                  side: BorderSide(color: context.colors.primary),
-                ),
-              ),
-              Expanded(
-                child: CustomMaterialButton(
+          ],
+          Gap(24.h),
+          showCancelButton
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: CustomMaterialButton(
+                        onPressed: onCancel ?? () => context.pop(),
+                        text: textCancelButton ?? AppStrings.cancel,
+                        textStyle: AppTextStyles.font16SemiBold.copyWith(
+                          color: context.colors.primary,
+                        ),
+                        backgroundColor: Colors.transparent,
+                        side: BorderSide(
+                          color: context.colors.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: CustomMaterialButton(
+                        onPressed: onConfirm,
+                        text: textConfirmButton,
+                        textStyle: AppTextStyles.font16SemiBold.copyWith(
+                          color: Colors.white,
+                        ),
+                        backgroundColor: context.colors.primary,
+                      ),
+                    ),
+                  ],
+                )
+              : CustomMaterialButton(
                   onPressed: onConfirm,
                   text: textConfirmButton,
-                  textStyle: AppTextStyles.font16Bold.copyWith(
-                    color: AppPalette.white,
+                  textStyle: AppTextStyles.font16SemiBold.copyWith(
+                    color: Colors.white,
                   ),
+                  backgroundColor: context.colors.primary,
                 ),
-              ),
-            ],
-          ),
         ],
       ),
     ),

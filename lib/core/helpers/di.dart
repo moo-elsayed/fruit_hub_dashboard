@@ -19,16 +19,20 @@ import 'package:fruit_hub_dashboard/features/orders/data/repo_imp/orders_repo_im
 import 'package:fruit_hub_dashboard/features/orders/domain/repo/orders_repo.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/update_order_status_use_case.dart';
+import 'package:fruit_hub_dashboard/features/orders/presentation/managers/orders_cubit/orders_cubit.dart';
 import 'package:fruit_hub_dashboard/features/products/data/data_sources/remote/products_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/products/data/repo_imp/products_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/add_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/delete_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/get_products_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/update_product_use_case.dart';
+import 'package:fruit_hub_dashboard/features/products/presentation/managers/products_cubit/products_cubit.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/data_sources/remote/settings_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/repo_imp/settings_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/fetch_shipping_config_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/update_shipping_config_use_case.dart';
+import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
+import 'package:fruit_hub_dashboard/features/splash/presentation/managers/splash_cubit/splash_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,6 +104,11 @@ void setupServiceLocator() {
     () => SignOutCubit(getIt<SignOutUseCase>()),
   );
 
+  /// splash
+  getIt.registerFactory<SplashCubit>(
+    () => SplashCubit(getIt<AppPreferencesService>()),
+  );
+
   /// products
   getIt.registerLazySingleton<ProductsRepoImp>(
     () => ProductsRepoImp(ProductsRemoteDataSourceImp()),
@@ -118,6 +127,15 @@ void setupServiceLocator() {
     () => UpdateProductUseCase(getIt<ProductsRepoImp>()),
   );
 
+  getIt.registerFactory<ProductsCubit>(
+    () => ProductsCubit(
+      getIt<AddProductUseCase>(),
+      getIt<GetProductsUseCase>(),
+      getIt<DeleteProductUseCase>(),
+      getIt<UpdateProductUseCase>(),
+    ),
+  );
+
   /// settings
   getIt.registerLazySingleton<SettingsRepoImp>(
     () => SettingsRepoImp(SettingsRemoteDataSourceImp()),
@@ -131,6 +149,13 @@ void setupServiceLocator() {
     () => FetchShippingConfigUseCase(getIt<SettingsRepoImp>()),
   );
 
+  getIt.registerFactory<SettingsCubit>(
+    () => SettingsCubit(
+      getIt<FetchShippingConfigUseCase>(),
+      getIt<UpdateShippingConfigUseCase>(),
+    ),
+  );
+
   /// orders
   getIt.registerLazySingleton<OrdersRepo>(
     () => OrdersRepoImp(OrdersRemoteDataSourceImp()),
@@ -142,5 +167,12 @@ void setupServiceLocator() {
 
   getIt.registerLazySingleton<UpdateOrderStatusUseCase>(
     () => UpdateOrderStatusUseCase(getIt<OrdersRepo>()),
+  );
+
+  getIt.registerFactory<OrdersCubit>(
+    () => OrdersCubit(
+      getIt<GetOrdersUseCase>(),
+      getIt<UpdateOrderStatusUseCase>(),
+    ),
   );
 }

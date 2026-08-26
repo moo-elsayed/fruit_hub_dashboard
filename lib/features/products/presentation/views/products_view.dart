@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
+import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/routing/routes.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
+import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
-import 'package:fruit_hub_dashboard/features/products/domain/use_cases/delete_product_use_case.dart';
-import 'package:fruit_hub_dashboard/features/products/presentation/widgets/products_grid_view.dart';
+import 'package:fruit_hub_dashboard/core/widgets/header_action_button.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:toastification/toastification.dart';
-import '../../../../core/helpers/di.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../../core/theming/app_colors.dart';
-import '../../../../core/widgets/app_dialogs.dart';
-import '../../../../core/widgets/app_toasts.dart';
 import '../../domain/entities/fruit_entity.dart';
-import '../../domain/use_cases/add_product_use_case.dart';
-import '../../domain/use_cases/get_products_use_case.dart';
-import '../../domain/use_cases/update_product_use_case.dart';
 import '../managers/products_cubit/products_cubit.dart';
+import '../widgets/products_empty_state.dart';
+import '../widgets/products_grid_view.dart';
 
 class ProductsView extends StatefulWidget {
   const ProductsView({super.key});
@@ -29,43 +28,48 @@ class _ProductsViewState extends State<ProductsView> {
   List<FruitEntity> _fruits = [];
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-    create: (context) => ProductsCubit(
-      getIt.get<AddProductUseCase>(),
-      getIt.get<GetProductsUseCase>(),
-      getIt.get<DeleteProductUseCase>(),
-      getIt.get<UpdateProductUseCase>(),
-    )..getProducts(),
+  Widget build(BuildContext context) => BlocProvider<ProductsCubit>(
+    create: (context) => getIt<ProductsCubit>()..getProducts(),
     child: Builder(
       builder: (context) => Scaffold(
         appBar: CustomAppBar(
-          title: 'Products',
+          title: AppStrings.products,
           showArrowBack: true,
           onTap: () => context.pop(),
+          actions: [
+            HeaderActionButton(
+              label: AppStrings.add,
+              icon: Icons.add_rounded,
+              onTap: () => context.pushNamed(
+                Routes.productView,
+                arguments: [context.read<ProductsCubit>()],
+              ),
+            ),
+            Gap(16.w),
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: BlocConsumer<ProductsCubit, ProductsState>(
             listener: (context, state) {
               if (state is ProductsSuccess) {
-                if ((state.itemRemoved ||
-                    state.newItemAdded ||
-                    state.itemUpdated)) {
+                if (state.newItemAdded || state.itemUpdated) {
                   context.pop();
                   AppToast.show(
                     context: context,
                     title: state.newItemAdded
-                        ? 'product added'
-                        : state.itemUpdated
-                        ? 'product updated'
-                        : 'product removed',
+                        ? AppStrings.productAdded
+                        : AppStrings.productUpdated,
+                    type: ToastificationType.success,
+                  );
+                } else if (state.itemRemoved) {
+                  AppToast.show(
+                    context: context,
+                    title: AppStrings.productRemoved,
                     type: ToastificationType.success,
                   );
                 }
                 _fruits = state.products;
-              }
-              if (state is ProductsLoading && state.itemRemoved) {
-                AppDialogs.showLoadingDialog(context);
               }
               if (state is ProductsFailure) {
                 AppToast.show(
@@ -76,30 +80,33 @@ class _ProductsViewState extends State<ProductsView> {
               }
             },
             builder: (context, state) {
-              if (state is ProductsSuccess ||
-                  (state is ProductsLoading && state.itemRemoved)) {
-                return ProductsGridView(fruits: _fruits);
-              } else if (state is ProductsLoading && !state.itemRemoved) {
+              if (state is ProductsSuccess) {
+                if (state.products.isEmpty) {
+                  return const ProductsEmptyState();
+                }
+                return ProductsGridView(fruits: state.products);
+              } else if (state is ProductsLoading &&
+                  !state.newItemAdded &&
+                  !state.itemUpdated &&
+                  !state.itemRemoved) {
                 return const Skeletonizer(
                   enabled: true,
-                  child: ProductsGridView(itemCount: 6),
+                  child: ProductsGridView(itemCount: 4),
                 );
+              } else if (_fruits.isNotEmpty) {
+                return ProductsGridView(fruits: _fruits);
               } else {
-                return const Center(child: Text('error'));
+                return Center(
+                  child: Text(
+                    AppStrings.somethingWentWrong,
+                    style: AppTextStyles.font14Regular.copyWith(
+                      color: context.colors.subText,
+                    ),
+                  ),
+                );
               }
             },
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => context.pushNamed(
-            Routes.productView,
-            arguments: [context.read<ProductsCubit>()],
-          ),
-          backgroundColor: AppColors.color1B5E37,
-          foregroundColor: AppColors.white,
-          elevation: 0,
-          shape: const CircleBorder(),
-          child: const Icon(Icons.add),
         ),
       ),
     ),

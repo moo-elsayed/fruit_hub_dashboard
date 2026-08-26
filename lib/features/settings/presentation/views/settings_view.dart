@@ -5,12 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
-import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/fetch_shipping_config_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/widgets/delivery_fees_container.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/theming/app_text_styles.dart';
-import '../../domain/use_cases/update_shipping_config_use_case.dart';
 import '../managers/settings_cubit/settings_cubit.dart';
 
 class SettingsView extends StatelessWidget {
@@ -18,10 +16,7 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (context) => SettingsCubit(
-      getIt.get<FetchShippingConfigUseCase>(),
-      getIt.get<UpdateShippingConfigUseCase>(),
-    )..fetchShippingConfig(),
+    create: (context) => getIt<SettingsCubit>()..fetchShippingConfig(),
     child: Scaffold(
       appBar: CustomAppBar(
         title: 'Settings',

@@ -392,4 +392,41 @@ abstract class AppStrings {
   static const String cancelInvoice = 'Cancel Invoice';
   static const String confirmCancelInvoiceSubtitle =
       'Are you sure you want to cancel this invoice?';
+  static const String welcomeToDashboard = 'Welcome to dashboard';
+  static const String users = 'Users';
+  static const String orders = 'Orders';
+  static const String analytics = 'Analytics';
+  static const String yes = 'Yes';
+  static const String no = 'No';
+  static const String usersSubtitle = 'Manage users & staff';
+  static const String productsSubtitle = 'Manage catalog & stock';
+  static const String ordersSubtitle = 'Track & manage orders';
+  static const String analyticsSubtitle = 'View stats & reports';
+  static const String settingsSubtitle = 'Store & app settings';
+  static const String quickActions = 'Quick Actions';
+  static const String storeControlPanel = 'Store Control Panel';
+  static const String controlPanelSubtitle =
+      'Monitor performance and manage your store efficiently';
+  static const String admin = 'Admin';
+  static const String addProduct = 'Add Product';
+  static const String editProduct = 'Edit Product';
+  static const String productAdded = 'Product added successfully';
+  static const String productUpdated = 'Product updated successfully';
+  static const String productRemoved = 'Product removed successfully';
+  static const String deleteProduct = 'Delete Product';
+  static const String deleteProductConfirmation =
+      'Are you sure you want to delete this product?';
+  static const String productName = 'Product Name';
+  static const String price = 'Price';
+  static const String productDescription = 'Product Description';
+  static const String daysUntilExpiration = 'Days Until Expiration';
+  static const String productCode = 'Product Code';
+  static const String numberOfCalories = 'Calories (per 100g)';
+  static const String unitAmountPerGram = 'Unit Weight (Gram)';
+  static const String featured = 'Featured';
+  static const String pleaseSelectImage = 'Please select an image';
+  static const String noProductsYet = 'No products yet';
+  static const String addFirstProduct = 'Add your first product to get started';
+  static const String add = 'Add';
+  static const String productImage = 'Product Image';
 }

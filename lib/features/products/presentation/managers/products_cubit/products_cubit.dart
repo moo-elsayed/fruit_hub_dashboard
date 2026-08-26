@@ -55,13 +55,21 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   Future<void> deleteProduct(String code) async {
-    emit(ProductsLoading(itemRemoved: true));
+    final index = _fruits.indexWhere((item) => item.code == code);
+    if (index == -1) return;
+
+    final removedFruit = _fruits[index];
+    _fruits = List.from(_fruits)..removeAt(index);
+    emit(ProductsSuccess(products: _fruits));
+
     final networkResponse = await _deleteProductUseCase.call(code);
     switch (networkResponse) {
       case NetworkSuccess():
-        await getProducts(itemRemoved: true, needLoading: false);
+        emit(ProductsSuccess(products: _fruits, itemRemoved: true));
       case NetworkFailure():
+        _fruits = List.from(_fruits)..insert(index, removedFruit);
         emit(ProductsFailure(networkResponse.error));
+        emit(ProductsSuccess(products: _fruits));
     }
   }
 

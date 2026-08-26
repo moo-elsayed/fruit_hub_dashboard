@@ -7,8 +7,6 @@ import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_entity.dart';
-import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_use_case.dart';
-import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/update_order_status_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/presentation/widgets/custom_order_item.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -27,10 +25,7 @@ class _OrdersViewState extends State<OrdersView> {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (context) => OrdersCubit(
-      getIt.get<GetOrdersUseCase>(),
-      getIt.get<UpdateOrderStatusUseCase>(),
-    )..streamOrders(),
+    create: (context) => getIt<OrdersCubit>()..streamOrders(),
     child: Scaffold(
       appBar: CustomAppBar(
         title: 'Orders',

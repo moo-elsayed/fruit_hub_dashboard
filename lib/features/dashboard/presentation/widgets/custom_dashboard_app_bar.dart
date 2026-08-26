@@ -1,5 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,40 +36,80 @@ class CustomDashboardAppBar extends StatelessWidget
           }
         },
         child: AppBar(
-          title: AnimatedTextKit(
-            animatedTexts: [
-              TypewriterAnimatedText(
-                'Welcome to dashboard',
-                textStyle: AppTextStyles.font19Bold.copyWith(
-                  color: context.colors.mainText,
+          backgroundColor: context.colors.background,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          centerTitle: false,
+          titleSpacing: 16.w,
+          title: Row(
+            children: [
+              Container(
+                width: 40.r,
+                height: 40.r,
+                decoration: BoxDecoration(
+                  color: context.colors.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                speed: const Duration(milliseconds: 200),
+                child: Icon(
+                  Icons.dashboard_rounded,
+                  color: context.colors.primary,
+                  size: 22.sp,
+                ),
+              ),
+              Gap(12.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppStrings.dashboard,
+                    style: AppTextStyles.font18Bold.copyWith(
+                      color: context.colors.mainText,
+                      height: 1.1,
+                    ),
+                  ),
+                  Gap(4.h),
+                  Text(
+                    AppStrings.admin,
+                    style: AppTextStyles.font11Regular.copyWith(
+                      color: context.colors.subText,
+                      height: 1.1,
+                    ),
+                  ),
+                ],
               ),
             ],
-            totalRepeatCount: 1,
-            pause: const Duration(milliseconds: 1000),
-            displayFullTextOnTap: true,
-            stopPauseOnTap: true,
           ),
-          centerTitle: true,
           actions: [
-            GestureDetector(
-              onTap: () {
-                showCupertinoDialog(
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => CustomConfirmationDialog.show(
                   context: context,
-                  builder: (_) => CustomConfirmationDialog(
-                    title: AppStrings.logOutConfirmation,
-                    textConfirmButton: 'Yes',
-                    textCancelButton: 'No',
-                    onConfirm: () async {
-                      await context.read<SignOutCubit>().signOut();
-                    },
+                  title: AppStrings.logOutConfirmation,
+                  textConfirmButton: AppStrings.yes,
+                  textCancelButton: AppStrings.no,
+                  onConfirm: () async {
+                    await context.read<SignOutCubit>().signOut();
+                  },
+                ),
+                borderRadius: BorderRadius.circular(12.r),
+                child: Ink(
+                  padding: EdgeInsets.all(8.r),
+                  decoration: BoxDecoration(
+                    color: context.colors.surface,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: context.colors.border),
                   ),
-                );
-              },
-              child: Icon(Icons.logout, color: context.colors.mainText),
+                  child: Icon(
+                    Icons.logout_rounded,
+                    color: context.colors.error,
+                    size: 20.sp,
+                  ),
+                ),
+              ),
             ),
-            Gap(12.w),
+            Gap(16.w),
           ],
         ),
       );
