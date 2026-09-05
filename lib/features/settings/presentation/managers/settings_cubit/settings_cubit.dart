@@ -18,6 +18,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> fetchShippingConfig() async {
     emit(FetchingShippingConfigLoading());
     final result = await _fetchShippingConfigUseCase();
+    if (isClosed) return;
     switch (result) {
       case NetworkSuccess<ShippingConfigEntity>():
         emit(FetchingShippingConfigSuccess(result.data!));
@@ -31,6 +32,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   ) async {
     emit(UpdatingShippingConfigLoading());
     final result = await _updateShippingConfigUseCase(shippingConfigEntity);
+    if (isClosed) return;
     switch (result) {
       case NetworkSuccess<void>():
         emit(UpdatingShippingConfigSuccess());

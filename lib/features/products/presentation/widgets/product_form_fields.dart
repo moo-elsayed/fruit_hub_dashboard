@@ -8,6 +8,7 @@ import 'package:fruit_hub_dashboard/core/widgets/image_picker_field.dart';
 import 'package:fruit_hub_dashboard/core/widgets/text_form_field_helper.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
 import 'package:gap/gap.dart';
+
 import 'custom_switch_container.dart';
 
 class ProductFormFields extends StatelessWidget {
@@ -118,8 +119,8 @@ class ProductFormFields extends StatelessWidget {
           ),
           Expanded(
             child: TextFormFieldHelper(
-              controller: productArgs.unitAmountController,
-              labelText: AppStrings.unitAmountPerGram,
+              controller: productArgs.weightInGramsController,
+              labelText: AppStrings.weightInGrams,
               hint: '1000',
               suffixText: AppStrings.gram,
               suffixStyle: AppTextStyles.font12Medium.copyWith(

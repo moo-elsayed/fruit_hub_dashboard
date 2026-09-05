@@ -21,13 +21,18 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
       final snapshots = _firestore
           .collection(BackendEndpoints.ordersCollection)
           .snapshots();
-
       await for (final snapshot in snapshots) {
-        final orderModels = snapshot.docs.map((doc) {
-          final data = Map<String, dynamic>.from(doc.data());
-          data['docId'] = doc.id;
-          return OrderModel.fromJson(data);
-        }).toList();
+        final orderModels =
+            snapshot.docs.map((doc) {
+              final data = Map<String, dynamic>.from(doc.data());
+              data['docId'] = doc.id;
+              return OrderModel.fromJson(data);
+            }).toList()..sort((a, b) {
+              if (a.date.isNotEmpty && b.date.isNotEmpty) {
+                return b.date.compareTo(a.date);
+              }
+              return b.orderId.compareTo(a.orderId);
+            });
         yield NetworkSuccess<List<OrderModel>>(orderModels);
       }
     } catch (e, stackTrace) {
@@ -48,6 +53,6 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
     await _firestore
         .collection(BackendEndpoints.ordersCollection)
         .doc(docId)
-        .update({'status': status.getName});
+        .update({'status': status.databaseValue});
   }, functionName: 'updateOrderStatus');
 }

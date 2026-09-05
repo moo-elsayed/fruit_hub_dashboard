@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_assets.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
+
 import '../managers/splash_cubit/splash_cubit.dart';
 
 class AnimatedSplashViewBody extends StatefulWidget {

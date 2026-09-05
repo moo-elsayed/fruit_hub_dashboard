@@ -10,11 +10,12 @@ class OrderItemModel {
   });
 
   factory OrderItemModel.fromJson(Map<String, dynamic> map) => OrderItemModel(
-    code: map['code'] ?? '',
-    name: map['name'] ?? '',
-    imagePath: map['imageUrl'] ?? '',
-    price: map['price'] ?? 0,
-    quantity: map['quantity'] ?? 0,
+    code: map['code']?.toString() ?? '',
+    name: map['name']?.toString() ?? '',
+    imagePath:
+        map['imageUrl']?.toString() ?? map['imagePath']?.toString() ?? '',
+    price: (map['price'] as num?)?.toDouble() ?? 0.0,
+    quantity: (map['quantity'] as num?)?.toInt() ?? 0,
   );
 
   final String code;

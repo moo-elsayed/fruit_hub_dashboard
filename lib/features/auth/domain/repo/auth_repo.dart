@@ -1,4 +1,5 @@
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
+
 import '../entities/user_entity.dart';
 
 abstract class AuthRepo {

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
+
 import '../../../../core/helpers/app_assets.dart';
 import '../../../../core/helpers/app_strings.dart';
 import '../../../../core/helpers/di.dart';

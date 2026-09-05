@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
+
 import '../helpers/extensions.dart';
+import '../theming/app_palette.dart';
 import '../theming/app_text_styles.dart';
 
 class CustomMaterialButton extends StatelessWidget {

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
@@ -16,6 +17,9 @@ class OrdersCubit extends Cubit<OrdersState> {
   final UpdateOrderStatusUseCase _updateOrderStatusUseCase;
 
   StreamSubscription? _ordersSubscription;
+  List<OrderEntity> _orders = [];
+
+  List<OrderEntity> get currentOrders => _orders;
 
   void streamOrders() {
     _ordersSubscription?.cancel();
@@ -23,13 +27,12 @@ class OrdersCubit extends Cubit<OrdersState> {
     emit(OrdersLoading(OrderState.getOrders));
     _ordersSubscription = _getOrdersUseCase().listen(
       (response) {
+        if (isClosed) return;
         switch (response) {
           case NetworkSuccess<List<OrderEntity>>():
+            _orders = response.data ?? [];
             emit(
-              OrdersSuccess(
-                orders: response.data!,
-                orderState: OrderState.getOrders,
-              ),
+              OrdersSuccess(orders: _orders, orderState: OrderState.getOrders),
             );
           case NetworkFailure<List<OrderEntity>>():
             emit(
@@ -41,6 +44,7 @@ class OrdersCubit extends Cubit<OrdersState> {
         }
       },
       onError: (error) {
+        if (isClosed) return;
         emit(
           OrdersFailure(
             message: error.toString(),
@@ -54,9 +58,15 @@ class OrdersCubit extends Cubit<OrdersState> {
   Future<void> updateOrderStatus(String docId, OrderStatus status) async {
     emit(OrdersLoading(OrderState.updateOrderStatus));
     final response = await _updateOrderStatusUseCase(docId, status);
+    if (isClosed) return;
     switch (response) {
       case NetworkSuccess<void>():
-        return;
+        emit(
+          OrdersSuccess(
+            orders: _orders,
+            orderState: OrderState.updateOrderStatus,
+          ),
+        );
       case NetworkFailure<void>():
         emit(
           OrdersFailure(

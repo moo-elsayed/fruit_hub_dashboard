@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+
 import '../theming/app_text_styles.dart';
 import 'custom_arrow_back.dart';
 

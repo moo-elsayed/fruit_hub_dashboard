@@ -7,6 +7,7 @@ import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_enti
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
+
 import '../../features/auth/presentation/args/login_args.dart';
 import '../../features/auth/presentation/views/forget_password_view.dart';
 import '../../features/auth/presentation/views/login_view.dart';

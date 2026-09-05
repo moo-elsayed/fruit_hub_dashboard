@@ -12,6 +12,7 @@ import 'package:fruit_hub_dashboard/core/widgets/header_action_button.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:toastification/toastification.dart';
+
 import '../../domain/entities/fruit_entity.dart';
 import '../managers/products_cubit/products_cubit.dart';
 import '../widgets/products_empty_state.dart';

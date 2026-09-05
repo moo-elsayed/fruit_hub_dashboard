@@ -1,5 +1,6 @@
 import 'package:fruit_hub_dashboard/core/enums/payment_methods.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/payment_option_entity.dart';
 import 'address_model.dart';
@@ -19,17 +20,30 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> map) => OrderModel(
-    uId: map['uId'] ?? '',
-    docId: map['docId'] ?? '',
-    orderId: map['orderId'] ?? 0,
-    totalPrice: map['totalPrice'] ?? 0,
-    status: map['status'] ?? '',
-    paymentMethod: map['paymentMethod'] ?? '',
-    shippingAddress: AddressModel.fromJson(map['shippingAddress']),
-    orderItems: List<OrderItemModel>.from(
-      map['orderItems']?.map((x) => OrderItemModel.fromJson(x)),
-    ),
-    date: map['date'] ?? '',
+    uId: map['uId']?.toString() ?? '',
+    docId: map['docId']?.toString() ?? '',
+    orderId: (map['orderId'] as num?)?.toInt() ?? 0,
+    totalPrice: (map['totalPrice'] as num?)?.toDouble() ?? 0.0,
+    status: map['status']?.toString() ?? '',
+    paymentMethod: map['paymentMethod']?.toString() ?? '',
+    shippingAddress: map['shippingAddress'] is Map<String, dynamic>
+        ? AddressModel.fromJson(map['shippingAddress'] as Map<String, dynamic>)
+        : AddressModel(
+            name: '',
+            email: '',
+            phone: '',
+            city: '',
+            buildingNumber: '',
+            streetName: '',
+            floorNumber: '',
+            apartmentNumber: '',
+          ),
+    orderItems:
+        (map['orderItems'] as List<dynamic>?)
+            ?.map((x) => OrderItemModel.fromJson(x as Map<String, dynamic>))
+            .toList() ??
+        [],
+    date: map['date']?.toString() ?? '',
   );
 
   final String uId;
@@ -42,23 +56,32 @@ class OrderModel {
   final List<OrderItemModel> orderItems;
   final String date;
 
-  OrderEntity toEntity() => OrderEntity(
-    uid: uId,
-    docId: docId,
-    orderId: orderId,
-    address: shippingAddress.toEntity(),
-    products: orderItems.map((e) => e.toEntity()).toList(),
-    paymentOption: PaymentOptionEntity(
-      type: paymentMethod == 'cash_on_delivery'
-          ? PaymentMethodType.cash
-          : paymentMethod == 'credit_card'
-          ? PaymentMethodType.card
-          : PaymentMethodType.paypal,
-      shippingCost:
-          totalPrice -
-          orderItems.fold(0, (sum, item) => sum + (item.price * item.quantity)),
-    ),
-    date: date,
-    status: status.toOrderStatus,
-  );
+  OrderEntity toEntity() {
+    final subtotal = orderItems.fold<double>(
+      0.0,
+      (sum, item) => sum + (item.price * item.quantity),
+    );
+    final shippingCost = (totalPrice > subtotal)
+        ? (totalPrice - subtotal).toDouble()
+        : 0.0;
+
+    return OrderEntity(
+      uid: uId,
+      docId: docId,
+      orderId: orderId,
+      totalPrice: totalPrice.toDouble(),
+      address: shippingAddress.toEntity(),
+      products: orderItems.map((e) => e.toEntity()).toList(),
+      paymentOption: PaymentOptionEntity(
+        type: paymentMethod == 'cash_on_delivery'
+            ? PaymentMethodType.cash
+            : paymentMethod == 'credit_card'
+            ? PaymentMethodType.card
+            : PaymentMethodType.paypal,
+        shippingCost: shippingCost,
+      ),
+      date: date,
+      status: status.toOrderStatus,
+    );
+  }
 }

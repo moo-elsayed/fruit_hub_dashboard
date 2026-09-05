@@ -1,5 +1,7 @@
-class OrderItemEntity {
-  OrderItemEntity({
+import 'package:equatable/equatable.dart';
+
+class OrderItemEntity extends Equatable {
+  const OrderItemEntity({
     this.code = '',
     this.name = '',
     this.imagePath = '',
@@ -12,4 +14,7 @@ class OrderItemEntity {
   final String imagePath;
   final double price;
   final int quantity;
+
+  @override
+  List<Object?> get props => [code, name, imagePath, price, quantity];
 }

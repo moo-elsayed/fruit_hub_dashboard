@@ -13,14 +13,14 @@ class AddressModel {
   });
 
   factory AddressModel.fromJson(Map<String, dynamic> map) => AddressModel(
-    name: map['name'] ?? '',
-    email: map['email'] ?? '',
-    phone: map['phone'] ?? '',
-    city: map['city'] ?? '',
-    streetName: map['street'] ?? '',
-    buildingNumber: map['building_number'] ?? '',
-    floorNumber: map['floor_number'] ?? '',
-    apartmentNumber: map['apartment_number'] ?? '',
+    name: map['name']?.toString() ?? '',
+    email: map['email']?.toString() ?? '',
+    phone: map['phone']?.toString() ?? '',
+    city: map['city']?.toString() ?? '',
+    streetName: map['street']?.toString() ?? '',
+    buildingNumber: map['building_number']?.toString() ?? '',
+    floorNumber: map['floor_number']?.toString() ?? '',
+    apartmentNumber: map['apartment_number']?.toString() ?? '',
   );
 
   factory AddressModel.fromEntity(AddressEntity entity) => AddressModel(

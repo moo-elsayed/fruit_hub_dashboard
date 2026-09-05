@@ -9,6 +9,7 @@ import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_confirmation_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
+
 import '../../../auth/presentation/managers/signout_cubit/sign_out_cubit.dart';
 
 class CustomDashboardAppBar extends StatelessWidget

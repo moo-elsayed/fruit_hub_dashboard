@@ -10,7 +10,7 @@ class ProductArgs {
       codeController = TextEditingController(),
       descriptionController = TextEditingController(),
       caloriesController = TextEditingController(),
-      unitAmountController = TextEditingController(text: '1000'),
+      weightInGramsController = TextEditingController(text: '1000'),
       daysUntilExpirationController = TextEditingController(),
       imageController = TextEditingController();
 
@@ -20,7 +20,7 @@ class ProductArgs {
   final TextEditingController codeController;
   final TextEditingController descriptionController;
   final TextEditingController caloriesController;
-  final TextEditingController unitAmountController;
+  final TextEditingController weightInGramsController;
   final TextEditingController daysUntilExpirationController;
   final TextEditingController imageController;
 
@@ -36,7 +36,7 @@ class ProductArgs {
     codeController.dispose();
     descriptionController.dispose();
     caloriesController.dispose();
-    unitAmountController.dispose();
+    weightInGramsController.dispose();
     daysUntilExpirationController.dispose();
     imageController.dispose();
   }
@@ -47,7 +47,8 @@ class ProductArgs {
     codeController.text = fruit.code;
     descriptionController.text = fruit.description;
     caloriesController.text = fruit.numberOfCalories.toString();
-    unitAmountController.text = (fruit.unitAmount > 0 ? fruit.unitAmount : 1000).toString();
+    weightInGramsController.text =
+        (fruit.weightInGrams > 0 ? fruit.weightInGrams : 1000).toString();
     daysUntilExpirationController.text = fruit.daysUntilExpiration.toString();
     imageController.text = fruit.imagePath;
 
@@ -74,7 +75,7 @@ class ProductArgs {
       imagePath: isRemote ? path : '',
       image: localImage,
       numberOfCalories: int.tryParse(caloriesController.text.trim()) ?? 0,
-      unitAmount: int.tryParse(unitAmountController.text.trim()) ?? 0,
+      weightInGrams: int.tryParse(weightInGramsController.text.trim()) ?? 0,
       daysUntilExpiration:
           int.tryParse(daysUntilExpirationController.text.trim()) ?? 0,
     );

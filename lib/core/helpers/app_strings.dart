@@ -422,11 +422,38 @@ abstract class AppStrings {
   static const String daysUntilExpiration = 'Days Until Expiration';
   static const String productCode = 'Product Code';
   static const String numberOfCalories = 'Calories (per 100g)';
-  static const String unitAmountPerGram = 'Unit Weight (Gram)';
+  static const String weightInGrams = 'Weight (Gram)';
   static const String featured = 'Featured';
   static const String pleaseSelectImage = 'Please select an image';
   static const String noProductsYet = 'No products yet';
   static const String addFirstProduct = 'Add your first product to get started';
   static const String add = 'Add';
   static const String productImage = 'Product Image';
+  static const String orderNumberPrefix = 'Order #';
+  static const String unknownUser = 'Unknown User';
+  static const String items = 'Items';
+  static const String shippingAddress = 'Shipping Address';
+  static const String phoneLabel = 'Phone: ';
+  static const String codeLabel = 'Code: ';
+  static const String updateOrderStatus = 'Update Order Status';
+  static const String printInvoice = 'Print Invoice';
+  static const String noOrdersYet = 'No orders yet';
+  static const String noOrdersYetSubtitle =
+      'Orders will appear here once customers place them';
+  static const String orderStatusUpdatedSuccessfully =
+      'Order status updated successfully';
+  static const String viewDetails = 'View Details';
+  static const String hideDetails = 'Hide Details';
+  static const String creditCard = 'Credit Card';
+  static const String paypal = 'PayPal';
+  static const String deliveryFees = 'Delivery Fees';
+  static const String generalConfiguration = 'General Configuration';
+  static const String freeShippingThreshold = 'Free Shipping Threshold';
+  static const String freeShippingThresholdHint =
+      'Minimum order for free shipping';
+  static const String freeShippingThresholdHelp =
+      'Set to 0 to disable free shipping';
+  static const String success = 'Success';
+  static const String settingsUpdatedSuccessfully =
+      'Settings updated successfully';
 }

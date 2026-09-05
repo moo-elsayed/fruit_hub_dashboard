@@ -10,7 +10,7 @@ class FruitModel {
     required this.ratingCount,
     required this.isOrganic,
     required this.daysUntilExpiration,
-    required this.unitAmount,
+    required this.weightInGrams,
     required this.numberOfCalories,
     required this.imagePath,
     required this.code,
@@ -31,7 +31,7 @@ class FruitModel {
     ratingCount: json['ratingCount'],
     isOrganic: json['isOrganic'],
     daysUntilExpiration: json['daysUntilExpiration'],
-    unitAmount: json['unitAmount'],
+    weightInGrams: json['weightInGrams'] ?? json['unitAmount'] ?? 0,
     numberOfCalories: json['numberOfCalories'],
     reviews: json['reviews']
         .map<ReviewModel>((reviewJson) => ReviewModel.fromJson(reviewJson))
@@ -50,7 +50,7 @@ class FruitModel {
     ratingCount: entity.ratingCount,
     isOrganic: entity.isOrganic,
     daysUntilExpiration: entity.daysUntilExpiration,
-    unitAmount: entity.unitAmount,
+    weightInGrams: entity.weightInGrams,
     numberOfCalories: entity.numberOfCalories,
     reviews: entity.reviews
         .map((review) => ReviewModel.fromEntity(review))
@@ -67,7 +67,7 @@ class FruitModel {
   final bool isOrganic;
   final int daysUntilExpiration;
   final int numberOfCalories;
-  final int unitAmount;
+  final int weightInGrams;
   final int ratingCount;
   final int sellingCount;
   final num avgRating;
@@ -84,7 +84,7 @@ class FruitModel {
     'ratingCount': ratingCount,
     'isOrganic': isOrganic,
     'daysUntilExpiration': daysUntilExpiration,
-    'unitAmount': unitAmount,
+    'weightInGrams': weightInGrams,
     'numberOfCalories': numberOfCalories,
     'reviews': reviews.map((review) => review.toJson()).toList(),
     'sellingCount': sellingCount,
@@ -101,7 +101,7 @@ class FruitModel {
     ratingCount: ratingCount,
     isOrganic: isOrganic,
     daysUntilExpiration: daysUntilExpiration,
-    unitAmount: unitAmount,
+    weightInGrams: weightInGrams,
     numberOfCalories: numberOfCalories,
     reviews: reviews.map((review) => review.toEntity()).toList(),
   );
@@ -116,7 +116,7 @@ class FruitModel {
     bool? isOrganic,
     int? daysUntilExpiration,
     int? numberOfCalories,
-    int? unitAmount,
+    int? weightInGrams,
     int? ratingCount,
     int? sellingCount,
     num? avgRating,
@@ -131,7 +131,7 @@ class FruitModel {
     isOrganic: isOrganic ?? this.isOrganic,
     daysUntilExpiration: daysUntilExpiration ?? this.daysUntilExpiration,
     numberOfCalories: numberOfCalories ?? this.numberOfCalories,
-    unitAmount: unitAmount ?? this.unitAmount,
+    weightInGrams: weightInGrams ?? this.weightInGrams,
     ratingCount: ratingCount ?? this.ratingCount,
     sellingCount: sellingCount ?? this.sellingCount,
     avgRating: avgRating ?? this.avgRating,

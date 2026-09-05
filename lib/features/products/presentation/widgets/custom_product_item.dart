@@ -13,6 +13,7 @@ import 'package:fruit_hub_dashboard/core/widgets/price_per_kilo.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/managers/products_cubit/products_cubit.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/widgets/product_badge.dart';
 import 'package:gap/gap.dart';
+
 import '../../domain/entities/fruit_entity.dart';
 
 class CustomProductItem extends StatelessWidget {

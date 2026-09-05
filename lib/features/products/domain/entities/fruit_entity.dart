@@ -14,7 +14,7 @@ class FruitEntity extends Equatable {
     this.isOrganic = false,
     this.daysUntilExpiration = 0,
     this.numberOfCalories = 0,
-    this.unitAmount = 0,
+    this.weightInGrams = 0,
     this.ratingCount = 0,
     this.avgRating = 0,
     this.reviews = const [],
@@ -30,7 +30,7 @@ class FruitEntity extends Equatable {
   final bool isOrganic;
   final int daysUntilExpiration;
   final int numberOfCalories;
-  final int unitAmount;
+  final int weightInGrams;
   final int ratingCount;
   final num avgRating;
   final List<ReviewEntity> reviews;
@@ -47,7 +47,7 @@ class FruitEntity extends Equatable {
     isOrganic,
     daysUntilExpiration,
     numberOfCalories,
-    unitAmount,
+    weightInGrams,
     ratingCount,
     avgRating,
     reviews,

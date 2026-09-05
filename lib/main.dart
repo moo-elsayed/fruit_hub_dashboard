@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/simple_bloc_observer.dart';
+
 import 'core/helpers/di.dart';
 import 'core/routing/app_router.dart';
 import 'firebase_options.dart';

@@ -4,6 +4,7 @@ import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
+
 import '../widgets/product_view_body.dart';
 
 class ProductView extends StatefulWidget {

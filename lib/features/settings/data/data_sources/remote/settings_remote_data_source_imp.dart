@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fruit_hub_dashboard/core/errors/exceptions.dart';
 import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
 import 'package:fruit_hub_dashboard/core/network/api_helper.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
@@ -20,7 +19,7 @@ class SettingsRemoteDataSourceImp implements SettingsRemoteDataSource {
             .doc(BackendEndpoints.shippingConfigDocId)
             .get();
         if (!docSnap.exists || docSnap.data() == null) {
-          throw BusinessException('Shipping configuration not found');
+          return const ShippingConfigModel(shippingCost: 0.0);
         }
         return ShippingConfigModel.fromJson(docSnap.data()!);
       }, functionName: 'fetchShippingConfig');

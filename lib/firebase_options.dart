@@ -65,8 +65,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '868341775085',
     projectId: 'fruithub-84bf2',
     storageBucket: 'fruithub-84bf2.firebasestorage.app',
-    iosClientId:
-        '868341775085-tet9sonilp8bcnfnsnb0ffgp0ha41js1.apps.googleusercontent.com',
+    iosClientId: '868341775085-tet9sonilp8bcnfnsnb0ffgp0ha41js1.apps.googleusercontent.com',
     iosBundleId: 'com.fruithubdashboard.app',
   );
 }

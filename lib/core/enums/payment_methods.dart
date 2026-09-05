@@ -1,7 +1,15 @@
+import '../helpers/app_strings.dart';
+
 enum PaymentMethodType {
   paypal,
   card,
   cash;
+
+  String get title => switch (this) {
+    PaymentMethodType.paypal => AppStrings.paypal,
+    PaymentMethodType.card => AppStrings.creditCard,
+    PaymentMethodType.cash => AppStrings.cashOnDelivery,
+  };
 
   String get databaseValue => switch (this) {
     PaymentMethodType.paypal => 'paypal',

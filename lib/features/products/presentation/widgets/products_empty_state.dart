@@ -8,6 +8,7 @@ import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_material_button.dart';
 import 'package:gap/gap.dart';
+
 import '../managers/products_cubit/products_cubit.dart';
 
 class ProductsEmptyState extends StatelessWidget {

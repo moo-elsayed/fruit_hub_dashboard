@@ -1,145 +1,140 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
-import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
+import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_config_entity.dart';
+import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
 import 'package:gap/gap.dart';
-import 'package:toastification/toastification.dart';
-import '../../../../core/helpers/validator.dart';
-import '../../../../core/theming/app_colors.dart';
-import '../../../../core/theming/app_text_styles.dart';
-import '../../../../core/widgets/custom_material_button.dart';
-import '../../../../core/widgets/text_form_field_helper.dart';
-import '../../domain/entities/shipping_config_entity.dart';
-import '../managers/settings_cubit/settings_cubit.dart';
+
+import 'settings_currency_field.dart';
+import 'settings_save_button.dart';
 
 class DeliveryFeesContainer extends StatefulWidget {
-  const DeliveryFeesContainer({super.key, required this.shippingCost});
+  const DeliveryFeesContainer({super.key, required this.config});
 
-  final double shippingCost;
+  final ShippingConfigEntity config;
 
   @override
   State<DeliveryFeesContainer> createState() => _DeliveryFeesContainerState();
 }
 
 class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
-  late GlobalKey<FormState> _formKey;
-  late TextEditingController _shippingCostController;
-  late double currentShippingCost = widget.shippingCost;
-  late ValueNotifier<double> _shippingCostNotifier = ValueNotifier(
-    currentShippingCost,
-  );
-
-  void _updateCurrentShippingCost() {
-    currentShippingCost = double.parse(_shippingCostController.text);
-    _shippingCostNotifier.value = currentShippingCost;
-  }
+  late final GlobalKey<FormState> _formKey;
+  late final TextEditingController _shippingCostController;
+  late final TextEditingController _thresholdController;
+  late ValueNotifier<ShippingConfigEntity> _configNotifier;
 
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
-    _shippingCostController = TextEditingController();
-    _shippingCostNotifier = ValueNotifier(currentShippingCost);
+    _configNotifier = ValueNotifier(widget.config);
+    _shippingCostController = TextEditingController(
+      text: widget.config.shippingCost.toStringAsFixed(0),
+    );
+    _thresholdController = TextEditingController(
+      text: widget.config.freeShippingThreshold.toStringAsFixed(0),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant DeliveryFeesContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.config != widget.config) {
+      _configNotifier.value = widget.config;
+      _shippingCostController.text = widget.config.shippingCost.toStringAsFixed(
+        0,
+      );
+      _thresholdController.text = widget.config.freeShippingThreshold
+          .toStringAsFixed(0);
+    }
   }
 
   @override
   void dispose() {
     _shippingCostController.dispose();
-    _shippingCostNotifier.dispose();
+    _thresholdController.dispose();
+    _configNotifier.dispose();
     super.dispose();
   }
 
+  void _onSave() {
+    if (_formKey.currentState!.validate()) {
+      final cost =
+          double.tryParse(_shippingCostController.text.trim()) ??
+          _configNotifier.value.shippingCost;
+      final threshold =
+          double.tryParse(_thresholdController.text.trim()) ??
+          _configNotifier.value.freeShippingThreshold;
+
+      if (cost == _configNotifier.value.shippingCost &&
+          threshold == _configNotifier.value.freeShippingThreshold) {
+        return;
+      }
+
+      context.read<SettingsCubit>().updateShippingConfig(
+        ShippingConfigEntity(
+          shippingCost: cost,
+          freeShippingThreshold: threshold,
+        ),
+      );
+    }
+  }
+
+  void _onSuccess() {
+    final cost =
+        double.tryParse(_shippingCostController.text.trim()) ??
+        _configNotifier.value.shippingCost;
+    final threshold =
+        double.tryParse(_thresholdController.text.trim()) ??
+        _configNotifier.value.freeShippingThreshold;
+
+    _configNotifier.value = ShippingConfigEntity(
+      shippingCost: cost,
+      freeShippingThreshold: threshold,
+    );
+  }
+
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
-    behavior: .opaque,
+  Widget build(BuildContext context) => CustomKeyboardUnfocus(
     child: Container(
-      padding: .all(20.r),
+      padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: .circular(12.r),
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: context.colors.border, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+            color: AppPalette.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: .start,
-          spacing: 16.h,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Delivery Fees',
-              style: AppTextStyles.font16Bold.copyWith(
-                color: context.colors.mainText,
+            SettingsCurrencyField(
+              title: AppStrings.deliveryFees,
+              controller: _shippingCostController,
+              hint: _configNotifier.value.shippingCost.toStringAsFixed(0),
+            ),
+            Gap(16.h),
+            SettingsCurrencyField(
+              title: AppStrings.freeShippingThreshold,
+              subtitle: AppStrings.freeShippingThresholdHelp,
+              controller: _thresholdController,
+              hint: _configNotifier.value.freeShippingThreshold.toStringAsFixed(
+                0,
               ),
             ),
-            ValueListenableBuilder<double>(
-              valueListenable: _shippingCostNotifier,
-              builder: (context, value, child) => TextFormFieldHelper(
-                controller: _shippingCostController,
-                onValidate: Validator.validateRequiredField,
-                hint: value.toString(),
-                suffixWidget: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'EGP',
-                      style: AppTextStyles.font13Regular.copyWith(
-                        color: context.colors.subText,
-                      ),
-                    ),
-                  ],
-                ),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-              ),
-            ),
-            Gap(8.h),
-            Align(
-              alignment: Alignment.center,
-              child: BlocConsumer<SettingsCubit, SettingsState>(
-                listener: (context, state) {
-                  if (state is UpdatingShippingConfigSuccess) {
-                    _updateCurrentShippingCost();
-                    AppToast.show(
-                      context: context,
-                      title: 'Success',
-                      type: ToastificationType.success,
-                    );
-                  }
-                },
-                buildWhen: (previous, current) =>
-                    current is UpdatingShippingConfigSuccess ||
-                    current is UpdatingShippingConfigFailure ||
-                    current is UpdatingShippingConfigLoading,
-                builder: (context, state) => CustomMaterialButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      final cost = double.parse(_shippingCostController.text);
-                      if (cost == currentShippingCost) {
-                        return;
-                      }
-                      context.read<SettingsCubit>().updateShippingConfig(
-                        ShippingConfigEntity(shippingCost: cost),
-                      );
-                    }
-                  },
-                  isLoading: state is UpdatingShippingConfigLoading,
-                  text: 'Save Changes',
-                  textStyle: AppTextStyles.font16Bold.copyWith(
-                    color: AppPalette.white,
-                  ),
-                ),
-              ),
-            ),
+            Gap(20.h),
+            SettingsSaveButton(onSave: _onSave, onSuccess: _onSuccess),
           ],
         ),
       ),
