@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fruit_hub_dashboard/core/helpers/app_assets.dart';
+
+import '../helpers/app_assets.dart';
 
 class CustomNetworkImage extends StatelessWidget {
   const CustomNetworkImage({
@@ -8,14 +9,26 @@ class CustomNetworkImage extends StatelessWidget {
     this.image = '',
     this.height,
     this.width,
+    this.fit = BoxFit.contain,
   });
 
   final String image;
   final double? height;
   final double? width;
+  final BoxFit? fit;
 
   @override
   Widget build(BuildContext context) => image == ''
-      ? Image.asset(AppAssets.imagesWatermelonTest)
-      : CachedNetworkImage(imageUrl: image, height: height, width: width);
+      ? Image.asset(
+          AppAssets.imagesWatermelonTest,
+          fit: fit,
+          height: height,
+          width: width,
+        )
+      : CachedNetworkImage(
+          imageUrl: image,
+          height: height,
+          width: width,
+          fit: fit,
+        );
 }

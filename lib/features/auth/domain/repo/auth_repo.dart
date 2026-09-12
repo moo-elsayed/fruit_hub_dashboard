@@ -1,5 +1,6 @@
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
+import '../entities/sign_up_input_entity.dart';
 import '../entities/user_entity.dart';
 
 abstract class AuthRepo {
@@ -8,11 +9,9 @@ abstract class AuthRepo {
     required String password,
   });
 
-  Future<NetworkResponse<UserEntity>> createUserWithEmailAndPassword({
-    required String email,
-    required String password,
-    required String username,
-  });
+  Future<NetworkResponse<UserEntity>> createUserWithEmailAndPassword(
+    SignUpInputEntity input,
+  );
 
   Future<NetworkResponse<UserEntity>> googleSignIn();
 

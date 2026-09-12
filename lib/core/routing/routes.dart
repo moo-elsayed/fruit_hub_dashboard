@@ -10,5 +10,7 @@ class Routes {
   static const settingsView = 'settingsView';
   static const ordersView = 'ordersView';
   static const analyticsView = 'analyticsView';
-  static const fullScreenImageView = 'fullScreenImageView';
+  static const fullScreenImageGalleryView = 'fullScreenImageGalleryView';
+  static const userDetailsView = 'userDetailsView';
+  static const usersSearchView = 'usersSearchView';
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
 import 'package:fruit_hub_dashboard/core/utils/full_screen_image_gallery_input_item.dart';
@@ -6,6 +6,9 @@ import 'package:fruit_hub_dashboard/core/widgets/full_screen_image_gallery.dart'
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/presentation/views/user_details_view.dart';
+import 'package:fruit_hub_dashboard/features/users/presentation/views/users_search_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
 
 import '../../features/auth/presentation/args/login_args.dart';
@@ -49,17 +52,20 @@ class AppRouter {
           ),
         );
       case Routes.usersView:
-        return CupertinoPageRoute(builder: (_) => const UsersView());
+        return _route(const UsersView());
+      case Routes.usersSearchView:
+        return _route(const UsersSearchView());
+      case Routes.userDetailsView:
+        final user = _currentSettings!.arguments as DashboardUserEntity;
+        return _route(UserDetailsView(user: user));
       case Routes.settingsView:
-        return CupertinoPageRoute(builder: (_) => const SettingsView());
+        return _route(const SettingsView());
       case Routes.ordersView:
-        return CupertinoPageRoute(builder: (_) => const OrdersView());
-      case Routes.fullScreenImageView:
+        return _route(const OrdersView());
+      case Routes.fullScreenImageGalleryView:
         final item =
             _currentSettings!.arguments as FullScreenImageGalleryInputItem;
         return _route(FullScreenImageGallery(item: item));
-      // case Routes.analyticsView:
-      //   return CupertinoPageRoute(builder: (_) => const OrdersView());
       default:
         return null;
     }

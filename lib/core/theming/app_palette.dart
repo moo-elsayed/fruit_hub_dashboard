@@ -21,6 +21,9 @@ class AppPalette {
 
   // --- Accent & Status Colors ---
   static const Color accentGreen = Color(0xff10B981); // Emerald Green
+  static const Color accentPink = Color(
+    0xffEC4899,
+  ); // Rose Pink (Favorites & Badges)
   static const Color starYellow = Color(0xffF59E0B);
   static const Color error = Color(0xffEF4444);
   static const Color success = Color(0xff1B5E37);

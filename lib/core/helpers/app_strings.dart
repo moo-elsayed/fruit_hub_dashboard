@@ -456,4 +456,40 @@ abstract class AppStrings {
   static const String success = 'Success';
   static const String settingsUpdatedSuccessfully =
       'Settings updated successfully';
+  static const String chooseImageSource = 'Choose Image Source';
+  static const String camera = 'Camera';
+  static const String gallery = 'Gallery';
+  static const String searchUsers = 'Search users by name, email, phone...';
+  static const String totalUsers = 'Total Users';
+  static const String verifiedUsers = 'Verified';
+  static const String activeCarts = 'Active Carts';
+  static const String noUsersFound = 'No users found';
+  static const String noUsersSubtitle =
+      'Users will appear here once registered';
+  static const String userDetails = 'User Details';
+  static const String notVerified = 'Unverified';
+  static const String lastActive = 'Last Active';
+  static const String callUser = 'Call';
+  static const String whatsAppUser = 'WhatsApp';
+  static const String sendNotification = 'Send Notification';
+  static const String cartItems = 'Cart Items';
+  static const String notifications = 'Notifications';
+  static const String emptyCart = 'No items in cart';
+  static const String emptyFavorites = 'No favorite products';
+  static const String emptyNotifications = 'No notifications received';
+  static const String notificationTitleAr = 'Title (Arabic)';
+  static const String notificationTitleEn = 'Title (English)';
+  static const String notificationBodyAr = 'Body (Arabic)';
+  static const String notificationBodyEn = 'Body (English)';
+  static const String notificationSentSuccessfully =
+      'Notification sent successfully';
+  static const String allUsers = 'All';
+  static const String itemsCount = 'Items';
+  static const String searchByName = 'Name';
+  static const String searchByEmail = 'Email';
+  static const String searchByPhone = 'Phone';
+  static const String typeToSearchUsers =
+      'Type to search users across the database';
+  static const String noSearchResultsFound =
+      'No users found matching your search';
 }

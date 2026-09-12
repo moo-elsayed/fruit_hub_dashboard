@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_entity.dart';
 import 'package:gap/gap.dart';
 
@@ -67,15 +66,23 @@ class _CustomOrderItemState extends State<CustomOrderItem>
       (sum, item) => sum + (item.price * item.quantity),
     );
 
+    final statusColor = order.status.color;
+
     return Container(
       padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
-        color: context.colors.surface,
+        color: Color.alphaBlend(
+          statusColor.withValues(alpha: 0.035),
+          context.colors.surface,
+        ),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: context.colors.border, width: 1),
+        border: Border.all(
+          color: statusColor.withValues(alpha: 0.3),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppPalette.black.withValues(alpha: 0.03),
+            color: statusColor.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),

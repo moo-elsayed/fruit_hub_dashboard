@@ -29,7 +29,7 @@ class CustomProductItem extends StatelessWidget {
   void _openImageGallery(BuildContext context) {
     if (fruitEntity.imagePath.isNotEmpty) {
       context.pushNamed(
-        Routes.fullScreenImageView,
+        Routes.fullScreenImageGalleryView,
         arguments: FullScreenImageGalleryInputItem(
           imagesPaths: [fruitEntity.imagePath],
         ),

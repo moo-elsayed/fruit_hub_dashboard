@@ -17,6 +17,7 @@ import 'package:fruit_hub_dashboard/core/widgets/text_form_field_helper.dart';
 import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../domain/entities/sign_up_input_entity.dart';
 import '../args/login_args.dart';
 import '../managers/signup_cubit/sign_up_cubit.dart';
 import '../widgets/auth_redirect_text.dart';
@@ -32,6 +33,7 @@ class _RegisterViewState extends State<RegisterView> {
   late GlobalKey<FormState> _formKey;
   late TextEditingController _nameController;
   late TextEditingController _emailController;
+  late TextEditingController _phoneController;
   late TextEditingController _passwordController;
 
   @override
@@ -40,6 +42,7 @@ class _RegisterViewState extends State<RegisterView> {
     _formKey = GlobalKey<FormState>();
     _nameController = TextEditingController();
     _emailController = TextEditingController();
+    _phoneController = TextEditingController();
     _passwordController = TextEditingController();
   }
 
@@ -47,6 +50,7 @@ class _RegisterViewState extends State<RegisterView> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -132,10 +136,17 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       Gap(16.h),
                       TextFormFieldHelper(
+                        controller: _phoneController,
+                        hint: AppStrings.phoneNumber,
+                        keyboardType: TextInputType.phone,
+                        onValidate: Validator.validatePhoneNumber,
+                        action: TextInputAction.next,
+                      ),
+                      Gap(16.h),
+                      TextFormFieldHelper(
                         controller: _passwordController,
                         hint: AppStrings.password,
                         isPassword: true,
-                        obscuringCharacter: '●',
                         keyboardType: TextInputType.visiblePassword,
                         onValidate: Validator.validatePassword,
                         action: TextInputAction.done,
@@ -173,13 +184,15 @@ class _RegisterViewState extends State<RegisterView> {
                         builder: (context, state) => CustomMaterialButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              final input = SignUpInputEntity(
+                                username: _nameController.text.trim(),
+                                email: _emailController.text.trim(),
+                                phone: _phoneController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              );
                               context
                                   .read<SignupCubit>()
-                                  .createUserWithEmailAndPassword(
-                                    username: _nameController.text.trim(),
-                                    email: _emailController.text.trim(),
-                                    password: _passwordController.text.trim(),
-                                  );
+                                  .createUserWithEmailAndPassword(input);
                             }
                           },
                           maxWidth: true,

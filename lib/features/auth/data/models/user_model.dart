@@ -6,12 +6,16 @@ class UserModel {
     required this.uid,
     required this.name,
     required this.email,
+    this.phone = '',
+    this.image = '',
     required this.isVerified,
   });
 
   factory UserModel.fromFirebaseUser(
     User user, {
     String? customName,
+    String? customPhone,
+    String? customImage,
     Map<String, dynamic>? additionalProfile,
   }) {
     String resolvedName = (customName ?? user.displayName ?? '').trim();
@@ -45,10 +49,24 @@ class UserModel {
       }
     }
 
+    final resolvedPhone = (customPhone ?? user.phoneNumber ?? '').trim();
+
+    String resolvedImage = (customImage ?? user.photoURL ?? '').trim();
+    if (resolvedImage.isEmpty && additionalProfile != null) {
+      final pic = additionalProfile['picture'];
+      if (pic is Map && pic['data'] != null && pic['data']['url'] != null) {
+        resolvedImage = pic['data']['url'].toString();
+      } else if (pic is String) {
+        resolvedImage = pic;
+      }
+    }
+
     return UserModel(
       uid: user.uid,
       name: resolvedName,
       email: user.email ?? '',
+      phone: resolvedPhone,
+      image: resolvedImage,
       isVerified: user.emailVerified,
     );
   }
@@ -57,6 +75,8 @@ class UserModel {
     uid: map['uid'] ?? '',
     name: map['name'] ?? '',
     email: map['email'] ?? '',
+    phone: map['phone'] ?? map['phoneNumber'] ?? '',
+    image: map['image'] ?? map['photoUrl'] ?? map['imageUrl'] ?? '',
     isVerified: map['isVerified'] ?? false,
   );
 
@@ -64,21 +84,33 @@ class UserModel {
     uid: user.uid,
     name: user.name,
     email: user.email,
+    phone: user.phone,
+    image: user.image,
     isVerified: user.isVerified,
   );
 
   final String uid;
   String name;
   final String email;
+  final String phone;
+  final String image;
   final bool isVerified;
 
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'name': name,
     'email': email,
+    'phone': phone,
+    'image': image,
     'isVerified': isVerified,
   };
 
-  UserEntity toUserEntity() =>
-      UserEntity(uid: uid, name: name, email: email, isVerified: isVerified);
+  UserEntity toUserEntity() => UserEntity(
+    uid: uid,
+    name: name,
+    email: email,
+    phone: phone,
+    image: image,
+    isVerified: isVerified,
+  );
 }

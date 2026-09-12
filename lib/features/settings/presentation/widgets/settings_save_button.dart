@@ -43,9 +43,7 @@ class SettingsSaveButton extends StatelessWidget {
           isLoading: state is UpdatingShippingConfigLoading,
           text: AppStrings.saveChanges,
           borderRadius: BorderRadius.circular(10.r),
-          textStyle: AppTextStyles.font15Bold.copyWith(
-            color: AppPalette.white,
-          ),
+          textStyle: AppTextStyles.font15Bold.copyWith(color: AppPalette.white),
         ),
       );
 }

@@ -1,5 +1,6 @@
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
+import '../entities/sign_up_input_entity.dart';
 import '../entities/user_entity.dart';
 import '../repo/auth_repo.dart';
 
@@ -8,13 +9,6 @@ class CreateUserWithEmailAndPasswordUseCase {
 
   final AuthRepo _authRepo;
 
-  Future<NetworkResponse<UserEntity>> call({
-    required String email,
-    required String password,
-    required String username,
-  }) async => await _authRepo.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-    username: username,
-  );
+  Future<NetworkResponse<UserEntity>> call(SignUpInputEntity input) async =>
+      await _authRepo.createUserWithEmailAndPassword(input);
 }

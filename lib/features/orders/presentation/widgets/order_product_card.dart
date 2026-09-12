@@ -31,7 +31,7 @@ class OrderProductCard extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
-            child: CustomNetworkImage(image: product.imagePath),
+            child: CustomNetworkImage(image: product.imagePath, fit: .cover),
           ),
         ),
         Gap(10.w),

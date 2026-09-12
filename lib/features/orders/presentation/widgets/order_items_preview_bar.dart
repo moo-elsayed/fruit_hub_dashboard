@@ -97,7 +97,10 @@ class _ProductsAvatarStack extends StatelessWidget {
                 border: Border.all(color: context.colors.surface, width: 1.5),
               ),
               child: ClipOval(
-                child: CustomNetworkImage(image: previewProducts[i].imagePath),
+                child: CustomNetworkImage(
+                  image: previewProducts[i].imagePath,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

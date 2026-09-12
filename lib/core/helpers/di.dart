@@ -33,6 +33,17 @@ import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/fetch_shi
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/update_shipping_config_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
 import 'package:fruit_hub_dashboard/features/splash/presentation/managers/splash_cubit/splash_cubit.dart';
+import 'package:fruit_hub_dashboard/features/users/data/data_sources/remote/users_remote_data_source_imp.dart';
+import 'package:fruit_hub_dashboard/features/users/data/repo_imp/users_repo_imp.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/repo/users_repo.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/use_cases/get_user_notifications_use_case.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/use_cases/get_users_stats_use_case.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/use_cases/get_users_use_case.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/use_cases/search_users_use_case.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/use_cases/send_user_notification_use_case.dart';
+import 'package:fruit_hub_dashboard/features/users/presentation/managers/user_notifications_cubit/user_notifications_cubit.dart';
+import 'package:fruit_hub_dashboard/features/users/presentation/managers/users_cubit/users_cubit.dart';
+import 'package:fruit_hub_dashboard/features/users/presentation/managers/users_search_cubit/users_search_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -173,6 +184,46 @@ void setupServiceLocator() {
     () => OrdersCubit(
       getIt<GetOrdersUseCase>(),
       getIt<UpdateOrderStatusUseCase>(),
+    ),
+  );
+
+  /// users
+  getIt.registerLazySingleton<UsersRepo>(
+    () => UsersRepoImp(UsersRemoteDataSourceImp()),
+  );
+
+  getIt.registerLazySingleton<GetUsersUseCase>(
+    () => GetUsersUseCase(getIt<UsersRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetUsersStatsUseCase>(
+    () => GetUsersStatsUseCase(getIt<UsersRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetUserNotificationsUseCase>(
+    () => GetUserNotificationsUseCase(getIt<UsersRepo>()),
+  );
+
+  getIt.registerLazySingleton<SearchUsersUseCase>(
+    () => SearchUsersUseCase(getIt<UsersRepo>()),
+  );
+
+  getIt.registerLazySingleton<SendUserNotificationUseCase>(
+    () => SendUserNotificationUseCase(getIt<UsersRepo>()),
+  );
+
+  getIt.registerFactory<UsersCubit>(
+    () => UsersCubit(getIt<GetUsersUseCase>(), getIt<GetUsersStatsUseCase>()),
+  );
+
+  getIt.registerFactory<UsersSearchCubit>(
+    () => UsersSearchCubit(getIt<SearchUsersUseCase>()),
+  );
+
+  getIt.registerFactory<UserNotificationsCubit>(
+    () => UserNotificationsCubit(
+      getIt<GetUserNotificationsUseCase>(),
+      getIt<SendUserNotificationUseCase>(),
     ),
   );
 }
