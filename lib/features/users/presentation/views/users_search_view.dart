@@ -118,7 +118,7 @@ class _UsersSearchViewState extends State<UsersSearchView> {
                 Expanded(
                   child: BlocBuilder<UsersSearchCubit, UsersSearchState>(
                     builder: (context, state) => switch (state) {
-                      UsersSearchInitial() => const UsersSearchEmptyView(
+                      UsersSearchInitial() => UsersSearchEmptyView(
                         icon: Icons.search_rounded,
                         message: AppStrings.typeToSearchUsers,
                       ),
@@ -130,7 +130,7 @@ class _UsersSearchViewState extends State<UsersSearchView> {
                         ),
                       UsersSearchSuccess(:final users) =>
                         users.isEmpty
-                            ? const UsersSearchEmptyView(
+                            ? UsersSearchEmptyView(
                                 icon: Icons.person_off_outlined,
                                 message: AppStrings.noSearchResultsFound,
                               )

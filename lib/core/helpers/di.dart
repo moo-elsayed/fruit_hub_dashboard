@@ -47,6 +47,8 @@ import 'package:fruit_hub_dashboard/features/users/presentation/managers/users_s
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../cubits/app_language_cubit.dart';
+
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
@@ -57,6 +59,10 @@ void setupServiceLocator() {
 
   getIt.registerLazySingleton<AppThemeCubit>(
     () => AppThemeCubit(getIt<AppPreferencesService>()),
+  );
+
+  getIt.registerLazySingleton<AppLanguageCubit>(
+    () => AppLanguageCubit(getIt<AppPreferencesService>()),
   );
 
   getIt.registerLazySingleton<UserInfoCubit>(

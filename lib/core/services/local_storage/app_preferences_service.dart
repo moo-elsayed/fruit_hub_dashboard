@@ -16,6 +16,10 @@ abstract class AppPreferencesService {
   Future<void> saveThemeMode(String theme);
 
   String getThemeMode();
+
+  Future<void> saveLanguage(String languageCode);
+
+  String getLanguage();
 }
 
 class AppPreferencesServiceImpl implements AppPreferencesService {
@@ -24,6 +28,7 @@ class AppPreferencesServiceImpl implements AppPreferencesService {
   final SharedPreferences _sharedPreferences;
   static const String _keyUser = 'cached_user';
   static const String _keyThemeMode = 'theme_mode';
+  static const String _keyLanguage = 'language_code';
 
   @override
   Future<void> saveUser(UserEntity user) async {
@@ -59,4 +64,12 @@ class AppPreferencesServiceImpl implements AppPreferencesService {
   @override
   String getThemeMode() =>
       _sharedPreferences.getString(_keyThemeMode) ?? 'system';
+
+  @override
+  Future<void> saveLanguage(String languageCode) async =>
+      await _sharedPreferences.setString(_keyLanguage, languageCode);
+
+  @override
+  String getLanguage() =>
+      _sharedPreferences.getString(_keyLanguage) ?? 'ar';
 }

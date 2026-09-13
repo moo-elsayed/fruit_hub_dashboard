@@ -81,10 +81,16 @@ class UsersRepoImp implements UsersRepo {
   }
 
   @override
-  Future<NetworkResponse<void>> sendNotification(
+  Future<NetworkResponse<NotificationEntity>> sendNotification(
     SendNotificationInputEntity input,
   ) async {
     final model = SendNotificationInputModel.fromEntity(input);
-    return await _remoteDataSource.sendNotification(model);
+    final response = await _remoteDataSource.sendNotification(model);
+    return switch (response) {
+      NetworkSuccess(data: final notificationModel) => NetworkSuccess(
+        notificationModel?.toEntity(),
+      ),
+      NetworkFailure(failure: final failure) => NetworkFailure(failure),
+    };
   }
 }

@@ -6,21 +6,24 @@ import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 import '../managers/user_notifications_cubit/user_notifications_cubit.dart';
+import 'user_notification_item.dart';
+import 'user_notifications_skeleton_list.dart';
 
 class UserNotificationsList extends StatelessWidget {
-  const UserNotificationsList({super.key});
+  const UserNotificationsList({super.key, this.physics});
+
+  final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<UserNotificationsCubit, UserNotificationsState>(
+        buildWhen: (previous, current) =>
+            current is UserNotificationsLoading ||
+            current is UserNotificationsSuccess ||
+            current is UserNotificationsFailure,
         builder: (context, state) {
           if (state is UserNotificationsLoading) {
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.h),
-                child: const CircularProgressIndicator.adaptive(),
-              ),
-            );
+            return UserNotificationsSkeletonList(physics: physics);
           }
 
           if (state is UserNotificationsFailure) {
@@ -65,77 +68,12 @@ class UserNotificationsList extends StatelessWidget {
             }
 
             return ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: physics,
+              padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
               itemCount: notifications.length,
               separatorBuilder: (context, index) => SizedBox(height: 8.h),
-              itemBuilder: (context, index) {
-                final notification = notifications[index];
-                final isArabic = context.isRTL;
-                final title = notification.localizedTitle(isArabic);
-                final body = notification.localizedBody(isArabic);
-
-                return Container(
-                  padding: EdgeInsets.all(12.r),
-                  decoration: BoxDecoration(
-                    color: context.colors.surface,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: context.colors.border),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(8.r),
-                        decoration: BoxDecoration(
-                          color: context.colors.primary.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          notification.type.icon,
-                          size: 18.sp,
-                          color: context.colors.primary,
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 4.h,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    title,
-                                    style: AppTextStyles.font13SemiBold
-                                        .copyWith(
-                                          color: context.colors.mainText,
-                                        ),
-                                  ),
-                                ),
-                                if (notification.isRead)
-                                  Icon(
-                                    Icons.done_all_rounded,
-                                    size: 14.sp,
-                                    color: context.colors.primary,
-                                  ),
-                              ],
-                            ),
-                            Text(
-                              body,
-                              style: AppTextStyles.font12Regular.copyWith(
-                                color: context.colors.subText,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+              itemBuilder: (context, index) =>
+                  UserNotificationItem(notification: notifications[index]),
             );
           }
 

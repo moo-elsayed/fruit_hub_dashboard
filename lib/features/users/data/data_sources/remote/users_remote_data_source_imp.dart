@@ -3,6 +3,7 @@ import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
 import 'package:fruit_hub_dashboard/core/network/api_helper.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
+import '../../../../../core/enums/notification_type.dart';
 import '../../../../../core/enums/user_filter_type.dart';
 import '../../../../../core/enums/user_search_by.dart';
 import '../../models/dashboard_user_model.dart';
@@ -146,13 +147,26 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
   }, functionName: 'searchUsers');
 
   @override
-  Future<NetworkResponse<void>> sendNotification(
+  Future<NetworkResponse<NotificationModel>> sendNotification(
     SendNotificationInputModel input,
   ) async => ApiHelper.executeSafely(() async {
-    await _firestore
+    final docRef = _firestore
         .collection(_usersCollection)
         .doc(input.userId)
         .collection(_notificationsCollection)
-        .add(input.toJson());
+        .doc();
+
+    await docRef.set(input.toJson());
+
+    return NotificationModel(
+      id: docRef.id,
+      titleAr: input.titleAr,
+      titleEn: input.titleEn,
+      bodyAr: input.bodyAr,
+      bodyEn: input.bodyEn,
+      type: NotificationType.fromString(input.type),
+      isRead: false,
+      createdAt: DateTime.now(),
+    );
   }, functionName: 'sendNotification');
 }

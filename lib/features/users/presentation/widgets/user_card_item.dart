@@ -52,7 +52,7 @@ class UserCardItem extends StatelessWidget {
                       if (user.isVerified)
                         Icon(
                           Icons.verified_rounded,
-                          size: 16.sp,
+                          size: 14.sp,
                           color: AppPalette.accentGreen,
                         ),
                     ],

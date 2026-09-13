@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -12,6 +13,7 @@ class DashboardViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _ = EasyLocalization.of(context)?.locale;
     final dashboardItems = getDashboardItems(context);
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

@@ -33,6 +33,7 @@ dependencies:
 
   # --- Local Storage & Utilities ---
   shared_preferences: ^2.5.5
+  easy_localization: ^3.0.8
   logger: ^2.7.0
 
   # --- Media Handling ---
@@ -71,3 +72,4 @@ flutter:
     - assets/images/
     - assets/svgs/
     - assets/svgs/icons/
+    - assets/translations/

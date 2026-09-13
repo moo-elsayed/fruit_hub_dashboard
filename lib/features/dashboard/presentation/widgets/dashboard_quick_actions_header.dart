@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
@@ -11,7 +12,10 @@ class DashboardQuickActionsHeader extends StatelessWidget {
   final int itemCount;
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) {
+    final _ = EasyLocalization.of(context)?.locale;
+
+    return Row(
     spacing: 8.w,
     children: [
       Text(
@@ -35,4 +39,5 @@ class DashboardQuickActionsHeader extends StatelessWidget {
       ),
     ],
   );
+  }
 }

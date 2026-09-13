@@ -45,16 +45,20 @@ class SettingsCurrencyField extends StatelessWidget {
         controller: controller,
         onValidate: Validator.validateRequiredField,
         hint: hint,
-        suffixWidget: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              AppStrings.egp,
-              style: AppTextStyles.font13Medium.copyWith(
-                color: context.colors.subText,
+        suffixWidget: Padding(
+          padding: EdgeInsetsDirectional.only(end: 14.w, start: 8.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppStrings.egp,
+                style: AppTextStyles.font13Medium.copyWith(
+                  color: context.colors.subText,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
@@ -20,153 +19,76 @@ class UserProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(16.r),
+    padding: EdgeInsets.all(14.r),
     decoration: BoxDecoration(
       color: context.colors.surface,
-      borderRadius: BorderRadius.circular(20.r),
+      borderRadius: BorderRadius.circular(16.r),
       border: Border.all(color: context.colors.border),
     ),
-    child: Column(
-      spacing: 16.h,
+    child: Row(
+      spacing: 12.w,
       children: [
-        Row(
-          spacing: 16.w,
-          children: [
-            UserAvatarWidget(imagePath: user.image, name: user.name, size: 64),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 4.h,
+        UserAvatarWidget(imagePath: user.image, name: user.name, size: 56),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 2.h,
+            children: [
+              Row(
+                spacing: 6.w,
                 children: [
-                  Row(
-                    spacing: 6.w,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          user.name.isNotEmpty ? user.name : user.email,
-                          style: AppTextStyles.font16Bold.copyWith(
-                            color: context.colors.mainText,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6.w,
-                          vertical: 2.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              (user.isVerified
-                                      ? AppPalette.accentGreen
-                                      : context.colors.subText)
-                                  .withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(6.r),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          spacing: 3.w,
-                          children: [
-                            Icon(
-                              user.isVerified
-                                  ? Icons.verified_rounded
-                                  : Icons.info_outline_rounded,
-                              size: 11.sp,
-                              color: user.isVerified
-                                  ? AppPalette.accentGreen
-                                  : context.colors.subText,
-                            ),
-                            Text(
-                              user.isVerified
-                                  ? AppStrings.verified
-                                  : AppStrings.notVerified,
-                              style: AppTextStyles.font11Regular.copyWith(
-                                color: user.isVerified
-                                    ? AppPalette.accentGreen
-                                    : context.colors.subText,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (user.email.isNotEmpty)
-                    Text(
-                      user.email,
-                      style: AppTextStyles.font12Regular.copyWith(
-                        color: context.colors.subText,
-                      ),
+                  Flexible(
+                    child: Text(
+                      user.name,
+                      style: AppTextStyles.font15Bold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  if (user.phone.isNotEmpty)
-                    Text(
-                      user.phone,
-                      style: AppTextStyles.font12Regular.copyWith(
-                        color: context.colors.subText,
-                      ),
+                  ),
+                  if (user.isVerified)
+                    Icon(
+                      Icons.verified_rounded,
+                      size: 15.sp,
+                      color: AppPalette.accentGreen,
                     ),
                 ],
               ),
-            ),
-          ],
+              if (user.email.isNotEmpty)
+                Text(
+                  user.email,
+                  style: AppTextStyles.font12Regular.copyWith(
+                    color: context.colors.subText,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              if (user.phone.isNotEmpty)
+                Text(
+                  user.phone,
+                  style: AppTextStyles.font12Regular.copyWith(
+                    color: context.colors.subText,
+                  ),
+                ),
+            ],
+          ),
         ),
-        Row(
-          spacing: 8.w,
-          children: [
-            Expanded(
-              child: _ActionButton(
-                icon: Icons.notifications_active_outlined,
-                label: AppStrings.sendNotification,
+        Material(
+          color: context.colors.primary.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12.r),
+          child: InkWell(
+            onTap: onSendNotification,
+            borderRadius: BorderRadius.circular(12.r),
+            child: Padding(
+              padding: EdgeInsets.all(10.r),
+              child: Icon(
+                Icons.notifications_active_outlined,
+                size: 20.sp,
                 color: context.colors.primary,
-                onTap: onSendNotification,
               ),
             ),
-          ],
+          ),
         ),
       ],
-    ),
-  );
-}
-
-class _ActionButton extends StatelessWidget {
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Material(
-    color: color.withValues(alpha: 0.08),
-    borderRadius: BorderRadius.circular(10.r),
-    child: InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10.r),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 6.w,
-          children: [
-            Icon(icon, size: 16.sp, color: color),
-            Text(
-              label,
-              style: AppTextStyles.font13Medium.copyWith(
-                color: color,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
     ),
   );
 }

@@ -41,7 +41,7 @@ class CustomArrowBack extends StatelessWidget {
           child: Padding(
             padding: padding ?? EdgeInsets.all(8.r),
             child: Transform.rotate(
-              angle: pi,
+              angle: context.isArabic ? 0 : pi,
               child: SvgPicture.asset(
                 AppAssets.iconsArrowBack,
                 fit: BoxFit.scaleDown,

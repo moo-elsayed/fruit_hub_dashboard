@@ -5,12 +5,14 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
+import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_broadcast_notification_entity.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_config_entity.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
 import 'package:gap/gap.dart';
 
 import 'settings_currency_field.dart';
 import 'settings_save_button.dart';
+import 'shipping_notification_toggle_tile.dart';
 
 class DeliveryFeesContainer extends StatefulWidget {
   const DeliveryFeesContainer({super.key, required this.config});
@@ -26,12 +28,14 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
   late final TextEditingController _shippingCostController;
   late final TextEditingController _thresholdController;
   late ValueNotifier<ShippingConfigEntity> _configNotifier;
+  late ValueNotifier<bool> _notifyUsersNotifier;
 
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
     _configNotifier = ValueNotifier(widget.config);
+    _notifyUsersNotifier = ValueNotifier(false);
     _shippingCostController = TextEditingController(
       text: widget.config.shippingCost.toStringAsFixed(0),
     );
@@ -58,6 +62,7 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
     _shippingCostController.dispose();
     _thresholdController.dispose();
     _configNotifier.dispose();
+    _notifyUsersNotifier.dispose();
     super.dispose();
   }
 
@@ -69,16 +74,37 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
       final threshold =
           double.tryParse(_thresholdController.text.trim()) ??
           _configNotifier.value.freeShippingThreshold;
+      final notify = _notifyUsersNotifier.value;
 
-      if (cost == _configNotifier.value.shippingCost &&
+      if (!notify &&
+          cost == _configNotifier.value.shippingCost &&
           threshold == _configNotifier.value.freeShippingThreshold) {
         return;
+      }
+
+      ShippingBroadcastNotificationEntity? notification;
+      if (notify) {
+        notification = ShippingBroadcastNotificationEntity(
+          titleAr: AppStrings.shippingUpdateTitleAr,
+          titleEn: AppStrings.shippingUpdateTitleEn,
+          bodyAr: AppStrings.shippingUpdateBodyAr(
+            cost: cost,
+            threshold: threshold,
+          ),
+          bodyEn: AppStrings.shippingUpdateBodyEn(
+            cost: cost,
+            threshold: threshold,
+          ),
+          type: 'general',
+          notify: true,
+        );
       }
 
       context.read<SettingsCubit>().updateShippingConfig(
         ShippingConfigEntity(
           shippingCost: cost,
           freeShippingThreshold: threshold,
+          broadcastNotification: notification,
         ),
       );
     }
@@ -96,6 +122,7 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
       shippingCost: cost,
       freeShippingThreshold: threshold,
     );
+    _notifyUsersNotifier.value = false;
   }
 
   @override
@@ -132,6 +159,12 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
               hint: _configNotifier.value.freeShippingThreshold.toStringAsFixed(
                 0,
               ),
+            ),
+            Gap(16.h),
+            ShippingNotificationToggleTile(
+              notifyNotifier: _notifyUsersNotifier,
+              costController: _shippingCostController,
+              thresholdController: _thresholdController,
             ),
             Gap(20.h),
             SettingsSaveButton(onSave: _onSave, onSuccess: _onSuccess),

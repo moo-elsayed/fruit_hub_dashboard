@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +11,10 @@ class DashboardBannerCard extends StatelessWidget {
   const DashboardBannerCard({super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    final _ = EasyLocalization.of(context)?.locale;
+
+    return Container(
     width: double.infinity,
     padding: EdgeInsets.all(20.r),
     decoration: BoxDecoration(
@@ -90,4 +94,5 @@ class DashboardBannerCard extends StatelessWidget {
       ],
     ),
   ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.08, duration: 400.ms);
+  }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/helpers/validator.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_bottom_sheet_handle.dart';
@@ -100,48 +101,40 @@ class _SendNotificationBottomSheetState
                     color: context.colors.mainText,
                   ),
                 ),
-                Text(
-                  widget.userName,
-                  style: AppTextStyles.font12Regular.copyWith(
-                    color: context.colors.subText,
-                  ),
-                ),
                 TextFormFieldHelper(
                   controller: _titleArController,
                   hint: AppStrings.notificationTitleAr,
                   action: TextInputAction.next,
-                  onValidate: (v) => v == null || v.trim().isEmpty
-                      ? AppStrings.requiredField
-                      : null,
+                  onValidate: Validator.validateRequiredField,
                 ),
                 TextFormFieldHelper(
                   controller: _titleEnController,
                   hint: AppStrings.notificationTitleEn,
                   action: TextInputAction.next,
-                  onValidate: (v) => v == null || v.trim().isEmpty
-                      ? AppStrings.requiredField
-                      : null,
+                  onValidate: Validator.validateRequiredField,
                 ),
                 TextFormFieldHelper(
                   controller: _bodyArController,
                   hint: AppStrings.notificationBodyAr,
                   maxLines: 2,
                   action: TextInputAction.next,
-                  onValidate: (v) => v == null || v.trim().isEmpty
-                      ? AppStrings.requiredField
-                      : null,
+                  onValidate: Validator.validateRequiredField,
                 ),
                 TextFormFieldHelper(
                   controller: _bodyEnController,
                   hint: AppStrings.notificationBodyEn,
                   maxLines: 2,
                   action: TextInputAction.done,
-                  onValidate: (v) => v == null || v.trim().isEmpty
-                      ? AppStrings.requiredField
-                      : null,
+                  onValidate: Validator.validateRequiredField,
                 ),
-                SizedBox(height: 4.h),
                 BlocConsumer<UserNotificationsCubit, UserNotificationsState>(
+                  listenWhen: (previous, current) =>
+                      current is SendNotificationSuccess ||
+                      current is SendNotificationFailure,
+                  buildWhen: (previous, current) =>
+                      current is SendNotificationLoading ||
+                      current is SendNotificationSuccess ||
+                      current is SendNotificationFailure,
                   listener: (context, state) {
                     if (state is SendNotificationSuccess) {
                       AppToast.show(

@@ -53,6 +53,7 @@ extension AppTheme on BuildContext {
 
 extension LanguageExtension on BuildContext {
   bool get isRTL => Directionality.of(this) == ui.TextDirection.rtl;
+  bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
 }
 
 extension ThemeExtension on BuildContext {

@@ -6,9 +6,10 @@ import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 class UserFavoritesList extends StatelessWidget {
-  const UserFavoritesList({super.key, required this.favoriteIds});
+  const UserFavoritesList({super.key, required this.favoriteIds, this.physics});
 
   final List<String> favoriteIds;
+  final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,8 @@ class UserFavoritesList extends StatelessWidget {
     }
 
     return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: physics,
+      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
       itemCount: favoriteIds.length,
       separatorBuilder: (context, index) => SizedBox(height: 8.h),
       itemBuilder: (context, index) {

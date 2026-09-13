@@ -8,9 +8,10 @@ import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import '../../domain/entities/cart_item_entity.dart';
 
 class UserCartItemsList extends StatelessWidget {
-  const UserCartItemsList({super.key, required this.cartItems});
+  const UserCartItemsList({super.key, required this.cartItems, this.physics});
 
   final List<CartItemEntity> cartItems;
+  final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +41,8 @@ class UserCartItemsList extends StatelessWidget {
     }
 
     return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: physics,
+      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
       itemCount: cartItems.length,
       separatorBuilder: (context, index) => SizedBox(height: 8.h),
       itemBuilder: (context, index) {

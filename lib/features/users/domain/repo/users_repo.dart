@@ -24,7 +24,7 @@ abstract class UsersRepo {
   Future<NetworkResponse<List<NotificationEntity>>> getUserNotifications(
     String userId,
   );
-  Future<NetworkResponse<void>> sendNotification(
+  Future<NetworkResponse<NotificationEntity>> sendNotification(
     SendNotificationInputEntity input,
   );
 }

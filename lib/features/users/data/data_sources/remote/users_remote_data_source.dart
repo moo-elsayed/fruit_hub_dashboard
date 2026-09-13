@@ -24,7 +24,7 @@ abstract class UsersRemoteDataSource {
   Future<NetworkResponse<List<NotificationModel>>> getUserNotifications(
     String userId,
   );
-  Future<NetworkResponse<void>> sendNotification(
+  Future<NetworkResponse<NotificationModel>> sendNotification(
     SendNotificationInputModel input,
   );
 }

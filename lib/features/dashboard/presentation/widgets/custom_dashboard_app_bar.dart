@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +21,10 @@ class CustomDashboardAppBar extends StatelessWidget
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  Widget build(BuildContext context) =>
-      BlocListener<SignOutCubit, SignOutState>(
+  Widget build(BuildContext context) {
+    final _ = EasyLocalization.of(context)?.locale;
+
+    return BlocListener<SignOutCubit, SignOutState>(
         listener: (context, state) {
           if (state is SignOutSuccess) {
             AppToast.show(
@@ -114,4 +117,5 @@ class CustomDashboardAppBar extends StatelessWidget
           ],
         ),
       );
+  }
 }

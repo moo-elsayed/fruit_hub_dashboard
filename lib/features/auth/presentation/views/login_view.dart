@@ -85,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
       BlocProvider(create: (context) => getIt.get<SocialSignInCubit>()),
     ],
     child: Scaffold(
-      appBar: const CustomAppBar(title: AppStrings.login, showArrowBack: false),
+      appBar: CustomAppBar(title: AppStrings.login, showArrowBack: false),
       body: CustomKeyboardUnfocus(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16.w),

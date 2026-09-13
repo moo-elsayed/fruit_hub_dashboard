@@ -17,12 +17,15 @@ class UserNotificationsCubit extends Cubit<UserNotificationsState> {
   final GetUserNotificationsUseCase _getUserNotificationsUseCase;
   final SendUserNotificationUseCase _sendUserNotificationUseCase;
 
+  List<NotificationEntity> _notifications = [];
+
   Future<void> getUserNotifications(String userId) async {
     emit(UserNotificationsLoading());
     final response = await _getUserNotificationsUseCase.call(userId);
     switch (response) {
       case NetworkSuccess(data: final notifications):
-        emit(UserNotificationsSuccess(notifications ?? []));
+        _notifications = List.of(notifications ?? []);
+        emit(UserNotificationsSuccess(List.unmodifiable(_notifications)));
       case NetworkFailure(failure: final failure):
         emit(UserNotificationsFailure(failure.error));
     }
@@ -32,10 +35,12 @@ class UserNotificationsCubit extends Cubit<UserNotificationsState> {
     emit(SendNotificationLoading());
     final response = await _sendUserNotificationUseCase.call(input);
     switch (response) {
-      case NetworkSuccess():
+      case NetworkSuccess(data: final newNotification):
+        if (newNotification != null) {
+          _notifications.insert(0, newNotification);
+        }
         emit(SendNotificationSuccess());
-        // Refresh notifications list after sending
-        await getUserNotifications(input.userId);
+        emit(UserNotificationsSuccess(List.unmodifiable(_notifications)));
       case NetworkFailure(failure: final failure):
         emit(SendNotificationFailure(failure.error));
     }
