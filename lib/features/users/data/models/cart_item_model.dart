@@ -5,18 +5,18 @@ class CartItemModel {
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) => CartItemModel(
     productId:
-        json['productId']?.toString() ??
+        json['fruitCode']?.toString() ??
         json['product_id']?.toString() ??
         json['code']?.toString() ??
         '',
-    quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+    quantity: (json['quantity'] as num?)?.toInt() ?? 0,
   );
 
   final String productId;
   final int quantity;
 
   Map<String, dynamic> toJson() => {
-    'productId': productId,
+    'fruitCode': productId,
     'quantity': quantity,
   };
 

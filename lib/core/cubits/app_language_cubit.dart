@@ -6,7 +6,7 @@ import '../services/local_storage/app_preferences_service.dart';
 
 class AppLanguageCubit extends Cubit<Locale> {
   AppLanguageCubit(this._preferencesService)
-      : super(Locale(_preferencesService.getLanguage()));
+    : super(Locale(_preferencesService.getLanguage()));
 
   final AppPreferencesService _preferencesService;
 

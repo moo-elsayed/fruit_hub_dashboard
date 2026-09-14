@@ -1,5 +1,10 @@
 import 'package:fruit_hub_dashboard/core/services/local_storage/app_preferences_service.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_theme_cubit.dart';
+import 'package:fruit_hub_dashboard/features/analytics/data/data_sources/remote/analytics_remote_data_source_imp.dart';
+import 'package:fruit_hub_dashboard/features/analytics/data/repo_imp/analytics_repo_imp.dart';
+import 'package:fruit_hub_dashboard/features/analytics/domain/repo/analytics_repo.dart';
+import 'package:fruit_hub_dashboard/features/analytics/domain/use_cases/get_analytics_use_case.dart';
+import 'package:fruit_hub_dashboard/features/analytics/presentation/managers/analytics_cubit/analytics_cubit.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/repo_imp/auth_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/create_user_with_email_and_password_use_case.dart';
@@ -191,6 +196,19 @@ void setupServiceLocator() {
       getIt<GetOrdersUseCase>(),
       getIt<UpdateOrderStatusUseCase>(),
     ),
+  );
+
+  /// analytics
+  getIt.registerLazySingleton<AnalyticsRepo>(
+    () => AnalyticsRepoImp(AnalyticsRemoteDataSourceImp()),
+  );
+
+  getIt.registerLazySingleton<GetAnalyticsUseCase>(
+    () => GetAnalyticsUseCase(getIt<AnalyticsRepo>()),
+  );
+
+  getIt.registerFactory<AnalyticsCubit>(
+    () => AnalyticsCubit(getIt<GetAnalyticsUseCase>()),
   );
 
   /// users

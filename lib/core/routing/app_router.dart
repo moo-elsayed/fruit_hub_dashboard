@@ -11,6 +11,7 @@ import 'package:fruit_hub_dashboard/features/users/presentation/views/user_detai
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_search_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
 
+import '../../features/analytics/presentation/views/analytics_view.dart';
 import '../../features/auth/presentation/args/login_args.dart';
 import '../../features/auth/presentation/views/forget_password_view.dart';
 import '../../features/auth/presentation/views/login_view.dart';
@@ -62,6 +63,8 @@ class AppRouter {
         return _route(const SettingsView());
       case Routes.ordersView:
         return _route(const OrdersView());
+      case Routes.analyticsView:
+        return _route(const AnalyticsView());
       case Routes.fullScreenImageGalleryView:
         final item =
             _currentSettings!.arguments as FullScreenImageGalleryInputItem;

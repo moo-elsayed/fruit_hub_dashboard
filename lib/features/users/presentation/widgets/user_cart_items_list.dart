@@ -55,6 +55,7 @@ class UserCartItemsList extends StatelessWidget {
             border: Border.all(color: context.colors.border),
           ),
           child: Row(
+            spacing: 12.w,
             children: [
               Container(
                 padding: EdgeInsets.all(8.r),
@@ -68,25 +69,12 @@ class UserCartItemsList extends StatelessWidget {
                   color: AppPalette.secondaryOrange,
                 ),
               ),
-              SizedBox(width: 12.w),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 2.h,
-                  children: [
-                    Text(
-                      '${AppStrings.productCode}: ${item.productId}',
-                      style: AppTextStyles.font13SemiBold.copyWith(
-                        color: context.colors.mainText,
-                      ),
-                    ),
-                    Text(
-                      '${AppStrings.itemsCount}: ${item.quantity}',
-                      style: AppTextStyles.font12Regular.copyWith(
-                        color: context.colors.subText,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  '${AppStrings.productCode}: ${item.productId}',
+                  style: AppTextStyles.font13SemiBold.copyWith(
+                    color: context.colors.mainText,
+                  ),
                 ),
               ),
               Container(

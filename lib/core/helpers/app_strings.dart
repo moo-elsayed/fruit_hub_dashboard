@@ -5,8 +5,10 @@ abstract class AppStrings {
 
   static String get pageViewItem1Title => 'page_view_item1_title'.tr();
   static String get pageViewItem2Title => 'page_view_item2_title'.tr();
-  static String get pageViewItem1Description => 'page_view_item1_description_dashboard'.tr();
-  static String get pageViewItem2Description => 'page_view_item2_description_dashboard'.tr();
+  static String get pageViewItem1Description =>
+      'page_view_item1_description_dashboard'.tr();
+  static String get pageViewItem2Description =>
+      'page_view_item2_description_dashboard'.tr();
   static String get skip => 'skip'.tr();
   static String get startNow => 'start_now'.tr();
   static String get login => 'login'.tr();
@@ -27,14 +29,19 @@ abstract class AppStrings {
   static String get createNewAccount => 'create_new_account'.tr();
   static String get alreadyHaveAnAccount => 'already_have_an_account'.tr();
   static String get emailCannotBeEmpty => 'email_cannot_be_empty'.tr();
-  static String get enterAValidEmailAddress => 'enter_a_valid_email_address'.tr();
+  static String get enterAValidEmailAddress =>
+      'enter_a_valid_email_address'.tr();
   static String get passwordCannotBeEmpty => 'password_cannot_be_empty'.tr();
-  static String get passwordMustContainOnlyLettersAndNumbers => 'password_must_contain_only_letters_and_numbers'.tr();
-  static String get passwordMustBeAtLeast6CharactersLong => 'password_must_be_at_least6_characters_long'.tr();
-  static String get passwordMustContainAtLeastOneNumber => 'password_must_contain_at_least_one_number'.tr();
+  static String get passwordMustContainOnlyLettersAndNumbers =>
+      'password_must_contain_only_letters_and_numbers'.tr();
+  static String get passwordMustBeAtLeast6CharactersLong =>
+      'password_must_be_at_least6_characters_long'.tr();
+  static String get passwordMustContainAtLeastOneNumber =>
+      'password_must_contain_at_least_one_number'.tr();
   static String get nameCannotBeEmpty => 'name_cannot_be_empty'.tr();
   static String get emailCreated => 'email_created'.tr();
-  static String get youShouldAcceptTermsAndConditions => 'you_should_accept_terms_and_conditions'.tr();
+  static String get youShouldAcceptTermsAndConditions =>
+      'you_should_accept_terms_and_conditions'.tr();
   static String get emailSentToVerify => 'email_sent_to_verify'.tr();
   static String get ok => 'ok'.tr();
   static String get welcome => 'welcome'.tr();
@@ -47,22 +54,27 @@ abstract class AppStrings {
   static String get emailSent => 'email_sent'.tr();
   static String get emailSentToReset => 'email_sent_to_reset'.tr();
   static String get invalidEmail => 'invalid_email'.tr();
-  static String get wrongPasswordProvidedForThatUser => 'wrong_password_provided_for_that_user'.tr();
-  static String get noUserFoundForThatEmail => 'no_user_found_for_that_email'.tr();
+  static String get wrongPasswordProvidedForThatUser =>
+      'wrong_password_provided_for_that_user'.tr();
+  static String get noUserFoundForThatEmail =>
+      'no_user_found_for_that_email'.tr();
   static String get userDisabled => 'user_disabled'.tr();
   static String get tooManyRequests => 'too_many_requests'.tr();
   static String get operationNotAllowed => 'operation_not_allowed'.tr();
   static String get invalidEmailOrPassword => 'invalid_email_or_password'.tr();
   static String get networkErrorMessage => 'network_error_message'.tr();
-  static String get thePasswordProvidedIsTooWeak => 'the_password_provided_is_too_weak'.tr();
-  static String get theAccountAlreadyExistsForThatEmail => 'the_account_already_exists_for_that_email'.tr();
+  static String get thePasswordProvidedIsTooWeak =>
+      'the_password_provided_is_too_weak'.tr();
+  static String get theAccountAlreadyExistsForThatEmail =>
+      'the_account_already_exists_for_that_email'.tr();
   static String get internalError => 'internal_error'.tr();
   static String get appNotAuthorized => 'app_not_authorized'.tr();
   static String get userTokenExpired => 'user_token_expired'.tr();
   static String get requiresRecentLogin => 'requires_recent_login'.tr();
   static String get userMismatch => 'user_mismatch'.tr();
   static String get quotaExceeded => 'quota_exceeded'.tr();
-  static String get errorOccurredPleaseTryAgain => 'error_occurred_please_try_again'.tr();
+  static String get errorOccurredPleaseTryAgain =>
+      'error_occurred_please_try_again'.tr();
   static String get permissionDenied => 'permission-denied'.tr();
   static String get goodMorning => 'good_morning'.tr();
   static String get searchFor => 'search_for'.tr();
@@ -87,11 +99,13 @@ abstract class AppStrings {
   static String get ourProducts => 'our_products'.tr();
   static String get cartAppBar => 'cart_app_bar'.tr();
   static String get youHave => 'you_have'.tr();
-  static String get productsInTheShoppingCart => 'products_in_the_shopping_cart'.tr();
+  static String get productsInTheShoppingCart =>
+      'products_in_the_shopping_cart'.tr();
   static String get checkout => 'checkout'.tr();
   static String get userNotLoggedIn => 'user_not_logged_in'.tr();
   static String get selectLanguage => 'select_language'.tr();
-  static String get languageChangedSuccessfully => 'language_changed_successfully'.tr();
+  static String get languageChangedSuccessfully =>
+      'language_changed_successfully'.tr();
   static String get cancel => 'cancel'.tr();
   static String get confirmLanguageChange => 'confirm_language_change'.tr();
   static String get appWillRestart => 'app_will_restart'.tr();
@@ -129,19 +143,25 @@ abstract class AppStrings {
   static String get freeShipping => 'free_shipping'.tr();
   static String get free => 'free'.tr();
   static String get phoneNumber => 'phone_number'.tr();
-  static String get streetNameCannotBeEmpty => 'street_name_cannot_be_empty'.tr();
+  static String get streetNameCannotBeEmpty =>
+      'street_name_cannot_be_empty'.tr();
   static String get city => 'city'.tr();
   static String get saveAddress => 'save_address'.tr();
   static String get floorNumber => 'floor_number'.tr();
   static String get apartmentNumber => 'apartment_number'.tr();
-  static String get phoneNumberCannotBeEmpty => 'phone_number_cannot_be_empty'.tr();
+  static String get phoneNumberCannotBeEmpty =>
+      'phone_number_cannot_be_empty'.tr();
   static String get enterAValidPhoneNumber => 'enter_a_valid_phone_number'.tr();
   static String get cityCannotBeEmpty => 'city_cannot_be_empty'.tr();
-  static String get floorNumberCannotBeEmpty => 'floor_number_cannot_be_empty'.tr();
-  static String get apartmentNumberCannotBeEmpty => 'apartment_number_cannot_be_empty'.tr();
-  static String get buildingNumberCannotBeEmpty => 'building_number_cannot_be_empty'.tr();
+  static String get floorNumberCannotBeEmpty =>
+      'floor_number_cannot_be_empty'.tr();
+  static String get apartmentNumberCannotBeEmpty =>
+      'apartment_number_cannot_be_empty'.tr();
+  static String get buildingNumberCannotBeEmpty =>
+      'building_number_cannot_be_empty'.tr();
   static String get payByPaypal => 'pay_by_paypal'.tr();
-  static String get chooseThePaymentMethodThatSuitsYouBest => 'choose_the_payment_method_that_suits_you_best'.tr();
+  static String get chooseThePaymentMethodThatSuitsYouBest =>
+      'choose_the_payment_method_that_suits_you_best'.tr();
   static String get orderSummary => 'order_summary'.tr();
   static String get delivery => 'delivery'.tr();
   static String get subtotal => 'subtotal'.tr();
@@ -156,10 +176,12 @@ abstract class AppStrings {
   static String get building => 'building'.tr();
   static String get floor => 'floor'.tr();
   static String get apartment => 'apartment'.tr();
-  static String get pleaseSelectAPaymentMethod => 'please_select_a_payment_method'.tr();
+  static String get pleaseSelectAPaymentMethod =>
+      'please_select_a_payment_method'.tr();
   static String get orderPlacedSuccessfully => 'order_placed_successfully'.tr();
   static String get orderCancelled => 'order_cancelled'.tr();
-  static String get contactUsForAnyQuestionsOnYourOrder => 'contact_us_for_any_questions_on_your_order'.tr();
+  static String get contactUsForAnyQuestionsOnYourOrder =>
+      'contact_us_for_any_questions_on_your_order'.tr();
   static String get trackOrder => 'track_order'.tr();
   static String get itWasDoneSuccessfully => 'It_was_done_successfully!'.tr();
   static String get orderNumber => 'order_number'.tr();
@@ -177,7 +199,8 @@ abstract class AppStrings {
   static String get wrongPassword => 'wrong_password'.tr();
   static String get invalidCredential => 'invalidCredential'.tr();
   static String get emailAlreadyInUse => 'emailAlreadyInUse'.tr();
-  static String get accountExistsWithDifferentCredential => 'account_exists_with_different_credential'.tr();
+  static String get accountExistsWithDifferentCredential =>
+      'account_exists_with_different_credential'.tr();
   static String get invalidEmail2 => 'invalid_email'.tr();
   static String get tooManyRequests2 => 'too_many_requests'.tr();
   static String get permissionDenied2 => 'permission_denied'.tr();
@@ -186,32 +209,45 @@ abstract class AppStrings {
   static String get cacheError => 'cache_error'.tr();
   static String get googleSignInCancelled => 'googleSignInCancelled'.tr();
   static String get emailCannotBeEmpty2 => 'email_cannot_be_empty'.tr();
-  static String get enterAValidEmailAddress2 => 'enter_a_valid_email_address'.tr();
+  static String get enterAValidEmailAddress2 =>
+      'enter_a_valid_email_address'.tr();
   static String get requiredField => 'requiredField'.tr();
   static String get passwordCannotBeEmpty2 => 'password_cannot_be_empty'.tr();
-  static String get passwordMustBeAtLeast8CharactersLong => 'password_must_be_at_least8_characters_long'.tr();
-  static String get passwordMustContainUppercase => 'password_must_contain_uppercase'.tr();
-  static String get passwordMustContainLowercase => 'password_must_contain_lowercase'.tr();
-  static String get passwordMustContainNumber => 'password_must_contain_number'.tr();
-  static String get passwordMustContainSpecialCharacter => 'password_must_contain_special_character'.tr();
-  static String get confirmPasswordMustMatchThePassword => 'passwords_do_not_match'.tr();
+  static String get passwordMustBeAtLeast8CharactersLong =>
+      'password_must_be_at_least8_characters_long'.tr();
+  static String get passwordMustContainUppercase =>
+      'password_must_contain_uppercase'.tr();
+  static String get passwordMustContainLowercase =>
+      'password_must_contain_lowercase'.tr();
+  static String get passwordMustContainNumber =>
+      'password_must_contain_number'.tr();
+  static String get passwordMustContainSpecialCharacter =>
+      'password_must_contain_special_character'.tr();
+  static String get confirmPasswordMustMatchThePassword =>
+      'passwords_do_not_match'.tr();
   static String get nameCannotBeEmpty2 => 'name_cannot_be_empty'.tr();
   static String get profilePictureIsRequired => 'profilePictureIsRequired'.tr();
   static String get idCardImageIsRequired => 'idCardImageIsRequired'.tr();
   static String get usernameCannotBeEmpty => 'usernameCannotBeEmpty'.tr();
-  static String get streetNameCannotBeEmpty2 => 'street_name_cannot_be_empty'.tr();
+  static String get streetNameCannotBeEmpty2 =>
+      'street_name_cannot_be_empty'.tr();
   static String get cityCannotBeEmpty2 => 'city_cannot_be_empty'.tr();
-  static String get buildingNumberCannotBeEmpty2 => 'building_number_cannot_be_empty'.tr();
+  static String get buildingNumberCannotBeEmpty2 =>
+      'building_number_cannot_be_empty'.tr();
   static String get itMustBeANumber2 => 'it_must_be_a_number'.tr();
   static String get pleaseEnterDescription => 'pleaseEnterDescription'.tr();
   static String get pleaseSelectLocation => 'pleaseSelectLocation'.tr();
   static String get pleaseSelectDate => 'pleaseSelectDate'.tr();
   static String get pleaseSelectTime => 'pleaseSelectTime'.tr();
-  static String get yearsOfExperienceCannotBeEmpty => 'years_of_experience_cannot_be_empty'.tr();
-  static String get phoneNumberCannotBeEmpty2 => 'phone_number_cannot_be_empty'.tr();
-  static String get enterAValidPhoneNumber2 => 'enter_a_valid_phone_number'.tr();
+  static String get yearsOfExperienceCannotBeEmpty =>
+      'years_of_experience_cannot_be_empty'.tr();
+  static String get phoneNumberCannotBeEmpty2 =>
+      'phone_number_cannot_be_empty'.tr();
+  static String get enterAValidPhoneNumber2 =>
+      'enter_a_valid_phone_number'.tr();
   static String get codeCannotBeEmpty => 'codeCannotBeEmpty'.tr();
-  static String get codeShouldBeAtLeast6Digits => 'code_should_be_at_least6_digits'.tr();
+  static String get codeShouldBeAtLeast6Digits =>
+      'code_should_be_at_least6_digits'.tr();
   static String get nationalIdCannotBeEmpty => 'nationalIdCannotBeEmpty'.tr();
   static String get nationalIdMustBe14Digits => 'nationalIdMustBe14Digits'.tr();
   static String get onboardingSkip => 'skip'.tr();
@@ -234,15 +270,18 @@ abstract class AppStrings {
   static String get sendEmailResetLink2 => 'send_email_reset_link'.tr();
   static String get sendPasswordResetLink2 => 'send_password_reset_link'.tr();
   static String get send => 'send'.tr();
-  static String get sendPasswordResetConfirmation => 'send_password_reset_confirmation'.tr();
+  static String get sendPasswordResetConfirmation =>
+      'send_password_reset_confirmation'.tr();
   static String get emailSent2 => 'email_sent'.tr();
   static String get emailSentToReset2 => 'email_sent_to_reset'.tr();
   static String get emailCreated2 => 'email_created'.tr();
   static String get emailSentToVerify2 => 'email_sent_to_verify'.tr();
-  static String get youShouldAcceptTermsAndConditions2 => 'you_should_accept_terms_and_conditions'.tr();
+  static String get youShouldAcceptTermsAndConditions2 =>
+      'you_should_accept_terms_and_conditions'.tr();
   static String get termsAndConditionsP12 => 'terms_and_conditions_p1'.tr();
   static String get termsAndConditionsP22 => 'terms_and_conditions_p2'.tr();
-  static String get noUserFoundForThatEmail2 => 'no_user_found_for_that_email'.tr();
+  static String get noUserFoundForThatEmail2 =>
+      'no_user_found_for_that_email'.tr();
   static String get pleaseVerifyYourEmail2 => 'please_verify_your_email'.tr();
   static String get invoices => 'invoices'.tr();
   static String get clients => 'clients'.tr();
@@ -275,7 +314,8 @@ abstract class AppStrings {
   static String get addClient => 'add_client'.tr();
   static String get editClient => 'edit_client'.tr();
   static String get deleteClient => 'delete_client'.tr();
-  static String get deleteClientConfirmation => 'delete_client_confirmation'.tr();
+  static String get deleteClientConfirmation =>
+      'delete_client_confirmation'.tr();
   static String get searchClients => 'search_clients'.tr();
   static String get noClientsFound => 'no_clients_found'.tr();
   static String get clientName => 'client_name'.tr();
@@ -284,8 +324,10 @@ abstract class AppStrings {
   static String get clientAddress => 'client_address'.tr();
   static String get clientInformation => 'client_information'.tr();
   static String get clientAddedSuccessfully => 'client_added_successfully'.tr();
-  static String get clientUpdatedSuccessfully => 'client_updated_successfully'.tr();
-  static String get clientDeletedSuccessfully => 'client_deleted_successfully'.tr();
+  static String get clientUpdatedSuccessfully =>
+      'client_updated_successfully'.tr();
+  static String get clientDeletedSuccessfully =>
+      'client_deleted_successfully'.tr();
   static String get phone => 'phone'.tr();
   static String get createInvoice => 'create_invoice'.tr();
   static String get invoiceNumber => 'invoice_number'.tr();
@@ -306,8 +348,10 @@ abstract class AppStrings {
   static String get notes => 'notes'.tr();
   static String get notesHint => 'notes_hint'.tr();
   static String get saveAsDraft => 'save_as_draft'.tr();
-  static String get invoiceCreatedSuccessfully => 'invoice_created_successfully'.tr();
-  static String get pleaseAddAtLeastOneItem => 'please_add_at_least_one_item'.tr();
+  static String get invoiceCreatedSuccessfully =>
+      'invoice_created_successfully'.tr();
+  static String get pleaseAddAtLeastOneItem =>
+      'please_add_at_least_one_item'.tr();
   static String get statusDraft => 'status_draft'.tr();
   static String get statusSent => 'status_sent'.tr();
   static String get statusOpened => 'status_opened'.tr();
@@ -319,13 +363,16 @@ abstract class AppStrings {
   static String get noClientsAvailable => 'no_clients_available'.tr();
   static String get noInvoicesYet => 'no_invoices_yet'.tr();
   static String get noInvoicesFound => 'no_invoices_found'.tr();
-  static String get deleteInvoiceConfirmation => 'delete_invoice_confirmation'.tr();
-  static String get invoiceDeletedSuccessfully => 'invoice_deleted_successfully'.tr();
+  static String get deleteInvoiceConfirmation =>
+      'delete_invoice_confirmation'.tr();
+  static String get invoiceDeletedSuccessfully =>
+      'invoice_deleted_successfully'.tr();
   static String get selectDate => 'select_date'.tr();
   static String get updateStatus => 'update_status'.tr();
   static String get editInvoice => 'edit_invoice'.tr();
   static String get invoiceDetails => 'invoice_details'.tr();
-  static String get invoiceUpdatedSuccessfully => 'invoice_updated_successfully'.tr();
+  static String get invoiceUpdatedSuccessfully =>
+      'invoice_updated_successfully'.tr();
   static String get deleteInvoice => 'delete_invoice'.tr();
   static String get dashboard => 'dashboard'.tr();
   static String get monthlyEarnings => 'monthly_earnings'.tr();
@@ -344,10 +391,13 @@ abstract class AppStrings {
   static String get confirmPaymentSubtitle => 'confirm_payment_subtitle'.tr();
   static String get confirmPaymentButton => 'confirm_payment_button'.tr();
   static String get markAsPaid => 'mark_as_paid'.tr();
-  static String get cannotEditPaidOrCancelled => 'cannot_edit_paid_or_cancelled'.tr();
-  static String get confirmSendInvoiceSubtitle => 'confirm_send_invoice_subtitle'.tr();
+  static String get cannotEditPaidOrCancelled =>
+      'cannot_edit_paid_or_cancelled'.tr();
+  static String get confirmSendInvoiceSubtitle =>
+      'confirm_send_invoice_subtitle'.tr();
   static String get cancelInvoice => 'cancel_invoice'.tr();
-  static String get confirmCancelInvoiceSubtitle => 'confirm_cancel_invoice_subtitle'.tr();
+  static String get confirmCancelInvoiceSubtitle =>
+      'confirm_cancel_invoice_subtitle'.tr();
   static String get welcomeToDashboard => 'welcome_to_dashboard'.tr();
   static String get users => 'users'.tr();
   static String get orders => 'orders'.tr();
@@ -369,7 +419,8 @@ abstract class AppStrings {
   static String get productUpdated => 'product_updated'.tr();
   static String get productRemoved => 'product_removed'.tr();
   static String get deleteProduct => 'delete_product'.tr();
-  static String get deleteProductConfirmation => 'delete_product_confirmation'.tr();
+  static String get deleteProductConfirmation =>
+      'delete_product_confirmation'.tr();
   static String get productName => 'product_name'.tr();
   static String get price => 'price'.tr();
   static String get productDescription => 'product_description'.tr();
@@ -393,7 +444,8 @@ abstract class AppStrings {
   static String get printInvoice => 'print_invoice'.tr();
   static String get noOrdersYet => 'no_orders_yet'.tr();
   static String get noOrdersYetSubtitle => 'no_orders_yet_subtitle'.tr();
-  static String get orderStatusUpdatedSuccessfully => 'order_status_updated_successfully'.tr();
+  static String get orderStatusUpdatedSuccessfully =>
+      'order_status_updated_successfully'.tr();
   static String get viewDetails => 'view_details'.tr();
   static String get hideDetails => 'hide_details'.tr();
   static String get creditCard => 'credit_card'.tr();
@@ -401,10 +453,13 @@ abstract class AppStrings {
   static String get deliveryFees => 'delivery_fees'.tr();
   static String get generalConfiguration => 'general_configuration'.tr();
   static String get freeShippingThreshold => 'free_shipping_threshold'.tr();
-  static String get freeShippingThresholdHint => 'free_shipping_threshold_hint'.tr();
-  static String get freeShippingThresholdHelp => 'free_shipping_threshold_help'.tr();
+  static String get freeShippingThresholdHint =>
+      'free_shipping_threshold_hint'.tr();
+  static String get freeShippingThresholdHelp =>
+      'free_shipping_threshold_help'.tr();
   static String get success => 'success'.tr();
-  static String get settingsUpdatedSuccessfully => 'settings_updated_successfully'.tr();
+  static String get settingsUpdatedSuccessfully =>
+      'settings_updated_successfully'.tr();
   static String get chooseImageSource => 'choose_image_source'.tr();
   static String get camera => 'camera'.tr();
   static String get gallery => 'gallery'.tr();
@@ -429,7 +484,8 @@ abstract class AppStrings {
   static String get notificationTitleEn => 'notification_title_en'.tr();
   static String get notificationBodyAr => 'notification_body_ar'.tr();
   static String get notificationBodyEn => 'notification_body_en'.tr();
-  static String get notificationSentSuccessfully => 'notification_sent_successfully'.tr();
+  static String get notificationSentSuccessfully =>
+      'notification_sent_successfully'.tr();
   static String get allUsers => 'all_users'.tr();
   static String get itemsCount => 'items_count'.tr();
   static String get searchByName => 'search_by_name'.tr();
@@ -438,8 +494,10 @@ abstract class AppStrings {
   static String get typeToSearchUsers => 'type_to_search_users'.tr();
   static String get noSearchResultsFound => 'no_search_results_found'.tr();
 
-  static String get notifyUsersAboutShippingUpdate => 'notify_users_about_shipping_update'.tr();
-  static String get notifyUsersAboutShippingUpdateSubtitle => 'notify_users_about_shipping_update_subtitle'.tr();
+  static String get notifyUsersAboutShippingUpdate =>
+      'notify_users_about_shipping_update'.tr();
+  static String get notifyUsersAboutShippingUpdateSubtitle =>
+      'notify_users_about_shipping_update_subtitle'.tr();
   static String get notificationPreview => 'notification_preview'.tr();
   static String get shippingUpdateTitleAr => 'shipping_update_title_ar'.tr();
   static String get shippingUpdateTitleEn => 'shipping_update_title_en'.tr();
@@ -457,4 +515,32 @@ abstract class AppStrings {
   }) => threshold > 0
       ? 'Shipping is now ${cost.toInt()} EGP, with free shipping on orders over ${threshold.toInt()} EGP!'
       : 'Shipping is now ${cost.toInt()} EGP for all orders!';
+
+  // Analytics UI
+  static String get last7Days => 'last_7_days'.tr();
+  static String get last30Days => 'last_30_days'.tr();
+  static String get thisMonth => 'this_month'.tr();
+  static String get customRange => 'custom_range'.tr();
+  static String get selectDateRange => 'select_date_range'.tr();
+  static String get totalOrders => 'total_orders'.tr();
+  static String get averageOrderValue => 'average_order_value'.tr();
+  static String get activeCustomers => 'active_customers'.tr();
+  static String get verifiedRatio => 'verified_ratio'.tr();
+  static String get revenueTimeline => 'revenue_timeline'.tr();
+  static String get orderStatusDistribution => 'order_status_distribution'.tr();
+  static String get paymentMethodsBreakdown => 'payment_methods_breakdown'.tr();
+  static String get topSellingProducts => 'top_selling_products'.tr();
+  static String get soldUnits => 'sold_units'.tr();
+  static String get noRevenueData => 'no_revenue_data'.tr();
+  static String get ordersCountLabel => 'orders_count_label'.tr();
+  static String get retry => 'retry'.tr();
+  static String get dailyAvg => 'daily_avg'.tr();
+  static String get salesShare => 'sales_share'.tr();
+  static String get refresh => 'refresh'.tr();
+  static String get startDate => 'start_date'.tr();
+  static String get endDate => 'end_date'.tr();
+  static String get statusPending => 'status_pending'.tr();
+  static String get statusProcessing => 'status_processing'.tr();
+  static String get statusShipped => 'status_shipped'.tr();
+  static String get statusDelivered => 'status_delivered'.tr();
 }

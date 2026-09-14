@@ -47,7 +47,7 @@ List<DashboardItemEntity> getDashboardItems(BuildContext context) => [
     subtitle: AppStrings.analyticsSubtitle,
     icon: Icons.bar_chart_rounded,
     color: AppPalette.dashboardAnalytics,
-    onTap: () {},
+    onTap: () => context.pushNamed(Routes.analyticsView),
   ),
   DashboardItemEntity(
     title: AppStrings.settings,

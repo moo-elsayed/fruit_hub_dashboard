@@ -16,28 +16,28 @@ class DashboardQuickActionsHeader extends StatelessWidget {
     final _ = EasyLocalization.of(context)?.locale;
 
     return Row(
-    spacing: 8.w,
-    children: [
-      Text(
-        AppStrings.quickActions,
-        style: AppTextStyles.font16Bold.copyWith(
-          color: context.colors.mainText,
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-        decoration: BoxDecoration(
-          color: context.colors.primary.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(10.r),
-        ),
-        child: Text(
-          '$itemCount',
-          style: AppTextStyles.font12Bold.copyWith(
-            color: context.colors.primary,
+      spacing: 8.w,
+      children: [
+        Text(
+          AppStrings.quickActions,
+          style: AppTextStyles.font16Bold.copyWith(
+            color: context.colors.mainText,
           ),
         ),
-      ),
-    ],
-  );
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+          decoration: BoxDecoration(
+            color: context.colors.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Text(
+            '$itemCount',
+            style: AppTextStyles.font12Bold.copyWith(
+              color: context.colors.primary,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -70,6 +70,5 @@ class AppPreferencesServiceImpl implements AppPreferencesService {
       await _sharedPreferences.setString(_keyLanguage, languageCode);
 
   @override
-  String getLanguage() =>
-      _sharedPreferences.getString(_keyLanguage) ?? 'ar';
+  String getLanguage() => _sharedPreferences.getString(_keyLanguage) ?? 'ar';
 }

@@ -53,6 +53,7 @@ class UserFavoritesList extends StatelessWidget {
             border: Border.all(color: context.colors.border),
           ),
           child: Row(
+            spacing: 12.w,
             children: [
               Container(
                 padding: EdgeInsets.all(8.r),
@@ -66,19 +67,12 @@ class UserFavoritesList extends StatelessWidget {
                   color: AppPalette.accentPink,
                 ),
               ),
-              SizedBox(width: 12.w),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 2.h,
-                  children: [
-                    Text(
-                      '${AppStrings.productCode}: $code',
-                      style: AppTextStyles.font13SemiBold.copyWith(
-                        color: context.colors.mainText,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  '${AppStrings.productCode}: $code',
+                  style: AppTextStyles.font13SemiBold.copyWith(
+                    color: context.colors.mainText,
+                  ),
                 ),
               ),
             ],

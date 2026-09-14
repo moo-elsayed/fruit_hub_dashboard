@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/app_strings.dart';
 import '../theming/app_palette.dart';
 
 enum OrderStatus {
@@ -10,11 +11,11 @@ enum OrderStatus {
   cancelled;
 
   String get getName => switch (this) {
-    OrderStatus.pending => 'Pending',
-    OrderStatus.processing => 'Processing',
-    OrderStatus.shipped => 'Shipped',
-    OrderStatus.delivered => 'Delivered',
-    OrderStatus.cancelled => 'Cancelled',
+    OrderStatus.pending => AppStrings.statusPending,
+    OrderStatus.processing => AppStrings.statusProcessing,
+    OrderStatus.shipped => AppStrings.statusShipped,
+    OrderStatus.delivered => AppStrings.statusDelivered,
+    OrderStatus.cancelled => AppStrings.statusCancelled,
   };
 
   String get databaseValue => switch (this) {
