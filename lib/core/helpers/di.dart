@@ -7,6 +7,7 @@ import 'package:fruit_hub_dashboard/features/analytics/domain/use_cases/get_anal
 import 'package:fruit_hub_dashboard/features/analytics/presentation/managers/analytics_cubit/analytics_cubit.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/repo_imp/auth_repo_imp.dart';
+import 'package:fruit_hub_dashboard/features/auth/domain/repo/auth_repo.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/create_user_with_email_and_password_use_case.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/forget_password_use_case.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/get_user_info_use_case.dart';
@@ -27,6 +28,7 @@ import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/update_orde
 import 'package:fruit_hub_dashboard/features/orders/presentation/managers/orders_cubit/orders_cubit.dart';
 import 'package:fruit_hub_dashboard/features/products/data/data_sources/remote/products_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/products/data/repo_imp/products_repo_imp.dart';
+import 'package:fruit_hub_dashboard/features/products/domain/repo/products_repo.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/add_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/delete_product_use_case.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/use_cases/get_products_use_case.dart';
@@ -34,6 +36,7 @@ import 'package:fruit_hub_dashboard/features/products/domain/use_cases/update_pr
 import 'package:fruit_hub_dashboard/features/products/presentation/managers/products_cubit/products_cubit.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/data_sources/remote/settings_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/settings/data/repo_imp/settings_repo_imp.dart';
+import 'package:fruit_hub_dashboard/features/settings/domain/settings_repo/settings_repo.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/fetch_shipping_config_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/use_cases/update_shipping_config_use_case.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
@@ -78,32 +81,32 @@ void setupServiceLocator() {
   );
 
   /// auth
-  getIt.registerLazySingleton<AuthRepoImp>(
+  getIt.registerLazySingleton<AuthRepo>(
     () => AuthRepoImp(AuthRemoteDataSourceImp()),
   );
 
   getIt.registerLazySingleton<SignOutUseCase>(
-    () => SignOutUseCase(getIt<AuthRepoImp>()),
+    () => SignOutUseCase(getIt<AuthRepo>()),
   );
 
   getIt.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
-    () => SignInWithEmailAndPasswordUseCase(getIt<AuthRepoImp>()),
+    () => SignInWithEmailAndPasswordUseCase(getIt<AuthRepo>()),
   );
 
   getIt.registerLazySingleton<CreateUserWithEmailAndPasswordUseCase>(
-    () => CreateUserWithEmailAndPasswordUseCase(getIt<AuthRepoImp>()),
+    () => CreateUserWithEmailAndPasswordUseCase(getIt<AuthRepo>()),
   );
 
   getIt.registerLazySingleton<GoogleSignInUseCase>(
-    () => GoogleSignInUseCase(getIt<AuthRepoImp>()),
+    () => GoogleSignInUseCase(getIt<AuthRepo>()),
   );
 
   getIt.registerLazySingleton<ForgetPasswordUseCase>(
-    () => ForgetPasswordUseCase(getIt<AuthRepoImp>()),
+    () => ForgetPasswordUseCase(getIt<AuthRepo>()),
   );
 
   getIt.registerLazySingleton<GetUserInfoUseCase>(
-    () => GetUserInfoUseCase(getIt<AuthRepoImp>()),
+    () => GetUserInfoUseCase(getIt<AuthRepo>()),
   );
 
   getIt.registerFactory<SignInCubit>(
@@ -132,21 +135,21 @@ void setupServiceLocator() {
   );
 
   /// products
-  getIt.registerLazySingleton<ProductsRepoImp>(
+  getIt.registerLazySingleton<ProductsRepo>(
     () => ProductsRepoImp(ProductsRemoteDataSourceImp()),
   );
 
   getIt.registerLazySingleton<GetProductsUseCase>(
-    () => GetProductsUseCase(getIt<ProductsRepoImp>()),
+    () => GetProductsUseCase(getIt<ProductsRepo>()),
   );
   getIt.registerLazySingleton<AddProductUseCase>(
-    () => AddProductUseCase(getIt<ProductsRepoImp>()),
+    () => AddProductUseCase(getIt<ProductsRepo>()),
   );
   getIt.registerLazySingleton<DeleteProductUseCase>(
-    () => DeleteProductUseCase(getIt<ProductsRepoImp>()),
+    () => DeleteProductUseCase(getIt<ProductsRepo>()),
   );
   getIt.registerLazySingleton<UpdateProductUseCase>(
-    () => UpdateProductUseCase(getIt<ProductsRepoImp>()),
+    () => UpdateProductUseCase(getIt<ProductsRepo>()),
   );
 
   getIt.registerFactory<ProductsCubit>(
@@ -159,16 +162,16 @@ void setupServiceLocator() {
   );
 
   /// settings
-  getIt.registerLazySingleton<SettingsRepoImp>(
+  getIt.registerLazySingleton<SettingsRepo>(
     () => SettingsRepoImp(SettingsRemoteDataSourceImp()),
   );
 
   getIt.registerLazySingleton<UpdateShippingConfigUseCase>(
-    () => UpdateShippingConfigUseCase(getIt<SettingsRepoImp>()),
+    () => UpdateShippingConfigUseCase(getIt<SettingsRepo>()),
   );
 
   getIt.registerLazySingleton<FetchShippingConfigUseCase>(
-    () => FetchShippingConfigUseCase(getIt<SettingsRepoImp>()),
+    () => FetchShippingConfigUseCase(getIt<SettingsRepo>()),
   );
 
   getIt.registerFactory<SettingsCubit>(

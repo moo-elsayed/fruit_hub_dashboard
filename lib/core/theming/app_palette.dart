@@ -42,6 +42,7 @@ class AppPalette {
   // --- Common Colors ---
   static const Color white = Color(0xffFFFFFF);
   static const Color black = Color(0xff000000);
+  static const Color transparent = Color(0x00000000);
 
   // --- Backgrounds & Surfaces (Light Theme) ---
   static const Color bgLight = Color(0xffFFFFFF); // خلفية التطبيق الفاتحة

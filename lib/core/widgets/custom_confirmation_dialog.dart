@@ -7,6 +7,7 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:gap/gap.dart';
 
 import '../helpers/extensions.dart';
+import '../theming/app_palette.dart';
 import '../theming/app_text_styles.dart';
 import 'custom_material_button.dart';
 
@@ -107,7 +108,7 @@ class CustomConfirmationDialog extends StatelessWidget {
                         textStyle: AppTextStyles.font16SemiBold.copyWith(
                           color: context.colors.primary,
                         ),
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: AppPalette.transparent,
                         side: BorderSide(
                           color: context.colors.primary,
                           width: 1.5,
@@ -120,7 +121,7 @@ class CustomConfirmationDialog extends StatelessWidget {
                         onPressed: onConfirm,
                         text: textConfirmButton,
                         textStyle: AppTextStyles.font16SemiBold.copyWith(
-                          color: Colors.white,
+                          color: AppPalette.white,
                         ),
                         backgroundColor: context.colors.primary,
                       ),
@@ -131,7 +132,7 @@ class CustomConfirmationDialog extends StatelessWidget {
                   onPressed: onConfirm,
                   text: textConfirmButton,
                   textStyle: AppTextStyles.font16SemiBold.copyWith(
-                    color: Colors.white,
+                    color: AppPalette.white,
                   ),
                   backgroundColor: context.colors.primary,
                 ),

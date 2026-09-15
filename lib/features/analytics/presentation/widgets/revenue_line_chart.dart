@@ -136,7 +136,7 @@ class RevenueLineChart extends StatelessWidget {
               final dateStr = DateFormat('yyyy-MM-dd').format(point.date);
               return LineTooltipItem(
                 '$dateStr\n${point.revenue.toStringAsFixed(0)} ${AppStrings.pounds} (${point.ordersCount} ${AppStrings.orders})',
-                AppTextStyles.font11Bold.copyWith(color: Colors.white),
+                AppTextStyles.font11Bold.copyWith(color: AppPalette.white),
               );
             }).toList(),
           ),
@@ -156,7 +156,7 @@ class RevenueLineChart extends StatelessWidget {
                     radius: 4.r,
                     color: AppPalette.primaryGreen,
                     strokeWidth: 2.w,
-                    strokeColor: Colors.white,
+                    strokeColor: AppPalette.white,
                   ),
             ),
             belowBarData: BarAreaData(

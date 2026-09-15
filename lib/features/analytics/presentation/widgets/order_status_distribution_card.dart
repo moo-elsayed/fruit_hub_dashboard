@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/features/analytics/domain/entities/order_status_stat_entity.dart';
 
@@ -88,7 +89,9 @@ class OrderStatusDistributionCard extends StatelessWidget {
           value: stat.count.toDouble(),
           title: stat.count > 0 ? '${pct.toStringAsFixed(0)}%' : '',
           radius: 36.r,
-          titleStyle: AppTextStyles.font10Bold.copyWith(color: Colors.white),
+          titleStyle: AppTextStyles.font10Bold.copyWith(
+            color: AppPalette.white,
+          ),
         );
       }).toList();
 }

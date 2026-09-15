@@ -11,13 +11,13 @@ class LeaderboardRankBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rank == 1) {
-      return Text('🥇', style: TextStyle(fontSize: 18.sp));
+      return Text('🥇', style: AppTextStyles.font18Bold);
     }
     if (rank == 2) {
-      return Text('🥈', style: TextStyle(fontSize: 18.sp));
+      return Text('🥈', style: AppTextStyles.font18Bold);
     }
     if (rank == 3) {
-      return Text('🥉', style: TextStyle(fontSize: 18.sp));
+      return Text('🥉', style: AppTextStyles.font18Bold);
     }
 
     return Container(

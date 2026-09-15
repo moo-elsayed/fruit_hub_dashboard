@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_bottom_sheet_handle.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_material_button.dart';
@@ -30,7 +31,7 @@ class CupertinoDateRangePickerSheet extends StatefulWidget {
     required ValueChanged<DateTimeRange> onConfirmed,
   }) => showModalBottomSheet(
     context: context,
-    backgroundColor: Colors.transparent,
+    backgroundColor: AppPalette.transparent,
     isScrollControlled: true,
     builder: (context) => CupertinoDateRangePickerSheet(
       initialRange: initialRange,
@@ -94,7 +95,7 @@ class _CupertinoDateRangePickerSheetState
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
+            color: AppPalette.black.withValues(alpha: 0.15),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

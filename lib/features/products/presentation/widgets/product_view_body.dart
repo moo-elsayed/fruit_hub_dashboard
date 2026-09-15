@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
-import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
-import 'package:fruit_hub_dashboard/core/widgets/custom_material_button.dart';
-import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
 import 'package:gap/gap.dart';
+import 'package:toastification/toastification.dart';
 
+import '../../../../core/helpers/app_strings.dart';
+import '../../../../core/theming/app_palette.dart';
+import '../../../../core/theming/app_text_styles.dart';
+import '../../../../core/widgets/app_toasts.dart';
+import '../../../../core/widgets/custom_keyboard_unfocus.dart';
+import '../../../../core/widgets/custom_material_button.dart';
+import '../args/product_args.dart';
 import '../managers/products_cubit/products_cubit.dart';
 import 'product_form_fields.dart';
 
@@ -44,10 +46,21 @@ class ProductViewBody extends StatelessWidget {
             Gap(20.h),
             ProductFormFields(productArgs: productArgs),
             Gap(28.h),
-            BlocBuilder<ProductsCubit, ProductsState>(
+            BlocConsumer<ProductsCubit, ProductsState>(
+              listenWhen: (previous, current) => current is ProductsFailure,
+              listener: (context, state) {
+                if (state is ProductsFailure) {
+                  AppToast.show(
+                    context: context,
+                    title: state.errorMessage,
+                    type: ToastificationType.error,
+                  );
+                }
+              },
               buildWhen: (previous, current) =>
-                  current is ProductsLoading &&
-                  (current.newItemAdded || current.itemUpdated),
+                  current is ProductsLoading ||
+                  current is ProductsSuccess ||
+                  current is ProductsFailure,
               builder: (context, state) => CustomMaterialButton(
                 onPressed: () => _handleSubmit(context),
                 isLoading:

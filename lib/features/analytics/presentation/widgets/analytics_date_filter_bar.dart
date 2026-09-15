@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/enums/analytics_date_filter.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 import '../managers/analytics_cubit/analytics_cubit.dart';
@@ -104,7 +105,7 @@ class _FilterChip extends StatelessWidget {
       child: Text(
         label,
         style: AppTextStyles.font12Medium.copyWith(
-          color: isSelected ? Colors.white : context.colors.mainText,
+          color: isSelected ? AppPalette.white : context.colors.mainText,
         ),
       ),
     ),
