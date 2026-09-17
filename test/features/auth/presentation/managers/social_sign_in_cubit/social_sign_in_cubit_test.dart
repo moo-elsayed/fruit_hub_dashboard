@@ -45,9 +45,8 @@ void main() {
     }
     getIt.registerSingleton<UserInfoCubit>(mockUserInfoCubit);
 
-    when(
-      () => mockUserInfoCubit.saveUserLocally(any()),
-    ).thenAnswer((_) async {});
+    when(() => mockUserInfoCubit.saveUserLocally(any()))
+        .thenAnswer((_) async {});
 
     sut = SocialSignInCubit(mockUseCase);
   });
@@ -70,24 +69,18 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(),
-        ).thenAnswer((_) async => const NetworkSuccess(tUserEntity));
+        when(() => mockUseCase.call())
+            .thenAnswer((_) async => const NetworkSuccess(tUserEntity));
       },
       act: (cubit) async {
         // Act
         await cubit.googleSignIn();
       },
-      expect: () => [
-        isA<GoogleLoading>(),
-        isA<GoogleSuccess>(),
-      ],
+      expect: () => [isA<GoogleLoading>(), isA<GoogleSuccess>()],
       verify: (_) {
         // Assert
         verify(() => mockUseCase.call()).called(1);
-        verify(
-          () => mockUserInfoCubit.saveUserLocally(tUserEntity),
-        ).called(1);
+        verify(() => mockUserInfoCubit.saveUserLocally(tUserEntity)).called(1);
         verifyNoMoreInteractions(mockUseCase);
       },
     );
@@ -97,18 +90,14 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(),
-        ).thenAnswer((_) async => const NetworkSuccess<UserEntity>(null));
+        when(() => mockUseCase.call())
+            .thenAnswer((_) async => const NetworkSuccess<UserEntity>(null));
       },
       act: (cubit) async {
         // Act
         await cubit.googleSignIn();
       },
-      expect: () => [
-        isA<GoogleLoading>(),
-        isA<GoogleSuccess>(),
-      ],
+      expect: () => [isA<GoogleLoading>(), isA<GoogleSuccess>()],
       verify: (_) {
         // Assert
         verify(() => mockUseCase.call()).called(1);
@@ -122,9 +111,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(),
-        ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
+        when(() => mockUseCase.call())
+            .thenAnswer((_) async => const NetworkFailure(tServerFailure));
       },
       act: (cubit) async {
         // Act

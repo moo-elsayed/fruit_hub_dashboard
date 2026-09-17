@@ -49,9 +49,8 @@ void main() {
     }
     getIt.registerSingleton<UserInfoCubit>(mockUserInfoCubit);
 
-    when(
-      () => mockUserInfoCubit.saveUserLocally(any()),
-    ).thenAnswer((_) async {});
+    when(() => mockUserInfoCubit.saveUserLocally(any()))
+        .thenAnswer((_) async {});
 
     sut = SignInCubit(mockUseCase);
   });
@@ -74,9 +73,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(email: tEmail, password: tPassword),
-        ).thenAnswer((_) async => const NetworkSuccess(tUserEntity));
+        when(() => mockUseCase.call(email: tEmail, password: tPassword))
+            .thenAnswer((_) async => const NetworkSuccess(tUserEntity));
       },
       act: (cubit) async {
         // Act
@@ -85,18 +83,12 @@ void main() {
           password: tPassword,
         );
       },
-      expect: () => [
-        isA<SignInLoading>(),
-        isA<SignInSuccess>(),
-      ],
+      expect: () => [isA<SignInLoading>(), isA<SignInSuccess>()],
       verify: (_) {
         // Assert
-        verify(
-          () => mockUseCase.call(email: tEmail, password: tPassword),
-        ).called(1);
-        verify(
-          () => mockUserInfoCubit.saveUserLocally(tUserEntity),
-        ).called(1);
+        verify(() => mockUseCase.call(email: tEmail, password: tPassword))
+            .called(1);
+        verify(() => mockUserInfoCubit.saveUserLocally(tUserEntity)).called(1);
         verifyNoMoreInteractions(mockUseCase);
       },
     );
@@ -106,9 +98,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(email: tEmail, password: tPassword),
-        ).thenAnswer((_) async => const NetworkSuccess<UserEntity>(null));
+        when(() => mockUseCase.call(email: tEmail, password: tPassword))
+            .thenAnswer((_) async => const NetworkSuccess<UserEntity>(null));
       },
       act: (cubit) async {
         // Act
@@ -117,15 +108,11 @@ void main() {
           password: tPassword,
         );
       },
-      expect: () => [
-        isA<SignInLoading>(),
-        isA<SignInSuccess>(),
-      ],
+      expect: () => [isA<SignInLoading>(), isA<SignInSuccess>()],
       verify: (_) {
         // Assert
-        verify(
-          () => mockUseCase.call(email: tEmail, password: tPassword),
-        ).called(1);
+        verify(() => mockUseCase.call(email: tEmail, password: tPassword))
+            .called(1);
         verifyNever(() => mockUserInfoCubit.saveUserLocally(any()));
         verifyNoMoreInteractions(mockUseCase);
       },
@@ -136,9 +123,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(email: tEmail, password: tPassword),
-        ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
+        when(() => mockUseCase.call(email: tEmail, password: tPassword))
+            .thenAnswer((_) async => const NetworkFailure(tServerFailure));
       },
       act: (cubit) async {
         // Act
@@ -157,9 +143,8 @@ void main() {
       ],
       verify: (_) {
         // Assert
-        verify(
-          () => mockUseCase.call(email: tEmail, password: tPassword),
-        ).called(1);
+        verify(() => mockUseCase.call(email: tEmail, password: tPassword))
+            .called(1);
         verifyNever(() => mockUserInfoCubit.saveUserLocally(any()));
         verifyNoMoreInteractions(mockUseCase);
       },

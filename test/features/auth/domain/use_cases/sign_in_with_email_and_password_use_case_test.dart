@@ -31,60 +31,54 @@ void main() {
     sut = SignInWithEmailAndPasswordUseCase(mockAuthRepo);
   });
 
-  test(
-    'should forward email and password to AuthRepo and return NetworkSuccess<UserEntity>',
-    () async {
-      // Arrange
-      when(
-        () => mockAuthRepo.signInWithEmailAndPassword(
-          email: tEmail,
-          password: tPassword,
-        ),
-      ).thenAnswer((_) async => const NetworkSuccess(tUserEntity));
+  test('should forward email and password to AuthRepo and return NetworkSuccess<UserEntity>', () async {
+    // Arrange
+    when(
+      () => mockAuthRepo.signInWithEmailAndPassword(
+        email: tEmail,
+        password: tPassword,
+      ),
+    ).thenAnswer((_) async => const NetworkSuccess(tUserEntity));
 
-      // Act
-      final result = await sut(email: tEmail, password: tPassword);
+    // Act
+    final result = await sut(email: tEmail, password: tPassword);
 
-      // Assert
-      expect(result, isA<NetworkSuccess<UserEntity>>());
-      final successResult = result as NetworkSuccess<UserEntity>;
-      expect(successResult.data, tUserEntity);
-      verify(
-        () => mockAuthRepo.signInWithEmailAndPassword(
-          email: tEmail,
-          password: tPassword,
-        ),
-      ).called(1);
-      verifyNoMoreInteractions(mockAuthRepo);
-    },
-  );
+    // Assert
+    expect(result, isA<NetworkSuccess<UserEntity>>());
+    final successResult = result as NetworkSuccess<UserEntity>;
+    expect(successResult.data, tUserEntity);
+    verify(
+      () => mockAuthRepo.signInWithEmailAndPassword(
+        email: tEmail,
+        password: tPassword,
+      ),
+    ).called(1);
+    verifyNoMoreInteractions(mockAuthRepo);
+  });
 
-  test(
-    'should return NetworkFailure when AuthRepo fails to sign in',
-    () async {
-      // Arrange
-      when(
-        () => mockAuthRepo.signInWithEmailAndPassword(
-          email: tEmail,
-          password: tPassword,
-        ),
-      ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
+  test('should return NetworkFailure when AuthRepo fails to sign in', () async {
+    // Arrange
+    when(
+      () => mockAuthRepo.signInWithEmailAndPassword(
+        email: tEmail,
+        password: tPassword,
+      ),
+    ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
 
-      // Act
-      final result = await sut(email: tEmail, password: tPassword);
+    // Act
+    final result = await sut(email: tEmail, password: tPassword);
 
-      // Assert
-      expect(result, isA<NetworkFailure<UserEntity>>());
-      final failureResult = result as NetworkFailure<UserEntity>;
-      expect(failureResult.failure, tServerFailure);
-      expect(failureResult.error, tServerFailure.error);
-      verify(
-        () => mockAuthRepo.signInWithEmailAndPassword(
-          email: tEmail,
-          password: tPassword,
-        ),
-      ).called(1);
-      verifyNoMoreInteractions(mockAuthRepo);
-    },
-  );
+    // Assert
+    expect(result, isA<NetworkFailure<UserEntity>>());
+    final failureResult = result as NetworkFailure<UserEntity>;
+    expect(failureResult.failure, tServerFailure);
+    expect(failureResult.error, tServerFailure.error);
+    verify(
+      () => mockAuthRepo.signInWithEmailAndPassword(
+        email: tEmail,
+        password: tPassword,
+      ),
+    ).called(1);
+    verifyNoMoreInteractions(mockAuthRepo);
+  });
 }

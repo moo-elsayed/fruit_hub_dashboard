@@ -17,7 +17,7 @@ class ProductsRemoteDataSourceImp implements ProductsRemoteDataSource {
     ImageCompressor? imageCompressor,
   }) : _firestore = firestore ?? FirebaseFirestore.instance,
        _storage = firebaseStorage ?? FirebaseStorage.instance,
-       _imageCompressor = imageCompressor ?? ImageCompressor();
+       _imageCompressor = imageCompressor ?? const ImageCompressor();
 
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;

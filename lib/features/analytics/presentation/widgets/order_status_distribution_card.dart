@@ -81,19 +81,18 @@ class OrderStatusDistributionCard extends StatelessWidget {
     );
   }
 
-  List<PieChartSectionData> _buildSections(int totalCount) =>
-      statusStats.map((stat) {
-        final pct = totalCount > 0 ? (stat.count / totalCount) * 100 : 0.0;
-        return PieChartSectionData(
-          color: stat.status.color,
-          value: stat.count.toDouble(),
-          title: stat.count > 0 ? '${pct.toStringAsFixed(0)}%' : '',
-          radius: 36.r,
-          titleStyle: AppTextStyles.font10Bold.copyWith(
-            color: AppPalette.white,
-          ),
-        );
-      }).toList();
+  List<PieChartSectionData> _buildSections(int totalCount) => statusStats.map((
+    stat,
+  ) {
+    final pct = totalCount > 0 ? (stat.count / totalCount) * 100 : 0.0;
+    return PieChartSectionData(
+      color: stat.status.color,
+      value: stat.count.toDouble(),
+      title: stat.count > 0 ? '${pct.toStringAsFixed(0)}%' : '',
+      radius: 36.r,
+      titleStyle: AppTextStyles.font10Bold.copyWith(color: AppPalette.white),
+    );
+  }).toList();
 }
 
 class _StatusChip extends StatelessWidget {

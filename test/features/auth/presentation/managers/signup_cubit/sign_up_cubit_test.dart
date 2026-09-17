@@ -60,18 +60,14 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(any()),
-        ).thenAnswer((_) async => const NetworkSuccess(tUserEntity));
+        when(() => mockUseCase.call(any()))
+            .thenAnswer((_) async => const NetworkSuccess(tUserEntity));
       },
       act: (cubit) async {
         // Act
         await cubit.createUserWithEmailAndPassword(tSignUpInputEntity);
       },
-      expect: () => [
-        isA<SignUpLoading>(),
-        isA<SignUpSuccess>(),
-      ],
+      expect: () => [isA<SignUpLoading>(), isA<SignUpSuccess>()],
       verify: (_) {
         // Assert
         verify(() => mockUseCase.call(tSignUpInputEntity)).called(1);
@@ -84,9 +80,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(any()),
-        ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
+        when(() => mockUseCase.call(any()))
+            .thenAnswer((_) async => const NetworkFailure(tServerFailure));
       },
       act: (cubit) async {
         // Act

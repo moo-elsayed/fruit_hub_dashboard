@@ -6,8 +6,7 @@ import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/forget_passwo
 import 'package:fruit_hub_dashboard/features/auth/presentation/managers/forget_password_cubit/forget_password_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockForgetPasswordUseCase extends Mock
-    implements ForgetPasswordUseCase {}
+class MockForgetPasswordUseCase extends Mock implements ForgetPasswordUseCase {}
 
 void main() {
   late MockForgetPasswordUseCase mockUseCase;
@@ -37,9 +36,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(tEmail),
-        ).thenAnswer((_) async => const NetworkSuccess<void>());
+        when(() => mockUseCase.call(tEmail))
+            .thenAnswer((_) async => const NetworkSuccess<void>());
       },
       act: (cubit) async {
         // Act

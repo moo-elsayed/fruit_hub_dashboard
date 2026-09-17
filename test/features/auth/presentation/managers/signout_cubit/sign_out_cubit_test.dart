@@ -52,18 +52,14 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockUseCase.call(),
-        ).thenAnswer((_) async => const NetworkSuccess<void>());
+        when(() => mockUseCase.call())
+            .thenAnswer((_) async => const NetworkSuccess<void>());
       },
       act: (cubit) async {
         // Act
         await cubit.signOut();
       },
-      expect: () => [
-        isA<SignOutLoading>(),
-        isA<SignOutSuccess>(),
-      ],
+      expect: () => [isA<SignOutLoading>(), isA<SignOutSuccess>()],
       verify: (_) {
         // Assert
         verify(() => mockUseCase.call()).called(1);

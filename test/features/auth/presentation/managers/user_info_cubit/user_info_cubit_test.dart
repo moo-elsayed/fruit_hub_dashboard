@@ -9,8 +9,7 @@ import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/get_user_info
 import 'package:fruit_hub_dashboard/features/auth/presentation/managers/user_info_cubit/user_info_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAppPreferencesService extends Mock
-    implements AppPreferencesService {}
+class MockAppPreferencesService extends Mock implements AppPreferencesService {}
 
 class MockGetUserInfoUseCase extends Mock implements GetUserInfoUseCase {}
 
@@ -63,9 +62,8 @@ void main() {
     when(() => mockFirebaseAuth.currentUser).thenReturn(mockFirebaseUser);
 
     when(() => mockAppPreferencesService.getUser()).thenReturn(null);
-    when(
-      () => mockAppPreferencesService.saveUser(any()),
-    ).thenAnswer((_) async {});
+    when(() => mockAppPreferencesService.saveUser(any()))
+        .thenAnswer((_) async {});
     when(() => mockAppPreferencesService.clearUser()).thenAnswer((_) async {});
 
     sut = UserInfoCubit(
@@ -85,26 +83,23 @@ void main() {
       expect(sut.state, isA<UserInfoInitial>());
     });
 
-    test(
-      'initial state should be UserInfoSuccess when cached user exists',
-      () {
-        // Arrange
-        final localMockPrefs = MockAppPreferencesService();
-        when(() => localMockPrefs.getUser()).thenReturn(tUser);
+    test('initial state should be UserInfoSuccess when cached user exists', () {
+      // Arrange
+      final localMockPrefs = MockAppPreferencesService();
+      when(() => localMockPrefs.getUser()).thenReturn(tUser);
 
-        // Act
-        final cubit = UserInfoCubit(
-          localMockPrefs,
-          mockGetUserInfoUseCase,
-          firebaseAuth: mockFirebaseAuth,
-        );
+      // Act
+      final cubit = UserInfoCubit(
+        localMockPrefs,
+        mockGetUserInfoUseCase,
+        firebaseAuth: mockFirebaseAuth,
+      );
 
-        // Assert
-        expect(cubit.state, isA<UserInfoSuccess>());
-        expect((cubit.state as UserInfoSuccess).user, tUser);
-        cubit.close();
-      },
-    );
+      // Assert
+      expect(cubit.state, isA<UserInfoSuccess>());
+      expect((cubit.state as UserInfoSuccess).user, tUser);
+      cubit.close();
+    });
   });
 
   group('currentUser', () {
@@ -119,21 +114,18 @@ void main() {
       expect(result, tUser);
     });
 
-    test(
-      'should fallback to AppPreferencesService.getUser when state is not UserInfoSuccess',
-      () {
-        // Arrange
-        when(() => mockAppPreferencesService.getUser()).thenReturn(tUser);
-        clearInteractions(mockAppPreferencesService);
+    test('should fallback to AppPreferencesService.getUser when state is not UserInfoSuccess', () {
+      // Arrange
+      when(() => mockAppPreferencesService.getUser()).thenReturn(tUser);
+      clearInteractions(mockAppPreferencesService);
 
-        // Act
-        final result = sut.currentUser;
+      // Act
+      final result = sut.currentUser;
 
-        // Assert
-        expect(result, tUser);
-        verify(() => mockAppPreferencesService.getUser()).called(1);
-      },
-    );
+      // Assert
+      expect(result, tUser);
+      verify(() => mockAppPreferencesService.getUser()).called(1);
+    });
   });
 
   group('saveUserLocally', () {
@@ -162,9 +154,7 @@ void main() {
         // Act
         await cubit.clearUserLocally();
       },
-      expect: () => [
-        isA<UserInfoInitial>(),
-      ],
+      expect: () => [isA<UserInfoInitial>()],
       verify: (_) {
         // Assert
         verify(() => mockAppPreferencesService.clearUser()).called(1);
@@ -190,9 +180,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockGetUserInfoUseCase.call(tUid),
-        ).thenAnswer((_) async => const NetworkSuccess(tUpdatedUser));
+        when(() => mockGetUserInfoUseCase.call(tUid))
+            .thenAnswer((_) async => const NetworkSuccess(tUpdatedUser));
       },
       act: (cubit) async {
         // Act
@@ -205,9 +194,8 @@ void main() {
       verify: (_) {
         // Assert
         verify(() => mockGetUserInfoUseCase.call(tUid)).called(1);
-        verify(
-          () => mockAppPreferencesService.saveUser(tUpdatedUser),
-        ).called(1);
+        verify(() => mockAppPreferencesService.saveUser(tUpdatedUser))
+            .called(1);
       },
     );
 
@@ -219,9 +207,8 @@ void main() {
       },
       setUp: () {
         // Arrange
-        when(
-          () => mockGetUserInfoUseCase.call(tUid),
-        ).thenAnswer((_) async => const NetworkSuccess(tUpdatedUser));
+        when(() => mockGetUserInfoUseCase.call(tUid))
+            .thenAnswer((_) async => const NetworkSuccess(tUpdatedUser));
       },
       act: (cubit) async {
         // Act
@@ -233,9 +220,8 @@ void main() {
       verify: (_) {
         // Assert
         verify(() => mockGetUserInfoUseCase.call(tUid)).called(1);
-        verify(
-          () => mockAppPreferencesService.saveUser(tUpdatedUser),
-        ).called(1);
+        verify(() => mockAppPreferencesService.saveUser(tUpdatedUser))
+            .called(1);
       },
     );
 
@@ -244,9 +230,8 @@ void main() {
       build: () => sut,
       setUp: () {
         // Arrange
-        when(
-          () => mockGetUserInfoUseCase.call(tUid),
-        ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
+        when(() => mockGetUserInfoUseCase.call(tUid))
+            .thenAnswer((_) async => const NetworkFailure(tServerFailure));
       },
       act: (cubit) async {
         // Act
@@ -254,11 +239,7 @@ void main() {
       },
       expect: () => [
         isA<UserInfoLoading>(),
-        isA<UserInfoFailure>().having(
-          (s) => s.error,
-          'error',
-          tErrorMessage,
-        ),
+        isA<UserInfoFailure>().having((s) => s.error, 'error', tErrorMessage),
       ],
       verify: (_) {
         // Assert
@@ -275,9 +256,8 @@ void main() {
       },
       setUp: () {
         // Arrange
-        when(
-          () => mockGetUserInfoUseCase.call(tUid),
-        ).thenAnswer((_) async => const NetworkFailure(tServerFailure));
+        when(() => mockGetUserInfoUseCase.call(tUid))
+            .thenAnswer((_) async => const NetworkFailure(tServerFailure));
       },
       act: (cubit) async {
         // Act
