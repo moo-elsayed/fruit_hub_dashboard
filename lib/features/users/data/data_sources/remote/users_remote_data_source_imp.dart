@@ -35,11 +35,11 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
       query = query.where('cartItems', isNotEqualTo: []);
     }
 
-    query = query.limit(limit);
-
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
     }
+
+    query = query.limit(limit);
 
     final snapshot = await query.get();
     final users = snapshot.docs

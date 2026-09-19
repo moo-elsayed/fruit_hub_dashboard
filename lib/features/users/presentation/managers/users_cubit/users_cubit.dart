@@ -127,7 +127,7 @@ class UsersCubit extends Cubit<UsersState> {
 
   void _emitSuccess() => emit(
     UsersSuccess(
-      users: _users,
+      users: List.unmodifiable(_users),
       activeFilter: _activeFilter,
       hasMore: _hasMore,
       isLoadingMore: _isLoadingMore,
