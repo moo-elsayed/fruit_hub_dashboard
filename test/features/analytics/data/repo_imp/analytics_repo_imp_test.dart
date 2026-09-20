@@ -93,107 +93,89 @@ void main() {
     });
 
     group('getAnalytics', () {
-      test(
-        'should return NetworkSuccess with mapped AnalyticsDataEntity when remote data source returns NetworkSuccess with model',
-        () async {
-          // Arrange
-          when(
-            () => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => NetworkSuccess(tDataModel));
+      test('should return NetworkSuccess with mapped AnalyticsDataEntity when remote data source returns NetworkSuccess with model', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo))
+            .thenAnswer((_) async => NetworkSuccess(tDataModel));
 
-          // Act
-          final result = await sut.getAnalytics(from: tFrom, to: tTo);
+        // Act
+        final result = await sut.getAnalytics(from: tFrom, to: tTo);
 
-          // Assert
-          expect(result, isA<NetworkSuccess<AnalyticsDataEntity>>());
-          final entity = (result as NetworkSuccess<AnalyticsDataEntity>).data;
-          expect(entity, equals(tDataModel.toEntity()));
+        // Assert
+        expect(result, isA<NetworkSuccess<AnalyticsDataEntity>>());
+        final entity = (result as NetworkSuccess<AnalyticsDataEntity>).data;
+        expect(entity, equals(tDataModel.toEntity()));
 
-          verify(
-            () => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo),
-          ).called(1);
-          verifyNoMoreInteractions(mockRemoteDataSource);
-        },
-      );
+        verify(() => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo))
+            .called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      });
 
-      test(
-        'should return NetworkSuccess with default AnalyticsDataEntity when remote data source returns NetworkSuccess with null data',
-        () async {
-          // Arrange
-          when(
-            () => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => const NetworkSuccess(null));
+      test('should return NetworkSuccess with default AnalyticsDataEntity when remote data source returns NetworkSuccess with null data', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo))
+            .thenAnswer((_) async => const NetworkSuccess(null));
 
-          // Act
-          final result = await sut.getAnalytics(from: tFrom, to: tTo);
+        // Act
+        final result = await sut.getAnalytics(from: tFrom, to: tTo);
 
-          // Assert
-          expect(result, isA<NetworkSuccess<AnalyticsDataEntity>>());
-          final entity = (result as NetworkSuccess<AnalyticsDataEntity>).data;
-          expect(entity, equals(const AnalyticsDataEntity()));
-          expect(entity?.kpi, equals(const AnalyticsKpiEntity()));
-          expect(entity?.revenueOverTime, isEmpty);
-          expect(entity?.topProducts, isEmpty);
-          expect(entity?.orderStatusStats, isEmpty);
-          expect(entity?.paymentMethodStats, isEmpty);
+        // Assert
+        expect(result, isA<NetworkSuccess<AnalyticsDataEntity>>());
+        final entity = (result as NetworkSuccess<AnalyticsDataEntity>).data;
+        expect(entity, equals(const AnalyticsDataEntity()));
+        expect(entity?.kpi, equals(const AnalyticsKpiEntity()));
+        expect(entity?.revenueOverTime, isEmpty);
+        expect(entity?.topProducts, isEmpty);
+        expect(entity?.orderStatusStats, isEmpty);
+        expect(entity?.paymentMethodStats, isEmpty);
 
-          verify(
-            () => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo),
-          ).called(1);
-          verifyNoMoreInteractions(mockRemoteDataSource);
-        },
-      );
+        verify(() => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo))
+            .called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      });
 
-      test(
-        'should return NetworkFailure with same failure when remote data source returns NetworkFailure',
-        () async {
-          // Arrange
-          when(
-            () => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => const NetworkFailure(tFailure));
+      test('should return NetworkFailure with same failure when remote data source returns NetworkFailure', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo))
+            .thenAnswer((_) async => const NetworkFailure(tFailure));
 
-          // Act
-          final result = await sut.getAnalytics(from: tFrom, to: tTo);
+        // Act
+        final result = await sut.getAnalytics(from: tFrom, to: tTo);
 
-          // Assert
-          expect(result, isA<NetworkFailure<AnalyticsDataEntity>>());
-          final failure = (result as NetworkFailure<AnalyticsDataEntity>).failure;
-          expect(failure, equals(tFailure));
+        // Assert
+        expect(result, isA<NetworkFailure<AnalyticsDataEntity>>());
+        final failure = (result as NetworkFailure<AnalyticsDataEntity>).failure;
+        expect(failure, equals(tFailure));
 
-          verify(
-            () => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo),
-          ).called(1);
-          verifyNoMoreInteractions(mockRemoteDataSource);
-        },
-      );
+        verify(() => mockRemoteDataSource.getAnalytics(from: tFrom, to: tTo))
+            .called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      });
 
-      test(
-        'should pass exact from and to DateTime parameters to the remote data source',
-        () async {
-          // Arrange
-          final specificFrom = DateTime(2026, 1, 15, 8, 30);
-          final specificTo = DateTime(2026, 1, 20, 18, 45);
+      test('should pass exact from and to DateTime parameters to the remote data source', () async {
+        // Arrange
+        final specificFrom = DateTime(2026, 1, 15, 8, 30);
+        final specificTo = DateTime(2026, 1, 20, 18, 45);
 
-          when(
-            () => mockRemoteDataSource.getAnalytics(
-              from: specificFrom,
-              to: specificTo,
-            ),
-          ).thenAnswer((_) async => NetworkSuccess(tDataModel));
+        when(
+          () => mockRemoteDataSource.getAnalytics(
+            from: specificFrom,
+            to: specificTo,
+          ),
+        ).thenAnswer((_) async => NetworkSuccess(tDataModel));
 
-          // Act
-          await sut.getAnalytics(from: specificFrom, to: specificTo);
+        // Act
+        await sut.getAnalytics(from: specificFrom, to: specificTo);
 
-          // Assert
-          verify(
-            () => mockRemoteDataSource.getAnalytics(
-              from: specificFrom,
-              to: specificTo,
-            ),
-          ).called(1);
-          verifyNoMoreInteractions(mockRemoteDataSource);
-        },
-      );
+        // Assert
+        verify(
+          () => mockRemoteDataSource.getAnalytics(
+            from: specificFrom,
+            to: specificTo,
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      });
     });
   });
 }

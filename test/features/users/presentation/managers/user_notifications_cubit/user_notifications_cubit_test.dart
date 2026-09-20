@@ -96,9 +96,9 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should emit [UserNotificationsLoading, UserNotificationsSuccess] when getUserNotifications succeeds',
         setUp: () {
-          when(
-            () => mockGetUserNotificationsUseCase.call(tUserId),
-          ).thenAnswer((_) async => NetworkSuccess([tNotification1, tNotification2]));
+          when(() => mockGetUserNotificationsUseCase.call(tUserId)).thenAnswer(
+            (_) async => NetworkSuccess([tNotification1, tNotification2]),
+          );
         },
         build: () => sut,
         act: (cubit) => cubit.getUserNotifications(tUserId),
@@ -119,9 +119,8 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should emit [UserNotificationsLoading, UserNotificationsSuccess] with empty list when NetworkSuccess data is null',
         setUp: () {
-          when(
-            () => mockGetUserNotificationsUseCase.call(tUserId),
-          ).thenAnswer((_) async => const NetworkSuccess(null));
+          when(() => mockGetUserNotificationsUseCase.call(tUserId))
+              .thenAnswer((_) async => const NetworkSuccess(null));
         },
         build: () => sut,
         act: (cubit) => cubit.getUserNotifications(tUserId),
@@ -142,9 +141,8 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should emit [UserNotificationsLoading, UserNotificationsFailure] when getUserNotifications fails',
         setUp: () {
-          when(
-            () => mockGetUserNotificationsUseCase.call(tUserId),
-          ).thenAnswer((_) async => const NetworkFailure(tFailure));
+          when(() => mockGetUserNotificationsUseCase.call(tUserId))
+              .thenAnswer((_) async => const NetworkFailure(tFailure));
         },
         build: () => sut,
         act: (cubit) => cubit.getUserNotifications(tUserId),
@@ -167,9 +165,8 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should emit [SendNotificationLoading, SendNotificationSuccess, UserNotificationsSuccess] with new notification prepended when sendNotification succeeds',
         setUp: () {
-          when(
-            () => mockSendUserNotificationUseCase.call(any()),
-          ).thenAnswer((_) async => NetworkSuccess(tNewNotification));
+          when(() => mockSendUserNotificationUseCase.call(any()))
+              .thenAnswer((_) async => NetworkSuccess(tNewNotification));
         },
         build: () => sut,
         act: (cubit) => cubit.sendNotification(tSendNotificationInput),
@@ -193,13 +190,11 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should insert newly created notification at index 0 when notifications already exist',
         setUp: () {
-          when(
-            () => mockGetUserNotificationsUseCase.call(tUserId),
-          ).thenAnswer((_) async => NetworkSuccess([tNotification1]));
+          when(() => mockGetUserNotificationsUseCase.call(tUserId))
+              .thenAnswer((_) async => NetworkSuccess([tNotification1]));
 
-          when(
-            () => mockSendUserNotificationUseCase.call(any()),
-          ).thenAnswer((_) async => NetworkSuccess(tNewNotification));
+          when(() => mockSendUserNotificationUseCase.call(any()))
+              .thenAnswer((_) async => NetworkSuccess(tNewNotification));
         },
         build: () => sut,
         act: (cubit) async {
@@ -232,9 +227,8 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should emit [SendNotificationLoading, SendNotificationSuccess, UserNotificationsSuccess] without modifying list when returned notification is null',
         setUp: () {
-          when(
-            () => mockSendUserNotificationUseCase.call(any()),
-          ).thenAnswer((_) async => const NetworkSuccess(null));
+          when(() => mockSendUserNotificationUseCase.call(any()))
+              .thenAnswer((_) async => const NetworkSuccess(null));
         },
         build: () => sut,
         act: (cubit) => cubit.sendNotification(tSendNotificationInput),
@@ -258,9 +252,8 @@ void main() {
       blocTest<UserNotificationsCubit, UserNotificationsState>(
         'should emit [SendNotificationLoading, SendNotificationFailure] when sendNotification fails',
         setUp: () {
-          when(
-            () => mockSendUserNotificationUseCase.call(any()),
-          ).thenAnswer((_) async => const NetworkFailure(tFailure));
+          when(() => mockSendUserNotificationUseCase.call(any()))
+              .thenAnswer((_) async => const NetworkFailure(tFailure));
         },
         build: () => sut,
         act: (cubit) => cubit.sendNotification(tSendNotificationInput),

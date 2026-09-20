@@ -58,3 +58,21 @@
 - **FCM Push vs. In-App Notification Language**: The FCM push banner uses the user's stored `languageCode` at the time of sending. The in-app notification screen always renders from the bilingual fields using a `localizedTitle(isArabic)` / `localizedBody(isArabic)` helper on the entity.
 - **Field Name Consistency**: All Firestore field names used in Cloud Functions must exactly match the Dart model `toJson()` / `fromJson()` keys. Cross-check against the model before writing a new function.
 - **`languageCode` Sync**: The `languageCode` field on the user's Firestore document must be kept in sync whenever the user changes language. This sync should be triggered from the language Cubit so it's guaranteed to run on every language change.
+
+## Unit Testing Guidelines & Best Practices
+- **Prefer `FakeFirebaseFirestore` over Mocks**: Never mock Firestore internal interfaces (`MockFirebaseFirestore`, `MockCollectionReference`, `MockDocumentReference`, `MockDocumentSnapshot`). Always use `FakeFirebaseFirestore` (`fake_cloud_firestore`) for testing Firestore-dependent data sources. This avoids `subtype_of_sealed_class` analyzer issues, eliminates complex `when(...)` stubbing, and guarantees real in-memory Firestore behavior (queries, transactions, merges, and real-time streams).
+- **Scoped `mocktail` Usage**: Use `mocktail` exclusively for services without full in-memory fakes (e.g. `FirebaseAuth`, `FirebaseStorage`, `ImageCompressor`, or domain repositories when testing Cubits/Use Cases).
+- **System Under Test (`sut`) Naming**: The class instance being tested must always be named `sut` and instantiated inside `setUp()`.
+- **AAA (Arrange-Act-Assert) Pattern**: Clearly divide every unit test into distinct `// Arrange`, `// Act`, and `// Assert` phases.
+- **Descriptive Test Naming (BDD Style)**: Name test cases following the format `'should [expected behavior] when [condition or scenario]'` (e.g., `'should return NetworkSuccess with default model when document does not exist'`).
+- **Comprehensive Model & Entity Mappings Coverage**: Every Remote Data Source test file must include a dedicated `Model and Entity Mappings` group verifying:
+  - `toEntity()` and `fromEntity()` mapping all properties accurately.
+  - `fromJson()` fallback handling on missing or null fields, default values, and numeric type coercion (`int` to `double`).
+  - `toJson()` verification of exact Firestore keys and conditional properties (e.g., `FieldValue.serverTimestamp()`, optional maps).
+- **NetworkResponse Verifications**: Always assert against the concrete `NetworkResponse` subclass:
+  - Success: `expect(result, isA<NetworkSuccess<T>>());` and verify `(result as NetworkSuccess<T>).data`.
+  - Failure: `expect(result, isA<NetworkFailure<T>>());` and assert on the `failure.error`.
+- **Merge & Real-time Stream Testing**:
+  - When testing `SetOptions(merge: true)`, explicitly verify that unrelated existing fields in the document are preserved.
+  - When testing streams, use `expectLater` with `emits(...)` or a `Completer` to verify emissions upon real-time updates.
+- **Zero Analyzer Warnings**: Test files must pass `dart analyze` with zero warnings or errors. Avoid suppressing rules (e.g., `// ignore_for_file: subtype_of_sealed_class`) by relying on proper fakes.

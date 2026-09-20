@@ -120,10 +120,8 @@ void main() {
           expect(sut.activeCartCount, 10);
           verify(() => mockGetUsersStatsUseCase.call()).called(1);
           verify(
-            () => mockGetUsersUseCase.call(
-              limit: 15,
-              filter: UserFilterType.all,
-            ),
+            () =>
+                mockGetUsersUseCase.call(limit: 15, filter: UserFilterType.all),
           ).called(1);
         },
       );
@@ -165,8 +163,7 @@ void main() {
         },
         expect: () => [
           isA<UsersLoading>(),
-          isA<UsersSuccess>()
-              .having((s) => s.totalCount, 'totalCount', 0),
+          isA<UsersSuccess>().having((s) => s.totalCount, 'totalCount', 0),
           isA<UsersSuccess>()
               .having((s) => s.totalCount, 'totalCount', 30)
               .having((s) => s.verifiedCount, 'verifiedCount', 20)
@@ -174,19 +171,22 @@ void main() {
         ],
       );
 
-      test('should keep existing stats when stats response is failure', () async {
-        // Arrange
-        when(() => mockGetUsersStatsUseCase.call())
-            .thenAnswer((_) async => const NetworkFailure(tFailure));
+      test(
+        'should keep existing stats when stats response is failure',
+        () async {
+          // Arrange
+          when(() => mockGetUsersStatsUseCase.call())
+              .thenAnswer((_) async => const NetworkFailure(tFailure));
 
-        // Act
-        await sut.getUsersStats();
+          // Act
+          await sut.getUsersStats();
 
-        // Assert
-        expect(sut.totalCount, 0);
-        expect(sut.verifiedCount, 0);
-        expect(sut.activeCartCount, 0);
-      });
+          // Assert
+          expect(sut.totalCount, 0);
+          expect(sut.verifiedCount, 0);
+          expect(sut.activeCartCount, 0);
+        },
+      );
     });
 
     group('getUsers', () {
@@ -208,14 +208,16 @@ void main() {
           isA<UsersSuccess>()
               .having((s) => s.users, 'users', [tUser1, tUser2])
               .having((s) => s.hasMore, 'hasMore', isTrue)
-              .having((s) => s.activeFilter, 'activeFilter', UserFilterType.all),
+              .having(
+                (s) => s.activeFilter,
+                'activeFilter',
+                UserFilterType.all,
+              ),
         ],
         verify: (_) {
           verify(
-            () => mockGetUsersUseCase.call(
-              limit: 15,
-              filter: UserFilterType.all,
-            ),
+            () =>
+                mockGetUsersUseCase.call(limit: 15, filter: UserFilterType.all),
           ).called(1);
         },
       );
@@ -256,7 +258,11 @@ void main() {
         act: (cubit) => cubit.getUsers(),
         expect: () => [
           isA<UsersLoading>(),
-          isA<UsersFailure>().having((s) => s.message, 'message', tErrorMessage),
+          isA<UsersFailure>().having(
+            (s) => s.message,
+            'message',
+            tErrorMessage,
+          ),
         ],
       );
 
@@ -275,8 +281,11 @@ void main() {
         act: (cubit) => cubit.getUsers(filter: UserFilterType.verified),
         expect: () => [
           isA<UsersLoading>(),
-          isA<UsersSuccess>()
-              .having((s) => s.activeFilter, 'activeFilter', UserFilterType.verified),
+          isA<UsersSuccess>().having(
+            (s) => s.activeFilter,
+            'activeFilter',
+            UserFilterType.verified,
+          ),
         ],
         verify: (_) {
           expect(sut.activeFilter, UserFilterType.verified);
@@ -308,7 +317,9 @@ void main() {
               lastDocument: any(named: 'lastDocument'),
               filter: any(named: 'filter'),
             ),
-          ).thenAnswer((_) async => const NetworkSuccess(tPage2)); // hasMore: false
+          ).thenAnswer(
+            (_) async => const NetworkSuccess(tPage2),
+          ); // hasMore: false
         },
         build: () => sut,
         act: (cubit) async {
@@ -321,10 +332,8 @@ void main() {
         ],
         verify: (_) {
           verify(
-            () => mockGetUsersUseCase.call(
-              limit: 15,
-              filter: UserFilterType.all,
-            ),
+            () =>
+                mockGetUsersUseCase.call(limit: 15, filter: UserFilterType.all),
           ).called(1);
         },
       );
@@ -361,8 +370,11 @@ void main() {
               .having((s) => s.users, 'users', [tUser1, tUser2])
               .having((s) => s.hasMore, 'hasMore', isTrue)
               .having((s) => s.isLoadingMore, 'isLoadingMore', isFalse),
-          isA<UsersSuccess>()
-              .having((s) => s.isLoadingMore, 'isLoadingMore', isTrue),
+          isA<UsersSuccess>().having(
+            (s) => s.isLoadingMore,
+            'isLoadingMore',
+            isTrue,
+          ),
           isA<UsersSuccess>()
               .having((s) => s.users, 'users', [tUser1, tUser2, tUser3])
               .having((s) => s.hasMore, 'hasMore', isFalse)
@@ -408,8 +420,11 @@ void main() {
           isA<UsersSuccess>()
               .having((s) => s.users, 'users', [tUser1, tUser2])
               .having((s) => s.hasMore, 'hasMore', isTrue),
-          isA<UsersSuccess>()
-              .having((s) => s.isLoadingMore, 'isLoadingMore', isTrue),
+          isA<UsersSuccess>().having(
+            (s) => s.isLoadingMore,
+            'isLoadingMore',
+            isTrue,
+          ),
           isA<UsersSuccess>()
               .having((s) => s.users, 'users', [tUser1, tUser2])
               .having((s) => s.hasMore, 'hasMore', isFalse)
@@ -446,8 +461,11 @@ void main() {
           isA<UsersSuccess>()
               .having((s) => s.users, 'users', [tUser1, tUser2])
               .having((s) => s.hasMore, 'hasMore', isTrue),
-          isA<UsersSuccess>()
-              .having((s) => s.isLoadingMore, 'isLoadingMore', isTrue),
+          isA<UsersSuccess>().having(
+            (s) => s.isLoadingMore,
+            'isLoadingMore',
+            isTrue,
+          ),
           isA<UsersSuccess>()
               .having((s) => s.users, 'users', [tUser1, tUser2])
               .having((s) => s.isLoadingMore, 'isLoadingMore', isFalse),
@@ -471,8 +489,11 @@ void main() {
         act: (cubit) => cubit.setFilter(UserFilterType.withCart),
         expect: () => [
           isA<UsersLoading>(),
-          isA<UsersSuccess>()
-              .having((s) => s.activeFilter, 'activeFilter', UserFilterType.withCart),
+          isA<UsersSuccess>().having(
+            (s) => s.activeFilter,
+            'activeFilter',
+            UserFilterType.withCart,
+          ),
         ],
         verify: (_) {
           expect(sut.activeFilter, UserFilterType.withCart);
@@ -501,17 +522,12 @@ void main() {
           await cubit.getUsers(); // default is UserFilterType.all
           await cubit.setFilter(UserFilterType.all); // same filter
         },
-        expect: () => [
-          isA<UsersLoading>(),
-          isA<UsersSuccess>(),
-        ],
+        expect: () => [isA<UsersLoading>(), isA<UsersSuccess>()],
         verify: (_) {
           // Should only be called once by the initial getUsers()
           verify(
-            () => mockGetUsersUseCase.call(
-              limit: 15,
-              filter: UserFilterType.all,
-            ),
+            () =>
+                mockGetUsersUseCase.call(limit: 15, filter: UserFilterType.all),
           ).called(1);
         },
       );

@@ -64,10 +64,7 @@ void main() {
     );
 
     final tUpdatedAnalyticsData = AnalyticsDataEntity(
-      kpi: const AnalyticsKpiEntity(
-        totalRevenue: 20000.0,
-        totalOrders: 80,
-      ),
+      kpi: const AnalyticsKpiEntity(totalRevenue: 20000.0, totalOrders: 80),
       revenueOverTime: [
         RevenueDataPointEntity(
           date: DateTime(2026, 9, 2),
@@ -86,18 +83,20 @@ void main() {
       sut.close();
     });
 
-    test('initial state should be AnalyticsInitial and cachedData should be null', () {
-      expect(sut.state, equals(AnalyticsInitial()));
-      expect(sut.cachedData, isNull);
-    });
+    test(
+      'initial state should be AnalyticsInitial and cachedData should be null',
+      () {
+        expect(sut.state, equals(AnalyticsInitial()));
+        expect(sut.cachedData, isNull);
+      },
+    );
 
     group('loadAnalytics', () {
       blocTest<AnalyticsCubit, AnalyticsState>(
         'emits [AnalyticsLoading, AnalyticsSuccess] and sets cachedData on success',
         build: () {
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
           return sut;
         },
         act: (cubit) => cubit.loadAnalytics(from: tFrom, to: tTo),
@@ -114,9 +113,8 @@ void main() {
       blocTest<AnalyticsCubit, AnalyticsState>(
         'emits [AnalyticsLoading, AnalyticsSuccess with default entity] when response data is null',
         build: () {
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => const NetworkSuccess(null));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => const NetworkSuccess(null));
           return sut;
         },
         act: (cubit) => cubit.loadAnalytics(from: tFrom, to: tTo),
@@ -133,9 +131,8 @@ void main() {
       blocTest<AnalyticsCubit, AnalyticsState>(
         'emits [AnalyticsLoading, AnalyticsFailure] when response is NetworkFailure',
         build: () {
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => const NetworkFailure(tFailure));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => const NetworkFailure(tFailure));
           return sut;
         },
         act: (cubit) => cubit.loadAnalytics(from: tFrom, to: tTo),
@@ -149,39 +146,39 @@ void main() {
         },
       );
 
-      test('does not emit state if cubit is closed before response returns', () async {
-        when(
-          () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-        ).thenAnswer((_) async {
-          await Future<void>.delayed(const Duration(milliseconds: 50));
-          return NetworkSuccess(tAnalyticsData);
-        });
+      test(
+        'does not emit state if cubit is closed before response returns',
+        () async {
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async {
+                await Future<void>.delayed(const Duration(milliseconds: 50));
+                return NetworkSuccess(tAnalyticsData);
+              });
 
-        final states = <AnalyticsState>[];
-        sut.stream.listen(states.add);
+          final states = <AnalyticsState>[];
+          sut.stream.listen(states.add);
 
-        final future = sut.loadAnalytics(from: tFrom, to: tTo);
-        await sut.close();
-        await future;
+          final future = sut.loadAnalytics(from: tFrom, to: tTo);
+          await sut.close();
+          await future;
 
-        expect(states, [AnalyticsLoading()]);
-      });
+          expect(states, [AnalyticsLoading()]);
+        },
+      );
     });
 
     group('refresh', () {
       blocTest<AnalyticsCubit, AnalyticsState>(
         'calls loadAnalytics with the previously loaded from and to dates and emits updated success',
         build: () {
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
           return sut;
         },
         act: (cubit) async {
           await cubit.loadAnalytics(from: tFrom, to: tTo);
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => NetworkSuccess(tUpdatedAnalyticsData));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => NetworkSuccess(tUpdatedAnalyticsData));
           await cubit.refresh();
         },
         expect: () => [
@@ -199,16 +196,14 @@ void main() {
       blocTest<AnalyticsCubit, AnalyticsState>(
         'emits failure on refresh when reload fails',
         build: () {
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
           return sut;
         },
         act: (cubit) async {
           await cubit.loadAnalytics(from: tFrom, to: tTo);
-          when(
-            () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-          ).thenAnswer((_) async => const NetworkFailure(tFailure));
+          when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+              .thenAnswer((_) async => const NetworkFailure(tFailure));
           await cubit.refresh();
         },
         expect: () => [
@@ -223,9 +218,8 @@ void main() {
       );
 
       test('does nothing when refresh is called on a closed cubit', () async {
-        when(
-          () => mockGetAnalyticsUseCase(from: tFrom, to: tTo),
-        ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+        when(() => mockGetAnalyticsUseCase(from: tFrom, to: tTo))
+            .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
 
         await sut.loadAnalytics(from: tFrom, to: tTo);
         await sut.close();
@@ -245,12 +239,10 @@ void main() {
           final range2From = DateTime(2026, 9, 1);
           final range2To = DateTime(2026, 9, 15);
 
-          when(
-            () => mockGetAnalyticsUseCase(from: range1From, to: range1To),
-          ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
-          when(
-            () => mockGetAnalyticsUseCase(from: range2From, to: range2To),
-          ).thenAnswer((_) async => NetworkSuccess(tUpdatedAnalyticsData));
+          when(() => mockGetAnalyticsUseCase(from: range1From, to: range1To))
+              .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+          when(() => mockGetAnalyticsUseCase(from: range2From, to: range2To))
+              .thenAnswer((_) async => NetworkSuccess(tUpdatedAnalyticsData));
 
           return sut;
         },
@@ -275,7 +267,8 @@ void main() {
         verify: (_) {
           final range2From = DateTime(2026, 9, 1);
           final range2To = DateTime(2026, 9, 15);
-          verify(() => mockGetAnalyticsUseCase(from: range2From, to: range2To)).called(2);
+          verify(() => mockGetAnalyticsUseCase(from: range2From, to: range2To))
+              .called(2);
         },
       );
     });

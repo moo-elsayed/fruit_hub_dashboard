@@ -204,8 +204,11 @@ void main() {
             'searchBy',
             UserSearchBy.phone,
           ),
-          isA<UsersSearchSuccess>()
-              .having((s) => s.searchBy, 'searchBy', UserSearchBy.phone),
+          isA<UsersSearchSuccess>().having(
+            (s) => s.searchBy,
+            'searchBy',
+            UserSearchBy.phone,
+          ),
         ],
       );
 
@@ -325,7 +328,9 @@ void main() {
         },
         build: () => sut,
         act: (cubit) async {
-          await cubit.searchUsers('karim@test.com'); // auto-sets searchBy to email
+          await cubit.searchUsers(
+            'karim@test.com',
+          ); // auto-sets searchBy to email
           cubit.clearSearch();
         },
         expect: () => [

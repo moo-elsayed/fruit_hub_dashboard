@@ -68,36 +68,30 @@ void main() {
       sut = GetAnalyticsUseCase(mockAnalyticsRepo);
     });
 
-    test(
-      'should forward from and to to AnalyticsRepo and return NetworkSuccess with AnalyticsDataEntity on success',
-      () async {
-        // Arrange
-        when(
-          () => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo),
-        ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+    test('should forward from and to to AnalyticsRepo and return NetworkSuccess with AnalyticsDataEntity on success', () async {
+      // Arrange
+      when(() => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo))
+          .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
 
-        // Act
-        final result = await sut(from: tFrom, to: tTo);
+      // Act
+      final result = await sut(from: tFrom, to: tTo);
 
-        // Assert
-        expect(result, isA<NetworkSuccess<AnalyticsDataEntity>>());
-        final data = (result as NetworkSuccess<AnalyticsDataEntity>).data;
-        expect(data, equals(tAnalyticsData));
+      // Assert
+      expect(result, isA<NetworkSuccess<AnalyticsDataEntity>>());
+      final data = (result as NetworkSuccess<AnalyticsDataEntity>).data;
+      expect(data, equals(tAnalyticsData));
 
-        verify(
-          () => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo),
-        ).called(1);
-        verifyNoMoreInteractions(mockAnalyticsRepo);
-      },
-    );
+      verify(() => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo))
+          .called(1);
+      verifyNoMoreInteractions(mockAnalyticsRepo);
+    });
 
     test(
       'should return NetworkFailure when AnalyticsRepo returns NetworkFailure',
       () async {
         // Arrange
-        when(
-          () => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo),
-        ).thenAnswer((_) async => const NetworkFailure(tFailure));
+        when(() => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo))
+            .thenAnswer((_) async => const NetworkFailure(tFailure));
 
         // Act
         final result = await sut(from: tFrom, to: tTo);
@@ -107,33 +101,28 @@ void main() {
         final failure = (result as NetworkFailure<AnalyticsDataEntity>).failure;
         expect(failure, equals(tFailure));
 
-        verify(
-          () => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo),
-        ).called(1);
+        verify(() => mockAnalyticsRepo.getAnalytics(from: tFrom, to: tTo))
+            .called(1);
         verifyNoMoreInteractions(mockAnalyticsRepo);
       },
     );
 
-    test(
-      'should pass exact custom DateTime instances to repo without modification',
-      () async {
-        // Arrange
-        final customFrom = DateTime(2026, 12, 1, 10, 0);
-        final customTo = DateTime(2026, 12, 31, 23, 59);
+    test('should pass exact custom DateTime instances to repo without modification', () async {
+      // Arrange
+      final customFrom = DateTime(2026, 12, 1, 10, 0);
+      final customTo = DateTime(2026, 12, 31, 23, 59);
 
-        when(
-          () => mockAnalyticsRepo.getAnalytics(from: customFrom, to: customTo),
-        ).thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
+      when(() => mockAnalyticsRepo.getAnalytics(from: customFrom, to: customTo))
+          .thenAnswer((_) async => NetworkSuccess(tAnalyticsData));
 
-        // Act
-        await sut(from: customFrom, to: customTo);
+      // Act
+      await sut(from: customFrom, to: customTo);
 
-        // Assert
-        verify(
-          () => mockAnalyticsRepo.getAnalytics(from: customFrom, to: customTo),
-        ).called(1);
-        verifyNoMoreInteractions(mockAnalyticsRepo);
-      },
-    );
+      // Assert
+      verify(
+        () => mockAnalyticsRepo.getAnalytics(from: customFrom, to: customTo),
+      ).called(1);
+      verifyNoMoreInteractions(mockAnalyticsRepo);
+    });
   });
 }

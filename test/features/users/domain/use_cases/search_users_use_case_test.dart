@@ -48,7 +48,9 @@ void main() {
           searchBy: any(named: 'searchBy'),
           limit: any(named: 'limit'),
         ),
-      ).thenAnswer((_) async => const NetworkSuccess<List<DashboardUserEntity>>(tUsers));
+      ).thenAnswer(
+        (_) async => const NetworkSuccess<List<DashboardUserEntity>>(tUsers),
+      );
 
       // Act
       final result = await sut(query: 'Youssef', searchBy: UserSearchBy.name);
@@ -78,7 +80,9 @@ void main() {
           searchBy: any(named: 'searchBy'),
           limit: any(named: 'limit'),
         ),
-      ).thenAnswer((_) async => const NetworkSuccess<List<DashboardUserEntity>>(tUsers));
+      ).thenAnswer(
+        (_) async => const NetworkSuccess<List<DashboardUserEntity>>(tUsers),
+      );
 
       // Act
       final result = await sut(

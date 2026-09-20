@@ -103,110 +103,107 @@ void main() {
         }
       });
 
-      test('returns correct data when from and to represent the same single day', () async {
-        final day = DateTime(2026, 9, 15);
-        final docKey = dateKey(day);
+      test(
+        'returns correct data when from and to represent the same single day',
+        () async {
+          final day = DateTime(2026, 9, 15);
+          final docKey = dateKey(day);
 
-        await fakeFirestore.collection(dailyCollection).doc(docKey).set(
-          createDailyDocMap(
-            revenue: 2500.0,
-            ordersCount: 8,
-            orderStatuses: {
-              'deliveredOrders': 5,
-              'pendingOrders': 2,
-              'cancelledOrders': 1,
-            },
-            paymentMethods: {
-              'cash_on_delivery': 3,
-              'credit_card': 5,
-            },
-            products: {
-              'APL': {
-                'name': 'Apple',
-                'imagePath': 'apple.png',
-                'quantitySold': 10,
-                'revenue': 500.0,
-              },
-            },
-          ),
-        );
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc(docKey)
+              .set(
+                createDailyDocMap(
+                  revenue: 2500.0,
+                  ordersCount: 8,
+                  orderStatuses: {
+                    'deliveredOrders': 5,
+                    'pendingOrders': 2,
+                    'cancelledOrders': 1,
+                  },
+                  paymentMethods: {'cash_on_delivery': 3, 'credit_card': 5},
+                  products: {
+                    'APL': {
+                      'name': 'Apple',
+                      'imagePath': 'apple.png',
+                      'quantitySold': 10,
+                      'revenue': 500.0,
+                    },
+                  },
+                ),
+              );
 
-        final response = await sut.getAnalytics(from: day, to: day);
+          final response = await sut.getAnalytics(from: day, to: day);
 
-        expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
-        final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+          expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+          final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
 
-        expect(data.kpi.totalRevenue, 2500.0);
-        expect(data.kpi.totalOrders, 8);
-        expect(data.kpi.deliveredOrders, 5);
-        expect(data.kpi.pendingOrders, 2);
-        expect(data.kpi.cancelledOrders, 1);
-        expect(data.kpi.deliveryRate, (5 / 8) * 100);
-        expect(data.kpi.cancellationRate, (1 / 8) * 100);
+          expect(data.kpi.totalRevenue, 2500.0);
+          expect(data.kpi.totalOrders, 8);
+          expect(data.kpi.deliveredOrders, 5);
+          expect(data.kpi.pendingOrders, 2);
+          expect(data.kpi.cancelledOrders, 1);
+          expect(data.kpi.deliveryRate, (5 / 8) * 100);
+          expect(data.kpi.cancellationRate, (1 / 8) * 100);
 
-        expect(data.revenueOverTime.length, 1);
-        expect(data.revenueOverTime.first.date, DateTime(2026, 9, 15));
-        expect(data.revenueOverTime.first.revenue, 2500.0);
-        expect(data.revenueOverTime.first.ordersCount, 8);
+          expect(data.revenueOverTime.length, 1);
+          expect(data.revenueOverTime.first.date, DateTime(2026, 9, 15));
+          expect(data.revenueOverTime.first.revenue, 2500.0);
+          expect(data.revenueOverTime.first.ordersCount, 8);
 
-        expect(data.topProducts.length, 1);
-        expect(data.topProducts.first.code, 'APL');
-        expect(data.topProducts.first.name, 'Apple');
-        expect(data.topProducts.first.imagePath, 'apple.png');
-        expect(data.topProducts.first.totalQuantitySold, 10);
-        expect(data.topProducts.first.totalRevenue, 500.0);
-      });
+          expect(data.topProducts.length, 1);
+          expect(data.topProducts.first.code, 'APL');
+          expect(data.topProducts.first.name, 'Apple');
+          expect(data.topProducts.first.imagePath, 'apple.png');
+          expect(data.topProducts.first.totalQuantitySold, 10);
+          expect(data.topProducts.first.totalRevenue, 500.0);
+        },
+      );
 
       test('aggregates revenue, ordersCount, statuses, and payments across multiple days', () async {
         final day1 = DateTime(2026, 9, 10);
         final day2 = DateTime(2026, 9, 11);
         final day3 = DateTime(2026, 9, 12);
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day1)).set(
-          createDailyDocMap(
-            revenue: 1200.0,
-            ordersCount: 4,
-            orderStatuses: {
-              'deliveredOrders': 2,
-              'pendingOrders': 2,
-            },
-            paymentMethods: {
-              'cash_on_delivery': 2,
-              'credit_card': 2,
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day1))
+            .set(
+              createDailyDocMap(
+                revenue: 1200.0,
+                ordersCount: 4,
+                orderStatuses: {'deliveredOrders': 2, 'pendingOrders': 2},
+                paymentMethods: {'cash_on_delivery': 2, 'credit_card': 2},
+              ),
+            );
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day2)).set(
-          createDailyDocMap(
-            revenue: 800.0,
-            ordersCount: 3,
-            orderStatuses: {
-              'deliveredOrders': 1,
-              'shippedOrders': 1,
-              'cancelledOrders': 1,
-            },
-            paymentMethods: {
-              'credit_card': 2,
-              'paypal': 1,
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day2))
+            .set(
+              createDailyDocMap(
+                revenue: 800.0,
+                ordersCount: 3,
+                orderStatuses: {
+                  'deliveredOrders': 1,
+                  'shippedOrders': 1,
+                  'cancelledOrders': 1,
+                },
+                paymentMethods: {'credit_card': 2, 'paypal': 1},
+              ),
+            );
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day3)).set(
-          createDailyDocMap(
-            revenue: 2500.0,
-            ordersCount: 5,
-            orderStatuses: {
-              'deliveredOrders': 4,
-              'processingOrders': 1,
-            },
-            paymentMethods: {
-              'cash_on_delivery': 1,
-              'paypal': 4,
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day3))
+            .set(
+              createDailyDocMap(
+                revenue: 2500.0,
+                ordersCount: 5,
+                orderStatuses: {'deliveredOrders': 4, 'processingOrders': 1},
+                paymentMethods: {'cash_on_delivery': 1, 'paypal': 4},
+              ),
+            );
 
         final response = await sut.getAnalytics(from: day1, to: day3);
 
@@ -239,20 +236,36 @@ void main() {
         // cash_on_delivery = 2 + 0 + 1 = 3
         // credit_card = 2 + 2 + 0 = 4
         // paypal = 0 + 1 + 4 = 5
-        final cashStat = data.paymentMethodStats.firstWhere((p) => p.type == PaymentMethodType.cash);
-        final cardStat = data.paymentMethodStats.firstWhere((p) => p.type == PaymentMethodType.card);
-        final paypalStat = data.paymentMethodStats.firstWhere((p) => p.type == PaymentMethodType.paypal);
+        final cashStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.cash,
+        );
+        final cardStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.card,
+        );
+        final paypalStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.paypal,
+        );
 
         expect(cashStat.count, 3);
         expect(cardStat.count, 4);
         expect(paypalStat.count, 5);
 
         // Status stats breakdown
-        final deliveredStat = data.orderStatusStats.firstWhere((s) => s.status == OrderStatus.delivered);
-        final pendingStat = data.orderStatusStats.firstWhere((s) => s.status == OrderStatus.pending);
-        final shippedStat = data.orderStatusStats.firstWhere((s) => s.status == OrderStatus.shipped);
-        final processingStat = data.orderStatusStats.firstWhere((s) => s.status == OrderStatus.processing);
-        final cancelledStat = data.orderStatusStats.firstWhere((s) => s.status == OrderStatus.cancelled);
+        final deliveredStat = data.orderStatusStats.firstWhere(
+          (s) => s.status == OrderStatus.delivered,
+        );
+        final pendingStat = data.orderStatusStats.firstWhere(
+          (s) => s.status == OrderStatus.pending,
+        );
+        final shippedStat = data.orderStatusStats.firstWhere(
+          (s) => s.status == OrderStatus.shipped,
+        );
+        final processingStat = data.orderStatusStats.firstWhere(
+          (s) => s.status == OrderStatus.processing,
+        );
+        final cancelledStat = data.orderStatusStats.firstWhere(
+          (s) => s.status == OrderStatus.cancelled,
+        );
 
         expect(deliveredStat.count, 7);
         expect(pendingStat.count, 2);
@@ -268,12 +281,14 @@ void main() {
         final toDay = DateTime(2026, 9, 5);
 
         // Only day 1 and day 4 exist in firestore
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day1)).set(
-          createDailyDocMap(revenue: 500.0, ordersCount: 2),
-        );
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day4)).set(
-          createDailyDocMap(revenue: 1000.0, ordersCount: 4),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day1))
+            .set(createDailyDocMap(revenue: 500.0, ordersCount: 2));
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day4))
+            .set(createDailyDocMap(revenue: 1000.0, ordersCount: 4));
 
         final response = await sut.getAnalytics(from: day1, to: toDay);
 
@@ -312,131 +327,164 @@ void main() {
         expect(data.kpi.totalOrders, 6);
       });
 
-      test('ignores daily documents strictly outside the requested date range', () async {
-        final beforeRange = DateTime(2026, 8, 31);
-        final day1 = DateTime(2026, 9, 1);
-        final day2 = DateTime(2026, 9, 2);
-        final afterRange = DateTime(2026, 9, 10);
+      test(
+        'ignores daily documents strictly outside the requested date range',
+        () async {
+          final beforeRange = DateTime(2026, 8, 31);
+          final day1 = DateTime(2026, 9, 1);
+          final day2 = DateTime(2026, 9, 2);
+          final afterRange = DateTime(2026, 9, 10);
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(beforeRange)).set(
-          createDailyDocMap(revenue: 9999.0, ordersCount: 50),
-        );
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day1)).set(
-          createDailyDocMap(revenue: 100.0, ordersCount: 1),
-        );
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day2)).set(
-          createDailyDocMap(revenue: 200.0, ordersCount: 2),
-        );
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(afterRange)).set(
-          createDailyDocMap(revenue: 8888.0, ordersCount: 40),
-        );
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc(dateKey(beforeRange))
+              .set(createDailyDocMap(revenue: 9999.0, ordersCount: 50));
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc(dateKey(day1))
+              .set(createDailyDocMap(revenue: 100.0, ordersCount: 1));
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc(dateKey(day2))
+              .set(createDailyDocMap(revenue: 200.0, ordersCount: 2));
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc(dateKey(afterRange))
+              .set(createDailyDocMap(revenue: 8888.0, ordersCount: 40));
 
-        final response = await sut.getAnalytics(from: day1, to: day2);
+          final response = await sut.getAnalytics(from: day1, to: day2);
 
-        expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
-        final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+          expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+          final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
 
-        // Total should only be day1 + day2 = 300.0 and 3 orders
-        expect(data.kpi.totalRevenue, 300.0);
-        expect(data.kpi.totalOrders, 3);
-        expect(data.revenueOverTime.length, 2);
-      });
+          // Total should only be day1 + day2 = 300.0 and 3 orders
+          expect(data.kpi.totalRevenue, 300.0);
+          expect(data.kpi.totalOrders, 3);
+          expect(data.revenueOverTime.length, 2);
+        },
+      );
 
-      test('handles month-end and year-end boundary transitions properly', () async {
-        // Range across year end: 2026-12-30 to 2027-01-02 (4 days)
-        final fromDate = DateTime(2026, 12, 30);
-        final toDate = DateTime(2027, 1, 2);
+      test(
+        'handles month-end and year-end boundary transitions properly',
+        () async {
+          // Range across year end: 2026-12-30 to 2027-01-02 (4 days)
+          final fromDate = DateTime(2026, 12, 30);
+          final toDate = DateTime(2027, 1, 2);
 
-        await fakeFirestore.collection(dailyCollection).doc('2026-12-31').set(
-          createDailyDocMap(revenue: 300.0, ordersCount: 3),
-        );
-        await fakeFirestore.collection(dailyCollection).doc('2027-01-01').set(
-          createDailyDocMap(revenue: 700.0, ordersCount: 7),
-        );
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc('2026-12-31')
+              .set(createDailyDocMap(revenue: 300.0, ordersCount: 3));
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc('2027-01-01')
+              .set(createDailyDocMap(revenue: 700.0, ordersCount: 7));
 
-        final response = await sut.getAnalytics(from: fromDate, to: toDate);
+          final response = await sut.getAnalytics(from: fromDate, to: toDate);
 
-        expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
-        final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+          expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+          final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
 
-        expect(data.revenueOverTime.length, 4);
-        expect(data.revenueOverTime[0].date, DateTime(2026, 12, 30));
-        expect(data.revenueOverTime[0].revenue, 0.0);
-        expect(data.revenueOverTime[1].date, DateTime(2026, 12, 31));
-        expect(data.revenueOverTime[1].revenue, 300.0);
-        expect(data.revenueOverTime[2].date, DateTime(2027, 1, 1));
-        expect(data.revenueOverTime[2].revenue, 700.0);
-        expect(data.revenueOverTime[3].date, DateTime(2027, 1, 2));
-        expect(data.revenueOverTime[3].revenue, 0.0);
+          expect(data.revenueOverTime.length, 4);
+          expect(data.revenueOverTime[0].date, DateTime(2026, 12, 30));
+          expect(data.revenueOverTime[0].revenue, 0.0);
+          expect(data.revenueOverTime[1].date, DateTime(2026, 12, 31));
+          expect(data.revenueOverTime[1].revenue, 300.0);
+          expect(data.revenueOverTime[2].date, DateTime(2027, 1, 1));
+          expect(data.revenueOverTime[2].revenue, 700.0);
+          expect(data.revenueOverTime[3].date, DateTime(2027, 1, 2));
+          expect(data.revenueOverTime[3].revenue, 0.0);
 
-        expect(data.kpi.totalRevenue, 1000.0);
-        expect(data.kpi.totalOrders, 10);
-      });
+          expect(data.kpi.totalRevenue, 1000.0);
+          expect(data.kpi.totalOrders, 10);
+        },
+      );
 
-      test('accurately counts totalUsers, verifiedUsers, and activeCartsCount', () async {
-        // User 1: verified + active cart
-        await addUser(uid: 'u1', isVerified: true, cartItems: [{'productId': 'p1', 'quantity': 1}]);
-        // User 2: verified + no cart
-        await addUser(uid: 'u2', isVerified: true);
-        // User 3: unverified + active cart
-        await addUser(uid: 'u3', isVerified: false, cartItems: [{'productId': 'p2', 'quantity': 2}]);
-        // User 4: unverified + no cart
-        await addUser(uid: 'u4', isVerified: false);
-        // User 5: unverified + no cart
-        await addUser(uid: 'u5', isVerified: false);
+      test(
+        'accurately counts totalUsers, verifiedUsers, and activeCartsCount',
+        () async {
+          // User 1: verified + active cart
+          await addUser(
+            uid: 'u1',
+            isVerified: true,
+            cartItems: [
+              {'productId': 'p1', 'quantity': 1},
+            ],
+          );
+          // User 2: verified + no cart
+          await addUser(uid: 'u2', isVerified: true);
+          // User 3: unverified + active cart
+          await addUser(
+            uid: 'u3',
+            isVerified: false,
+            cartItems: [
+              {'productId': 'p2', 'quantity': 2},
+            ],
+          );
+          // User 4: unverified + no cart
+          await addUser(uid: 'u4', isVerified: false);
+          // User 5: unverified + no cart
+          await addUser(uid: 'u5', isVerified: false);
 
-        final day = DateTime(2026, 9, 20);
-        final response = await sut.getAnalytics(from: day, to: day);
+          final day = DateTime(2026, 9, 20);
+          final response = await sut.getAnalytics(from: day, to: day);
 
-        expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
-        final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+          expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+          final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
 
-        expect(data.kpi.totalUsers, 5);
-        expect(data.kpi.verifiedUsers, 2);
-        expect(data.kpi.activeCartsCount, 2);
-      });
+          expect(data.kpi.totalUsers, 5);
+          expect(data.kpi.verifiedUsers, 2);
+          expect(data.kpi.activeCartsCount, 2);
+        },
+      );
 
       test('aggregates product quantities and revenues across multiple days and sorts descending by quantitySold', () async {
         final day1 = DateTime(2026, 9, 1);
         final day2 = DateTime(2026, 9, 2);
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day1)).set(
-          createDailyDocMap(
-            products: {
-              'apple': {
-                'name': 'Apple',
-                'imagePath': 'apple.png',
-                'quantitySold': 5,
-                'revenue': 50.0,
-              },
-              'banana': {
-                'name': 'Banana',
-                'imagePath': 'banana.png',
-                'quantitySold': 2,
-                'revenue': 20.0,
-              },
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day1))
+            .set(
+              createDailyDocMap(
+                products: {
+                  'apple': {
+                    'name': 'Apple',
+                    'imagePath': 'apple.png',
+                    'quantitySold': 5,
+                    'revenue': 50.0,
+                  },
+                  'banana': {
+                    'name': 'Banana',
+                    'imagePath': 'banana.png',
+                    'quantitySold': 2,
+                    'revenue': 20.0,
+                  },
+                },
+              ),
+            );
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day2)).set(
-          createDailyDocMap(
-            products: {
-              'apple': {
-                'name': 'Apple',
-                'imagePath': 'apple.png',
-                'quantitySold': 10,
-                'revenue': 100.0,
-              },
-              'orange': {
-                'name': 'Orange',
-                'imagePath': 'orange.png',
-                'quantitySold': 8,
-                'revenue': 40.0,
-              },
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day2))
+            .set(
+              createDailyDocMap(
+                products: {
+                  'apple': {
+                    'name': 'Apple',
+                    'imagePath': 'apple.png',
+                    'quantitySold': 10,
+                    'revenue': 100.0,
+                  },
+                  'orange': {
+                    'name': 'Orange',
+                    'imagePath': 'orange.png',
+                    'quantitySold': 8,
+                    'revenue': 40.0,
+                  },
+                },
+              ),
+            );
 
         final response = await sut.getAnalytics(from: day1, to: day2);
 
@@ -479,9 +527,10 @@ void main() {
           };
         }
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day)).set(
-          createDailyDocMap(products: productsMap),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day))
+            .set(createDailyDocMap(products: productsMap));
 
         final response = await sut.getAnalytics(from: day, to: day);
 
@@ -506,30 +555,33 @@ void main() {
         final day1 = DateTime(2026, 9, 1);
         final day2 = DateTime(2026, 9, 2);
 
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day1)).set(
-          createDailyDocMap(
-            products: {
-              'p1': {
-                'name': 'Watermelon',
-                'imagePath': 'melon.png',
-                'quantitySold': 3,
-                'revenue': 30.0,
-              },
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day1))
+            .set(
+              createDailyDocMap(
+                products: {
+                  'p1': {
+                    'name': 'Watermelon',
+                    'imagePath': 'melon.png',
+                    'quantitySold': 3,
+                    'revenue': 30.0,
+                  },
+                },
+              ),
+            );
 
         // Day 2 has same product code but name and imagePath are null/omitted
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day2)).set(
-          createDailyDocMap(
-            products: {
-              'p1': {
-                'quantitySold': 7,
-                'revenue': 70.0,
-              },
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day2))
+            .set(
+              createDailyDocMap(
+                products: {
+                  'p1': {'quantitySold': 7, 'revenue': 70.0},
+                },
+              ),
+            );
 
         final response = await sut.getAnalytics(from: day1, to: day2);
 
@@ -548,19 +600,17 @@ void main() {
         final day = DateTime(2026, 9, 1);
 
         // Only deliveredOrders and cancelledOrders are present, paypal is the only payment method
-        await fakeFirestore.collection(dailyCollection).doc(dateKey(day)).set(
-          createDailyDocMap(
-            revenue: 900.0,
-            ordersCount: 3,
-            orderStatuses: {
-              'deliveredOrders': 2,
-              'cancelledOrders': 1,
-            },
-            paymentMethods: {
-              'paypal': 3,
-            },
-          ),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc(dateKey(day))
+            .set(
+              createDailyDocMap(
+                revenue: 900.0,
+                ordersCount: 3,
+                orderStatuses: {'deliveredOrders': 2, 'cancelledOrders': 1},
+                paymentMethods: {'paypal': 3},
+              ),
+            );
 
         final response = await sut.getAnalytics(from: day, to: day);
 
@@ -573,9 +623,15 @@ void main() {
         expect(data.kpi.processingOrders, 0);
         expect(data.kpi.shippedOrders, 0);
 
-        final cashStat = data.paymentMethodStats.firstWhere((p) => p.type == PaymentMethodType.cash);
-        final cardStat = data.paymentMethodStats.firstWhere((p) => p.type == PaymentMethodType.card);
-        final paypalStat = data.paymentMethodStats.firstWhere((p) => p.type == PaymentMethodType.paypal);
+        final cashStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.cash,
+        );
+        final cardStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.card,
+        );
+        final paypalStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.paypal,
+        );
 
         expect(cashStat.count, 0);
         expect(cardStat.count, 0);
@@ -625,9 +681,10 @@ void main() {
         // Date with single-digit month and day: 2026-03-05
         final singleDigitDate = DateTime(2026, 3, 5);
 
-        await fakeFirestore.collection(dailyCollection).doc('2026-03-05').set(
-          createDailyDocMap(revenue: 777.0, ordersCount: 7),
-        );
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc('2026-03-05')
+            .set(createDailyDocMap(revenue: 777.0, ordersCount: 7));
 
         final response = await sut.getAnalytics(
           from: singleDigitDate,
@@ -642,30 +699,35 @@ void main() {
         expect(data.revenueOverTime.first.revenue, 777.0);
       });
 
-      test('normalizes DateTime instances with non-zero time components', () async {
-        // from at 14:30, to at 08:15 across 2 days
-        final fromWithTime = DateTime(2026, 9, 1, 14, 30);
-        final toWithTime = DateTime(2026, 9, 2, 8, 15);
+      test(
+        'normalizes DateTime instances with non-zero time components',
+        () async {
+          // from at 14:30, to at 08:15 across 2 days
+          final fromWithTime = DateTime(2026, 9, 1, 14, 30);
+          final toWithTime = DateTime(2026, 9, 2, 8, 15);
 
-        await fakeFirestore.collection(dailyCollection).doc('2026-09-01').set(
-          createDailyDocMap(revenue: 100.0, ordersCount: 1),
-        );
-        await fakeFirestore.collection(dailyCollection).doc('2026-09-02').set(
-          createDailyDocMap(revenue: 200.0, ordersCount: 2),
-        );
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc('2026-09-01')
+              .set(createDailyDocMap(revenue: 100.0, ordersCount: 1));
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc('2026-09-02')
+              .set(createDailyDocMap(revenue: 200.0, ordersCount: 2));
 
-        final response = await sut.getAnalytics(
-          from: fromWithTime,
-          to: toWithTime,
-        );
+          final response = await sut.getAnalytics(
+            from: fromWithTime,
+            to: toWithTime,
+          );
 
-        expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
-        final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+          expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+          final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
 
-        expect(data.revenueOverTime.length, 2);
-        expect(data.kpi.totalRevenue, 300.0);
-        expect(data.kpi.totalOrders, 3);
-      });
+          expect(data.revenueOverTime.length, 2);
+          expect(data.kpi.totalRevenue, 300.0);
+          expect(data.kpi.totalOrders, 3);
+        },
+      );
     });
   });
 }
