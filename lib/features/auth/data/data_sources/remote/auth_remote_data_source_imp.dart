@@ -78,7 +78,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
 
     final user = userCredential.user;
     if (user == null) {
-      throw BusinessException(AppStrings.userNotFound);
+      throw BusinessException(AppStrings.unexpectedError);
     }
 
     await user.reload();
@@ -172,9 +172,19 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
           : userModel.name;
       storedUserData['name'] = resolvedName;
 
+      final String storedPhone =
+          (storedUserData['phone'] ?? storedUserData['phoneNumber'] ?? '')
+              .toString()
+              .trim();
+      final String resolvedPhone = storedPhone.isNotEmpty
+          ? storedPhone
+          : userModel.phone;
+      storedUserData['phone'] = resolvedPhone;
+
       await _firestore.collection(_usersCollection).doc(userModel.uid).update({
         'isVerified': isVerifiedNow,
         if (resolvedName.isNotEmpty) 'name': resolvedName,
+        if (resolvedPhone.isNotEmpty) 'phone': resolvedPhone,
       });
       return UserModel.fromJson(storedUserData);
     } else {

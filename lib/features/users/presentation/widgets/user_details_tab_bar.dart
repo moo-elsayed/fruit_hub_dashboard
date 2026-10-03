@@ -11,11 +11,13 @@ class UserDetailsTabBar extends StatelessWidget {
     required this.tabController,
     required this.cartItemsCount,
     required this.favoritesCount,
+    this.notificationsCount,
   });
 
   final TabController tabController;
   final int cartItemsCount;
   final int favoritesCount;
+  final int? notificationsCount;
 
   @override
   Widget build(BuildContext context) => SliverAppBar(
@@ -39,7 +41,7 @@ class UserDetailsTabBar extends StatelessWidget {
           child: TabBar(
             controller: tabController,
             dividerColor: Colors.transparent,
-            padding: EdgeInsets.all(3.w),
+            padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
             labelPadding: EdgeInsets.symmetric(horizontal: 4.w),
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: BoxDecoration(
@@ -52,14 +54,19 @@ class UserDetailsTabBar extends StatelessWidget {
             unselectedLabelStyle: AppTextStyles.font12Regular,
             tabs: [
               Tab(
-                height: 34.h,
+                height: 32.h,
                 text: '${AppStrings.cartItems} ($cartItemsCount)',
               ),
               Tab(
-                height: 34.h,
+                height: 32.h,
                 text: '${AppStrings.favorites} ($favoritesCount)',
               ),
-              Tab(height: 34.h, text: AppStrings.notifications),
+              Tab(
+                height: 32.h,
+                text: notificationsCount != null
+                    ? '${AppStrings.notifications} ($notificationsCount)'
+                    : AppStrings.notifications,
+              ),
             ],
           ),
         ),

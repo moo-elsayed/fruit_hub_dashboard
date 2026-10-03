@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../domain/entities/dashboard_user_entity.dart';
+import '../../domain/entities/app_user_entity.dart';
 import 'cart_item_model.dart';
 
-class DashboardUserModel {
-  const DashboardUserModel({
+class AppUserModel {
+  const AppUserModel({
     required this.uid,
     required this.name,
     required this.email,
@@ -18,7 +18,7 @@ class DashboardUserModel {
     this.favoriteIds = const [],
   });
 
-  factory DashboardUserModel.fromFirestore(
+  factory AppUserModel.fromFirestore(
     Map<String, dynamic> json,
     String docId,
   ) {
@@ -54,7 +54,7 @@ class DashboardUserModel {
       }
     }
 
-    return DashboardUserModel(
+    return AppUserModel(
       uid: json['uid'] ?? docId,
       name: json['name'] ?? '',
       email: json['email'] ?? '',
@@ -81,7 +81,7 @@ class DashboardUserModel {
   final List<CartItemModel> cartItems;
   final List<String> favoriteIds;
 
-  DashboardUserEntity toEntity() => DashboardUserEntity(
+  AppUserEntity toEntity() => AppUserEntity(
     uid: uid,
     name: name,
     email: email,

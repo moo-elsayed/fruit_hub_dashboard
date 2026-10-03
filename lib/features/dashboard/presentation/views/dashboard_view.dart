@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/helpers/di.dart';
-import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/sign_out_use_case.dart';
 import 'package:fruit_hub_dashboard/features/auth/presentation/managers/signout_cubit/sign_out_cubit.dart';
 
 import '../widgets/custom_dashboard_app_bar.dart';
@@ -19,7 +18,7 @@ class DashboardView extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: BlocProvider(
-          create: (context) => SignOutCubit(getIt.get<SignOutUseCase>()),
+          create: (context) => getIt.get<SignOutCubit>(),
           child: const CustomDashboardAppBar(),
         ),
       ),

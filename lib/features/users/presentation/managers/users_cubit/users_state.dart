@@ -6,7 +6,9 @@ sealed class UsersState {
 
 final class UsersInitial extends UsersState {}
 
-final class UsersLoading extends UsersState {}
+final class UsersLoading extends UsersState {
+  dynamic get totalCount => null;
+}
 
 final class UsersSuccess extends UsersState {
   const UsersSuccess({
@@ -19,7 +21,7 @@ final class UsersSuccess extends UsersState {
     this.activeCartCount = 0,
   });
 
-  final List<DashboardUserEntity> users;
+  final List<AppUserEntity> users;
   final UserFilterType activeFilter;
   final bool hasMore;
   final bool isLoadingMore;
@@ -28,7 +30,7 @@ final class UsersSuccess extends UsersState {
   final int activeCartCount;
 
   UsersSuccess copyWith({
-    List<DashboardUserEntity>? users,
+    List<AppUserEntity>? users,
     UserFilterType? activeFilter,
     bool? hasMore,
     bool? isLoadingMore,

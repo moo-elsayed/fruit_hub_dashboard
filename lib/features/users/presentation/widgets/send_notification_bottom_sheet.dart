@@ -94,7 +94,7 @@ class _SendNotificationBottomSheetState
               mainAxisSize: MainAxisSize.min,
               spacing: 12.h,
               children: [
-                const CustomBottomSheetHandle(),
+                const CustomBottomSheetHandle(bottomGap: 0),
                 Text(
                   AppStrings.sendNotification,
                   style: AppTextStyles.font16Bold.copyWith(

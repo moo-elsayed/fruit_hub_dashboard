@@ -4,7 +4,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
-import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/app_user_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/entities/users_page_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/entities/users_stats_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/use_cases/get_users_stats_use_case.dart';
@@ -32,21 +32,21 @@ void main() {
     activeCartCount: 10,
   );
 
-  const tUser1 = DashboardUserEntity(
+  const tUser1 = AppUserEntity(
     uid: 'u_1',
     name: 'Ahmed',
     email: 'ahmed@test.com',
     phone: '01011112222',
   );
 
-  const tUser2 = DashboardUserEntity(
+  const tUser2 = AppUserEntity(
     uid: 'u_2',
     name: 'Mohamed',
     email: 'mohamed@test.com',
     phone: '01033334444',
   );
 
-  const tUser3 = DashboardUserEntity(
+  const tUser3 = AppUserEntity(
     uid: 'u_3',
     name: 'Ali',
     email: 'ali@test.com',

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/core/enums/user_search_by.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
-import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/app_user_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/repo/users_repo.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/use_cases/search_users_use_case.dart';
 import 'package:mocktail/mocktail.dart';
@@ -13,8 +13,8 @@ void main() {
   late MockUsersRepo mockUsersRepo;
   late SearchUsersUseCase sut;
 
-  const tUsers = <DashboardUserEntity>[
-    DashboardUserEntity(
+  const tUsers = <AppUserEntity>[
+    AppUserEntity(
       uid: 'u_1',
       name: 'Youssef Ali',
       email: 'youssef@test.com',
@@ -49,15 +49,15 @@ void main() {
           limit: any(named: 'limit'),
         ),
       ).thenAnswer(
-        (_) async => const NetworkSuccess<List<DashboardUserEntity>>(tUsers),
+        (_) async => const NetworkSuccess<List<AppUserEntity>>(tUsers),
       );
 
       // Act
       final result = await sut(query: 'Youssef', searchBy: UserSearchBy.name);
 
       // Assert
-      expect(result, isA<NetworkSuccess<List<DashboardUserEntity>>>());
-      final list = (result as NetworkSuccess<List<DashboardUserEntity>>).data!;
+      expect(result, isA<NetworkSuccess<List<AppUserEntity>>>());
+      final list = (result as NetworkSuccess<List<AppUserEntity>>).data!;
       expect(list, tUsers);
       expect(list.length, 1);
       expect(list.first.name, 'Youssef Ali');
@@ -81,7 +81,7 @@ void main() {
           limit: any(named: 'limit'),
         ),
       ).thenAnswer(
-        (_) async => const NetworkSuccess<List<DashboardUserEntity>>(tUsers),
+        (_) async => const NetworkSuccess<List<AppUserEntity>>(tUsers),
       );
 
       // Act
@@ -92,7 +92,7 @@ void main() {
       );
 
       // Assert
-      expect(result, isA<NetworkSuccess<List<DashboardUserEntity>>>());
+      expect(result, isA<NetworkSuccess<List<AppUserEntity>>>());
 
       verify(
         () => mockUsersRepo.searchUsers(
@@ -123,9 +123,9 @@ void main() {
         );
 
         // Assert
-        expect(result, isA<NetworkFailure<List<DashboardUserEntity>>>());
+        expect(result, isA<NetworkFailure<List<AppUserEntity>>>());
         final failure =
-            (result as NetworkFailure<List<DashboardUserEntity>>).failure;
+            (result as NetworkFailure<List<AppUserEntity>>).failure;
         expect(failure.error, tFailure.error);
 
         verify(

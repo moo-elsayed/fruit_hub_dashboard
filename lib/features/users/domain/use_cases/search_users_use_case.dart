@@ -1,7 +1,7 @@
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
 import '../../../../core/enums/user_search_by.dart';
-import '../entities/dashboard_user_entity.dart';
+import '../entities/app_user_entity.dart';
 import '../repo/users_repo.dart';
 
 class SearchUsersUseCase {
@@ -9,7 +9,7 @@ class SearchUsersUseCase {
 
   final UsersRepo _usersRepo;
 
-  Future<NetworkResponse<List<DashboardUserEntity>>> call({
+  Future<NetworkResponse<List<AppUserEntity>>> call({
     required String query,
     required UserSearchBy searchBy,
     int limit = 30,

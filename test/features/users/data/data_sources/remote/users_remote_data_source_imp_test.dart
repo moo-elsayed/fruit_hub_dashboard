@@ -7,7 +7,7 @@ import 'package:fruit_hub_dashboard/core/enums/user_search_by.dart';
 import 'package:fruit_hub_dashboard/core/helpers/backend_endpoints.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/users/data/data_sources/remote/users_remote_data_source_imp.dart';
-import 'package:fruit_hub_dashboard/features/users/data/models/dashboard_user_model.dart';
+import 'package:fruit_hub_dashboard/features/users/data/models/app_user_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/notification_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/send_notification_input_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/users_page_model.dart';
@@ -88,7 +88,7 @@ void main() {
         expect(page.lastDocument, isNull);
       });
 
-      test('should return NetworkSuccess with properly mapped DashboardUserModel list when documents exist', () async {
+      test('should return NetworkSuccess with properly mapped AppUserModel list when documents exist', () async {
         // Arrange
         final tokenDate = DateTime(2026, 9, 17, 12, 0);
         final userMap = createUserMap(
@@ -616,9 +616,9 @@ void main() {
           );
 
           // Assert
-          expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+          expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
           final users =
-              (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+              (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users, isEmpty);
         },
       );
@@ -633,9 +633,9 @@ void main() {
           );
 
           // Assert
-          expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+          expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
           final users =
-              (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+              (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users, isEmpty);
         },
       );
@@ -650,9 +650,9 @@ void main() {
           );
 
           // Assert
-          expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+          expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
           final users =
-              (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+              (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users.length, 1);
           expect(users.first.email, 'ahmed@test.com');
         },
@@ -666,9 +666,9 @@ void main() {
         );
 
         // Assert
-        expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+        expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
         final users =
-            (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+            (response as NetworkSuccess<List<AppUserModel>>).data!;
         expect(users.length, 2);
         final phones = users.map((u) => u.phone).toList();
         expect(phones, containsAll(['01011112222', '01033334444']));
@@ -682,9 +682,9 @@ void main() {
         );
 
         // Assert
-        expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+        expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
         final users =
-            (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+            (response as NetworkSuccess<List<AppUserModel>>).data!;
         expect(users.length, 1);
         expect(users.first.name, 'Mohamed Ali');
       });
@@ -698,9 +698,9 @@ void main() {
         );
 
         // Assert
-        expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+        expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
         final users =
-            (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+            (response as NetworkSuccess<List<AppUserModel>>).data!;
         expect(users.length, 1);
       });
 
@@ -714,9 +714,9 @@ void main() {
           );
 
           // Assert
-          expect(response, isA<NetworkSuccess<List<DashboardUserModel>>>());
+          expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
           final users =
-              (response as NetworkSuccess<List<DashboardUserModel>>).data!;
+              (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users, isEmpty);
         },
       );
@@ -802,9 +802,9 @@ void main() {
     });
 
     group('Model to Entity mappings', () {
-      test('DashboardUserModel.toEntity should map all fields correctly', () {
+      test('AppUserModel.toEntity should map all fields correctly', () {
         final date = DateTime(2026, 9, 18, 10, 0);
-        final model = DashboardUserModel(
+        final model = AppUserModel(
           uid: 'u_test',
           name: 'Name',
           email: 'test@email.com',

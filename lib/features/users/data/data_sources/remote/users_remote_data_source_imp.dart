@@ -6,7 +6,7 @@ import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import '../../../../../core/enums/notification_type.dart';
 import '../../../../../core/enums/user_filter_type.dart';
 import '../../../../../core/enums/user_search_by.dart';
-import '../../models/dashboard_user_model.dart';
+import '../../models/app_user_model.dart';
 import '../../models/notification_model.dart';
 import '../../models/send_notification_input_model.dart';
 import '../../models/users_page_model.dart';
@@ -44,7 +44,7 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
     final snapshot = await query.get();
     final users = snapshot.docs
         .map(
-          (doc) => DashboardUserModel.fromFirestore(
+          (doc) => AppUserModel.fromFirestore(
             doc.data() as Map<String, dynamic>,
             doc.id,
           ),
@@ -107,13 +107,13 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
   }, functionName: 'getUserNotifications');
 
   @override
-  Future<NetworkResponse<List<DashboardUserModel>>> searchUsers({
+  Future<NetworkResponse<List<AppUserModel>>> searchUsers({
     required String query,
     required UserSearchBy searchBy,
     int limit = 30,
   }) async => ApiHelper.executeSafely(() async {
     final cleanQuery = query.trim();
-    if (cleanQuery.isEmpty) return <DashboardUserModel>[];
+    if (cleanQuery.isEmpty) return <AppUserModel>[];
 
     Query queryRef = _firestore.collection(_usersCollection);
 
@@ -138,7 +138,7 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
 
     return snapshot.docs
         .map(
-          (doc) => DashboardUserModel.fromFirestore(
+          (doc) => AppUserModel.fromFirestore(
             doc.data() as Map<String, dynamic>,
             doc.id,
           ),

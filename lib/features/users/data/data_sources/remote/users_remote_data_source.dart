@@ -3,7 +3,7 @@ import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
 import '../../../../../core/enums/user_filter_type.dart';
 import '../../../../../core/enums/user_search_by.dart';
-import '../../models/dashboard_user_model.dart';
+import '../../models/app_user_model.dart';
 import '../../models/notification_model.dart';
 import '../../models/send_notification_input_model.dart';
 import '../../models/users_page_model.dart';
@@ -16,7 +16,7 @@ abstract class UsersRemoteDataSource {
     UserFilterType filter = UserFilterType.all,
   });
   Future<NetworkResponse<UsersStatsModel>> getUsersStats();
-  Future<NetworkResponse<List<DashboardUserModel>>> searchUsers({
+  Future<NetworkResponse<List<AppUserModel>>> searchUsers({
     required String query,
     required UserSearchBy searchBy,
     int limit = 30,

@@ -12,10 +12,10 @@ import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
 import 'package:fruit_hub_dashboard/core/widgets/search_text_field.dart';
 
 import '../managers/users_search_cubit/users_search_cubit.dart';
-import '../widgets/users_search_empty_view.dart';
 import '../widgets/users_search_filter_chips.dart';
 import '../widgets/users_search_results_list.dart';
 import '../widgets/users_skeleton_list.dart';
+import '../widgets/users_status_view.dart';
 
 class UsersSearchView extends StatefulWidget {
   const UsersSearchView({super.key});
@@ -86,59 +86,60 @@ class _UsersSearchViewState extends State<UsersSearchView> {
             onTap: () => context.pop(),
           ),
           body: CustomKeyboardUnfocus(
-            child: Column(
-              children: [
-                SizedBox(height: 12.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Hero(
-                    tag: 'search_bar_hero_tag',
-                    child: Material(
-                      color: Colors.transparent,
-                      child: SearchTextField(
-                        focusNode: _focusNode,
-                        controller: _searchController,
-                        hint: AppStrings.searchUsers,
-                        onChanged: (query) => _onSearchChanged(query, cubit),
-                        onClear: () => _onClearSearch(cubit),
+            child: Padding(
+              padding: EdgeInsets.only(top: 12.h),
+              child: Column(
+                spacing: 12.h,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Hero(
+                      tag: 'search_bar_hero_tag',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: SearchTextField(
+                          focusNode: _focusNode,
+                          controller: _searchController,
+                          hint: AppStrings.searchUsers,
+                          onChanged: (query) => _onSearchChanged(query, cubit),
+                          onClear: () => _onClearSearch(cubit),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 12.h),
-                BlocBuilder<UsersSearchCubit, UsersSearchState>(
-                  buildWhen: (previous, current) =>
-                      previous.searchBy != current.searchBy,
-                  builder: (context, state) => UsersSearchFilterChips(
-                    selectedSearchBy: state.searchBy,
-                    onSelected: (by) => _onFilterSelected(by, cubit),
+                  BlocBuilder<UsersSearchCubit, UsersSearchState>(
+                    buildWhen: (previous, current) =>
+                        previous.searchBy != current.searchBy,
+                    builder: (context, state) => UsersSearchFilterChips(
+                      selectedSearchBy: state.searchBy,
+                      onSelected: (by) => _onFilterSelected(by, cubit),
+                    ),
                   ),
-                ),
-                SizedBox(height: 8.h),
-                Expanded(
-                  child: BlocBuilder<UsersSearchCubit, UsersSearchState>(
-                    builder: (context, state) => switch (state) {
-                      UsersSearchInitial() => UsersSearchEmptyView(
-                        icon: Icons.search_rounded,
-                        message: AppStrings.typeToSearchUsers,
-                      ),
-                      UsersSearchLoading() => const UsersSkeletonList(),
-                      UsersSearchFailure(:final message) =>
-                        UsersSearchEmptyView(
+                  Expanded(
+                    child: BlocBuilder<UsersSearchCubit, UsersSearchState>(
+                      builder: (context, state) => switch (state) {
+                        UsersSearchInitial() => UsersStatusView(
+                          icon: Icons.search_rounded,
+                          message: AppStrings.typeToSearchUsers,
+                        ),
+                        UsersSearchLoading() => const UsersSkeletonList(),
+                        UsersSearchFailure(:final message) => UsersStatusView(
                           icon: Icons.error_outline_rounded,
                           message: message,
+                          color: context.colors.error,
                         ),
-                      UsersSearchSuccess(:final users) =>
-                        users.isEmpty
-                            ? UsersSearchEmptyView(
-                                icon: Icons.person_off_outlined,
-                                message: AppStrings.noSearchResultsFound,
-                              )
-                            : UsersSearchResultsList(users: users),
-                    },
+                        UsersSearchSuccess(:final users) =>
+                          users.isEmpty
+                              ? UsersStatusView(
+                                  icon: Icons.person_off_outlined,
+                                  message: AppStrings.noSearchResultsFound,
+                                )
+                              : UsersSearchResultsList(users: users),
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

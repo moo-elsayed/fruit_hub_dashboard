@@ -3,13 +3,22 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 class Validator {
   Validator._();
 
+  static final RegExp _emailRegex = RegExp(
+    r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  );
+  static final RegExp _uppercaseRegex = RegExp(r'(?=.*[A-Z])');
+  static final RegExp _lowercaseRegex = RegExp(r'(?=.*[a-z])');
+  static final RegExp _numberRegex = RegExp(r'(?=.*\d)');
+  static final RegExp _specialCharRegex = RegExp(
+    r'(?=.*[!@#$%^&*(),.?":{}|<>_])',
+  );
+  static final RegExp _phoneRegex = RegExp(r'^\+?\d+$');
+
   static String? validateEmail(String? val) {
-    final RegExp emailRegex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-    );
     if (val == null || val.trim().isEmpty) {
       return AppStrings.emailCannotBeEmpty;
-    } else if (!emailRegex.hasMatch(val)) {
+    }
+    if (!_emailRegex.hasMatch(val.trim())) {
       return AppStrings.enterAValidEmailAddress;
     }
     return null;
@@ -24,8 +33,8 @@ class Validator {
   }
 
   static String? validateOldPassword(String? val) {
-    if (val == null || val.isEmpty) {
-      return AppStrings.passwordCannotBeEmpty;
+    if (val == null || val.trim().isEmpty) {
+      return AppStrings.currentPasswordCannotBeEmpty;
     }
     return null;
   }
@@ -39,19 +48,19 @@ class Validator {
       return AppStrings.passwordMustBeAtLeast8CharactersLong;
     }
 
-    if (!RegExp(r'(?=.*[A-Z])').hasMatch(val)) {
+    if (!_uppercaseRegex.hasMatch(val)) {
       return AppStrings.passwordMustContainUppercase;
     }
 
-    if (!RegExp(r'(?=.*[a-z])').hasMatch(val)) {
+    if (!_lowercaseRegex.hasMatch(val)) {
       return AppStrings.passwordMustContainLowercase;
     }
 
-    if (!RegExp(r'(?=.*\d)').hasMatch(val)) {
+    if (!_numberRegex.hasMatch(val)) {
       return AppStrings.passwordMustContainNumber;
     }
 
-    if (!RegExp(r'(?=.*[!@#$%^&*(),.?":{}|<>_])').hasMatch(val)) {
+    if (!_specialCharRegex.hasMatch(val)) {
       return AppStrings.passwordMustContainSpecialCharacter;
     }
 
@@ -181,13 +190,10 @@ class Validator {
     if (val == null || val.trim().isEmpty) {
       return AppStrings.phoneNumberCannotBeEmpty;
     }
-
     final phone = val.trim();
-    final isValid = RegExp(r'^\+?\d+$').hasMatch(phone);
-    if (!isValid) {
+    if (!_phoneRegex.hasMatch(phone)) {
       return AppStrings.enterAValidPhoneNumber;
     }
-
     return null;
   }
 

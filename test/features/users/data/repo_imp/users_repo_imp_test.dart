@@ -5,14 +5,14 @@ import 'package:fruit_hub_dashboard/core/enums/user_search_by.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/users/data/data_sources/remote/users_remote_data_source.dart';
+import 'package:fruit_hub_dashboard/features/users/data/models/app_user_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/cart_item_model.dart';
-import 'package:fruit_hub_dashboard/features/users/data/models/dashboard_user_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/notification_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/send_notification_input_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/users_page_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/models/users_stats_model.dart';
 import 'package:fruit_hub_dashboard/features/users/data/repo_imp/users_repo_imp.dart';
-import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/app_user_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/entities/notification_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/entities/send_notification_input_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/entities/users_page_entity.dart';
@@ -30,7 +30,7 @@ void main() {
 
   const tFailure = ServerFailure(error: 'Network connection failure');
 
-  final tUserModel = DashboardUserModel(
+  final tUserModel = AppUserModel(
     uid: 'user_1',
     name: 'Ahmed Mohamed',
     email: 'ahmed@test.com',
@@ -270,7 +270,7 @@ void main() {
     });
 
     group('searchUsers', () {
-      test('should return NetworkSuccess with mapped DashboardUserEntities when remote returns NetworkSuccess', () async {
+      test('should return NetworkSuccess with mapped AppUserEntities when remote returns NetworkSuccess', () async {
         // Arrange
         when(
           () => mockRemoteDataSource.searchUsers(
@@ -288,9 +288,9 @@ void main() {
         );
 
         // Assert
-        expect(result, isA<NetworkSuccess<List<DashboardUserEntity>>>());
+        expect(result, isA<NetworkSuccess<List<AppUserEntity>>>());
         final list =
-            (result as NetworkSuccess<List<DashboardUserEntity>>).data!;
+            (result as NetworkSuccess<List<AppUserEntity>>).data!;
         expect(list.length, 1);
         expect(list.first.uid, 'user_1');
         expect(list.first.name, 'Ahmed Mohamed');
@@ -323,9 +323,9 @@ void main() {
           );
 
           // Assert
-          expect(result, isA<NetworkSuccess<List<DashboardUserEntity>>>());
+          expect(result, isA<NetworkSuccess<List<AppUserEntity>>>());
           final list =
-              (result as NetworkSuccess<List<DashboardUserEntity>>).data!;
+              (result as NetworkSuccess<List<AppUserEntity>>).data!;
           expect(list, isEmpty);
         },
       );
@@ -347,9 +347,9 @@ void main() {
         );
 
         // Assert
-        expect(result, isA<NetworkFailure<List<DashboardUserEntity>>>());
+        expect(result, isA<NetworkFailure<List<AppUserEntity>>>());
         final failure =
-            (result as NetworkFailure<List<DashboardUserEntity>>).failure;
+            (result as NetworkFailure<List<AppUserEntity>>).failure;
         expect(failure.error, tFailure.error);
       });
     });

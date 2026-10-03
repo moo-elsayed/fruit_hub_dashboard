@@ -307,7 +307,7 @@ void main() {
       expect(doc.data()!['uid'], tUid);
     });
 
-    test('should return NetworkFailure with userNotFound when userCredential.user is null', () async {
+    test('should return NetworkFailure with unexpectedError when userCredential.user is null', () async {
       // Arrange
       when(
         () => mockFirebaseAuth.signInWithEmailAndPassword(
@@ -326,7 +326,7 @@ void main() {
       // Assert
       expect(result, isA<NetworkFailure<UserModel>>());
       final failure = (result as NetworkFailure<UserModel>).failure;
-      expect(failure.error, AppStrings.userNotFound);
+      expect(failure.error, AppStrings.unexpectedError);
     });
 
     test('should sign out and return NetworkFailure with pleaseVerifyYourEmail when email is not verified', () async {

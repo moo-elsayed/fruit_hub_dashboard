@@ -6,7 +6,7 @@ import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 
-import '../../domain/entities/dashboard_user_entity.dart';
+import '../../domain/entities/app_user_entity.dart';
 import '../managers/user_notifications_cubit/user_notifications_cubit.dart';
 import '../widgets/send_notification_bottom_sheet.dart';
 import '../widgets/user_cart_items_list.dart';
@@ -18,7 +18,7 @@ import '../widgets/user_profile_header.dart';
 class UserDetailsView extends StatefulWidget {
   const UserDetailsView({super.key, required this.user});
 
-  final DashboardUserEntity user;
+  final AppUserEntity user;
 
   @override
   State<UserDetailsView> createState() => _UserDetailsViewState();
@@ -132,6 +132,9 @@ class _UserDetailsViewState extends State<UserDetailsView>
                       tabController: _tabController,
                       cartItemsCount: widget.user.cartItems.length,
                       favoritesCount: widget.user.favoriteIds.length,
+                      notificationsCount: state is UserNotificationsSuccess
+                          ? notificationsCount
+                          : null,
                     ),
                   ],
                   body: TabBarView(

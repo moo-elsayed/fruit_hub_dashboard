@@ -1,7 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
-import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/entities/user_entity.dart';
 import 'package:fruit_hub_dashboard/features/auth/domain/use_cases/google_sign_in_use_case.dart';
@@ -40,22 +39,14 @@ void main() {
     mockUseCase = MockGoogleSignInUseCase();
     mockUserInfoCubit = MockUserInfoCubit();
 
-    if (getIt.isRegistered<UserInfoCubit>()) {
-      getIt.unregister<UserInfoCubit>();
-    }
-    getIt.registerSingleton<UserInfoCubit>(mockUserInfoCubit);
-
     when(() => mockUserInfoCubit.saveUserLocally(any()))
         .thenAnswer((_) async {});
 
-    sut = SocialSignInCubit(mockUseCase);
+    sut = SocialSignInCubit(mockUseCase, mockUserInfoCubit);
   });
 
   tearDown(() {
     sut.close();
-    if (getIt.isRegistered<UserInfoCubit>()) {
-      getIt.unregister<UserInfoCubit>();
-    }
   });
 
   test('initial state should be SocialSignInInitial', () {

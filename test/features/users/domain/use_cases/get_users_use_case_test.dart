@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/core/enums/user_filter_type.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
-import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/app_user_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/entities/users_page_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/repo/users_repo.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/use_cases/get_users_use_case.dart';
@@ -16,7 +16,7 @@ void main() {
 
   const tUsersPage = UsersPageEntity(
     users: [
-      DashboardUserEntity(
+      AppUserEntity(
         uid: 'user_1',
         name: 'Mahmoud Ahmed',
         email: 'mahmoud@example.com',

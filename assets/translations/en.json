@@ -478,6 +478,7 @@
   "free_shipping_threshold_help": "Set to 0 to disable free shipping",
   "success": "Success",
   "settings_updated_successfully": "Settings updated successfully",
+  "no_changes_to_save": "No changes to save",
   "search_users": "Search users by name, email, phone...",
   "total_users": "Total Users",
   "verified_users": "Verified",
@@ -536,5 +537,6 @@
   "status_pending": "Pending",
   "status_processing": "Processing",
   "status_shipped": "Shipped",
-  "status_delivered": "Delivered"
+  "status_delivered": "Delivered",
+  "remove_photo": "Remove Photo"
 }

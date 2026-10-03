@@ -4,11 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
+import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_broadcast_notification_entity.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_config_entity.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
-import 'package:gap/gap.dart';
+import 'package:toastification/toastification.dart';
 
 import 'settings_currency_field.dart';
 import 'settings_save_button.dart';
@@ -79,6 +80,11 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
       if (!notify &&
           cost == _configNotifier.value.shippingCost &&
           threshold == _configNotifier.value.freeShippingThreshold) {
+        AppToast.show(
+          context: context,
+          title: AppStrings.noChangesToSave,
+          type: ToastificationType.info,
+        );
         return;
       }
 
@@ -145,13 +151,13 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16.h,
           children: [
             SettingsCurrencyField(
               title: AppStrings.deliveryFees,
               controller: _shippingCostController,
               hint: _configNotifier.value.shippingCost.toStringAsFixed(0),
             ),
-            Gap(16.h),
             SettingsCurrencyField(
               title: AppStrings.freeShippingThreshold,
               subtitle: AppStrings.freeShippingThresholdHelp,
@@ -160,13 +166,11 @@ class _DeliveryFeesContainerState extends State<DeliveryFeesContainer> {
                 0,
               ),
             ),
-            Gap(16.h),
             ShippingNotificationToggleTile(
               notifyNotifier: _notifyUsersNotifier,
               costController: _shippingCostController,
               thresholdController: _thresholdController,
             ),
-            Gap(20.h),
             SettingsSaveButton(onSave: _onSave, onSuccess: _onSuccess),
           ],
         ),

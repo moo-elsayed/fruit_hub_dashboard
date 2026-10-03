@@ -104,13 +104,13 @@ class ShippingNotificationToggleTile extends StatelessWidget {
                   spacing: 6.h,
                   children: [
                     Row(
+                      spacing: 6.w,
                       children: [
                         Icon(
                           Icons.visibility_outlined,
                           size: 14.sp,
                           color: context.colors.primary,
                         ),
-                        Gap(6.w),
                         Text(
                           AppStrings.notificationPreview,
                           style: AppTextStyles.font12SemiBold.copyWith(
@@ -132,7 +132,7 @@ class ShippingNotificationToggleTile extends StatelessWidget {
                       ),
                     ),
                     Divider(
-                      height: 12.h,
+                      height: 0.h,
                       color: context.colors.border.withValues(alpha: 0.5),
                     ),
                     Text(

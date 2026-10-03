@@ -5,15 +5,17 @@ class CustomBottomSheetSelectionItem<T> {
     required this.title,
     this.subtitle,
     this.icon,
+    this.trailing,
     this.value,
-    this.isSelected = false,
+    this.isSelected,
     required this.onTap,
   });
 
   final String title;
   final String? subtitle;
   final IconData? icon;
+  final Widget? trailing;
   final T? value;
-  final bool isSelected;
+  final bool? isSelected;
   final VoidCallback onTap;
 }

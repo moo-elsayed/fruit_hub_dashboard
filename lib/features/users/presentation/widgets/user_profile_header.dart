@@ -5,7 +5,7 @@ import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/user_avatar_widget.dart';
 
-import '../../domain/entities/dashboard_user_entity.dart';
+import '../../domain/entities/app_user_entity.dart';
 
 class UserProfileHeader extends StatelessWidget {
   const UserProfileHeader({
@@ -14,7 +14,7 @@ class UserProfileHeader extends StatelessWidget {
     required this.onSendNotification,
   });
 
-  final DashboardUserEntity user;
+  final AppUserEntity user;
   final VoidCallback onSendNotification;
 
   @override

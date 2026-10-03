@@ -28,17 +28,17 @@ class CustomConfirmationDialog extends StatelessWidget {
   final bool showCancelButton;
   final String? subtitle;
   final String? textCancelButton;
-  final void Function()? onCancel;
-  final void Function() onConfirm;
+  final VoidCallback? onCancel;
+  final VoidCallback onConfirm;
 
   static Future<T?> show<T>({
     required BuildContext context,
     required String title,
     required String textConfirmButton,
-    required void Function() onConfirm,
+    required VoidCallback onConfirm,
     String? subtitle,
     String? textCancelButton,
-    void Function()? onCancel,
+    VoidCallback? onCancel,
     bool showCancelButton = true,
   }) => showCupertinoDialog<T>(
     context: context,

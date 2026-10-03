@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 import '../managers/user_notifications_cubit/user_notifications_cubit.dart';
+import 'user_details_tab_empty_state.dart';
 import 'user_notification_item.dart';
 import 'user_notifications_skeleton_list.dart';
+import 'users_status_view.dart';
 
 class UserNotificationsList extends StatelessWidget {
   const UserNotificationsList({super.key, this.physics});
@@ -27,43 +28,19 @@ class UserNotificationsList extends StatelessWidget {
           }
 
           if (state is UserNotificationsFailure) {
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.h),
-                child: Text(
-                  state.message,
-                  style: AppTextStyles.font13Regular.copyWith(
-                    color: context.colors.error,
-                  ),
-                ),
-              ),
+            return UsersStatusView(
+              icon: Icons.error_outline_rounded,
+              message: state.message,
+              color: context.colors.error,
             );
           }
 
           if (state is UserNotificationsSuccess) {
             final notifications = state.notifications;
             if (notifications.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 36.h),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 8.h,
-                    children: [
-                      Icon(
-                        Icons.notifications_none_rounded,
-                        size: 40.sp,
-                        color: context.colors.subText,
-                      ),
-                      Text(
-                        AppStrings.emptyNotifications,
-                        style: AppTextStyles.font14Medium.copyWith(
-                          color: context.colors.subText,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return UserDetailsTabEmptyState(
+                icon: Icons.notifications_none_rounded,
+                message: AppStrings.emptyNotifications,
               );
             }
 

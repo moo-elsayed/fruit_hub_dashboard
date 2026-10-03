@@ -10,11 +10,11 @@ class ReviewModel {
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) => ReviewModel(
-    name: json['name'],
-    description: json['description'],
-    rating: json['rating'],
-    date: json['date'],
-    image: json['image'],
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    rating: json['rating']?.toDouble() ?? 0.0,
+    date: json['date'] ?? '',
+    image: json['image'] ?? '',
   );
 
   factory ReviewModel.fromEntity(ReviewEntity reviewEntity) => ReviewModel(

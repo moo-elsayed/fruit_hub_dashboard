@@ -21,7 +21,7 @@ final class UsersSearchSuccess extends UsersSearchState {
     required super.searchBy,
   });
 
-  final List<DashboardUserEntity> users;
+  final List<AppUserEntity> users;
   final String query;
 }
 

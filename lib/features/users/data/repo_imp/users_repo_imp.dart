@@ -3,7 +3,7 @@ import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
 import '../../../../core/enums/user_filter_type.dart';
 import '../../../../core/enums/user_search_by.dart';
-import '../../domain/entities/dashboard_user_entity.dart';
+import '../../domain/entities/app_user_entity.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/entities/send_notification_input_entity.dart';
 import '../../domain/entities/users_page_entity.dart';
@@ -62,7 +62,7 @@ class UsersRepoImp implements UsersRepo {
   }
 
   @override
-  Future<NetworkResponse<List<DashboardUserEntity>>> searchUsers({
+  Future<NetworkResponse<List<AppUserEntity>>> searchUsers({
     required String query,
     required UserSearchBy searchBy,
     int limit = 30,

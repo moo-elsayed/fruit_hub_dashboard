@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
@@ -25,15 +26,20 @@ extension Navigation on BuildContext {
   ).pushNamedAndRemoveUntil(routeName, predicate, arguments: arguments);
 
   void pop<T extends Object?>([T? result]) => Navigator.of(this).pop(result);
+
+  void popUntil(RoutePredicate predicate) =>
+      Navigator.of(this).popUntil(predicate);
+
+  bool canPop() => Navigator.of(this).canPop();
 }
 
 extension AppToastColorExtension on ToastificationType {
   Color getColor(BuildContext context) => switch (this) {
     ToastificationType.success => context.colors.success,
-    ToastificationType.info => context.colors.primary,
+    ToastificationType.info => context.colors.info,
     ToastificationType.warning => context.colors.warning,
     ToastificationType.error => context.colors.error,
-    _ => context.colors.primary,
+    _ => context.colors.info,
   };
 }
 
@@ -86,4 +92,70 @@ extension NumExtension on num {
 
 extension OrderStatusFromStringExtension on String {
   OrderStatus get toOrderStatus => OrderStatus.fromString(this);
+}
+
+extension DateTimeExtension on DateTime {
+  String toLocalizedDate(BuildContext context) {
+    try {
+      final locale = Localizations.maybeLocaleOf(context)?.languageCode ?? 'en';
+      return DateFormat.yMMMMd(locale).format(this);
+    } catch (_) {
+      return toFormattedDate();
+    }
+  }
+
+  String toFormattedDate({String pattern = 'dd/MM/yyyy'}) {
+    try {
+      return DateFormat(pattern).format(this);
+    } catch (_) {
+      return '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/$year';
+    }
+  }
+
+  String toTimeAgo(BuildContext context) {
+    final difference = DateTime.now().difference(this);
+
+    if (difference.inMinutes < 1) {
+      return AppStrings.justNow;
+    } else if (difference.inHours < 1) {
+      return AppStrings.minutesAgo(difference.inMinutes);
+    } else if (difference.inDays < 1) {
+      return AppStrings.hoursAgo(difference.inHours);
+    } else if (difference.inDays < 7) {
+      return AppStrings.daysAgo(difference.inDays);
+    } else {
+      return toFormattedDate(pattern: 'dd/MM/yyyy');
+    }
+  }
+}
+
+extension NullableDateTimeExtension on DateTime? {
+  String toTimeAgo(BuildContext context) =>
+      this == null ? '' : this!.toTimeAgo(context);
+}
+
+extension StringDateExtension on String {
+  DateTime? get toDateTime => DateTime.tryParse(this);
+
+  String toLocalizedDate(BuildContext context) {
+    if (isEmpty) return '';
+    final parsed = toDateTime;
+    if (parsed == null) return this;
+    return parsed.toLocalizedDate(context);
+  }
+
+  String toFormattedDate({String pattern = 'dd/MM/yyyy'}) {
+    if (isEmpty) return '';
+    final parsed = toDateTime;
+    if (parsed == null) return length > 10 ? substring(0, 10) : this;
+    return parsed.toFormattedDate(pattern: pattern);
+  }
+}
+
+extension ThemeModeLabel on ThemeMode {
+  String get label => switch (this) {
+    ThemeMode.light => AppStrings.light,
+    ThemeMode.dark => AppStrings.dark,
+    ThemeMode.system => AppStrings.system,
+  };
 }

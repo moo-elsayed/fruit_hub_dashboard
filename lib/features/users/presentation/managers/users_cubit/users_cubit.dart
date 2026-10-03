@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
 import '../../../../../core/enums/user_filter_type.dart';
-import '../../../domain/entities/dashboard_user_entity.dart';
+import '../../../domain/entities/app_user_entity.dart';
 import '../../../domain/entities/users_stats_entity.dart';
 import '../../../domain/use_cases/get_users_stats_use_case.dart';
 import '../../../domain/use_cases/get_users_use_case.dart';
@@ -20,7 +20,7 @@ class UsersCubit extends Cubit<UsersState> {
   final GetUsersStatsUseCase _getUsersStatsUseCase;
 
   static const int _pageSize = 15;
-  List<DashboardUserEntity> _users = [];
+  List<AppUserEntity> _users = [];
   UserFilterType _activeFilter = UserFilterType.all;
 
   DocumentSnapshot? _lastDocument;

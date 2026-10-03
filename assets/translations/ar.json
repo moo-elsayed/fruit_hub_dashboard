@@ -478,6 +478,7 @@
   "free_shipping_threshold_help": "ضع 0 لتعطيل الشحن المجاني",
   "success": "تم بنجاح",
   "settings_updated_successfully": "تم تحديث الإعدادات بنجاح",
+  "no_changes_to_save": "لم يتم إجراء أي تعديلات لحفظها",
   "search_users": "البحث عن المستخدمين بالاسم، البريد، الهاتف...",
   "total_users": "إجمالي المستخدمين",
   "verified_users": "تم التحقق",
@@ -536,5 +537,6 @@
   "status_pending": "معلق",
   "status_processing": "قيد التجهيز",
   "status_shipped": "تم الشحن",
-  "status_delivered": "مكتمل"
+  "status_delivered": "مكتمل",
+  "remove_photo": "حذف الصورة"
 }

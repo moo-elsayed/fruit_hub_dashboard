@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 import 'cart_item_entity.dart';
 
-class DashboardUserEntity extends Equatable {
-  const DashboardUserEntity({
+class AppUserEntity extends Equatable {
+  const AppUserEntity({
     required this.uid,
     required this.name,
     required this.email,
@@ -34,7 +34,7 @@ class DashboardUserEntity extends Equatable {
   int get favoritesCount => favoriteIds.length;
   bool get hasActiveCart => cartItems.isNotEmpty;
 
-  DashboardUserEntity copyWith({
+  AppUserEntity copyWith({
     String? uid,
     String? name,
     String? email,
@@ -46,7 +46,7 @@ class DashboardUserEntity extends Equatable {
     DateTime? lastTokenUpdate,
     List<CartItemEntity>? cartItems,
     List<String>? favoriteIds,
-  }) => DashboardUserEntity(
+  }) => AppUserEntity(
     uid: uid ?? this.uid,
     name: name ?? this.name,
     email: email ?? this.email,

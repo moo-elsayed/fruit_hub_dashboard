@@ -409,6 +409,7 @@ void main() {
         expect(json['isRead'], isFalse);
         expect(json['source'], 'admin_dashboard');
         expect(json['pushSent'], isFalse);
+        expect(json['processed'], isFalse);
         expect(json['createdAt'], isA<FieldValue>());
       });
     });

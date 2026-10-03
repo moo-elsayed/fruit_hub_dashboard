@@ -51,6 +51,7 @@ class ShippingBroadcastNotificationModel {
     'isRead': false,
     'source': 'admin_dashboard',
     'pushSent': false,
+    'processed': false,
     'createdAt': FieldValue.serverTimestamp(),
   };
 

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/core/enums/user_search_by.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
-import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/app_user_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/domain/use_cases/search_users_use_case.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/managers/users_search_cubit/users_search_cubit.dart';
 import 'package:mocktail/mocktail.dart';
@@ -17,7 +17,7 @@ void main() {
   const tErrorMessage = 'Failed to search users';
   const tFailure = ServerFailure(error: tErrorMessage);
 
-  const tUser = DashboardUserEntity(
+  const tUser = AppUserEntity(
     uid: 'u_100',
     name: 'Karim',
     email: 'karim@test.com',
@@ -114,7 +114,7 @@ void main() {
       );
 
       blocTest<UsersSearchCubit, UsersSearchState>(
-        'should auto-detect email when query contains @ and switch searchBy to email',
+        'should search with currentSearchBy without auto-switching when query contains @',
         setUp: () {
           when(
             () => mockSearchUsersUseCase.call(
@@ -130,27 +130,27 @@ void main() {
           isA<UsersSearchLoading>().having(
             (s) => s.searchBy,
             'searchBy',
-            UserSearchBy.email,
+            UserSearchBy.name,
           ),
           isA<UsersSearchSuccess>()
               .having((s) => s.users, 'users', [tUser])
               .having((s) => s.query, 'query', 'karim@test.com')
-              .having((s) => s.searchBy, 'searchBy', UserSearchBy.email),
+              .having((s) => s.searchBy, 'searchBy', UserSearchBy.name),
         ],
         verify: (_) {
-          expect(sut.currentSearchBy, UserSearchBy.email);
+          expect(sut.currentSearchBy, UserSearchBy.name);
           expect(sut.currentQuery, 'karim@test.com');
           verify(
             () => mockSearchUsersUseCase.call(
               query: 'karim@test.com',
-              searchBy: UserSearchBy.email,
+              searchBy: UserSearchBy.name,
             ),
           ).called(1);
         },
       );
 
       blocTest<UsersSearchCubit, UsersSearchState>(
-        'should auto-detect phone when query matches phone regex and switch searchBy to phone',
+        'should search with currentSearchBy without auto-switching when query matches phone digits',
         setUp: () {
           when(
             () => mockSearchUsersUseCase.call(
@@ -166,50 +166,23 @@ void main() {
           isA<UsersSearchLoading>().having(
             (s) => s.searchBy,
             'searchBy',
-            UserSearchBy.phone,
+            UserSearchBy.name,
           ),
           isA<UsersSearchSuccess>()
               .having((s) => s.users, 'users', [tUser])
               .having((s) => s.query, 'query', '01012345678')
-              .having((s) => s.searchBy, 'searchBy', UserSearchBy.phone),
+              .having((s) => s.searchBy, 'searchBy', UserSearchBy.name),
         ],
         verify: (_) {
-          expect(sut.currentSearchBy, UserSearchBy.phone);
+          expect(sut.currentSearchBy, UserSearchBy.name);
           expect(sut.currentQuery, '01012345678');
           verify(
             () => mockSearchUsersUseCase.call(
               query: '01012345678',
-              searchBy: UserSearchBy.phone,
+              searchBy: UserSearchBy.name,
             ),
           ).called(1);
         },
-      );
-
-      blocTest<UsersSearchCubit, UsersSearchState>(
-        'should auto-detect phone with leading plus symbol (+201012345678)',
-        setUp: () {
-          when(
-            () => mockSearchUsersUseCase.call(
-              query: any(named: 'query'),
-              searchBy: any(named: 'searchBy'),
-              limit: any(named: 'limit'),
-            ),
-          ).thenAnswer((_) async => const NetworkSuccess([tUser]));
-        },
-        build: () => sut,
-        act: (cubit) => cubit.searchUsers('+201012345678'),
-        expect: () => [
-          isA<UsersSearchLoading>().having(
-            (s) => s.searchBy,
-            'searchBy',
-            UserSearchBy.phone,
-          ),
-          isA<UsersSearchSuccess>().having(
-            (s) => s.searchBy,
-            'searchBy',
-            UserSearchBy.phone,
-          ),
-        ],
       );
 
       blocTest<UsersSearchCubit, UsersSearchState>(
@@ -328,9 +301,7 @@ void main() {
         },
         build: () => sut,
         act: (cubit) async {
-          await cubit.searchUsers(
-            'karim@test.com',
-          ); // auto-sets searchBy to email
+          await cubit.searchUsers('karim');
           cubit.clearSearch();
         },
         expect: () => [
@@ -339,12 +310,12 @@ void main() {
           isA<UsersSearchInitial>().having(
             (s) => s.searchBy,
             'searchBy',
-            UserSearchBy.email,
+            UserSearchBy.name,
           ),
         ],
         verify: (_) {
           expect(sut.currentQuery, isEmpty);
-          expect(sut.currentSearchBy, UserSearchBy.email);
+          expect(sut.currentSearchBy, UserSearchBy.name);
         },
       );
     });

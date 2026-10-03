@@ -8,6 +8,7 @@ import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_error_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/domain/entities/shipping_config_entity.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/managers/settings_cubit/settings_cubit.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/widgets/delivery_fees_container.dart';
@@ -41,6 +42,7 @@ class SettingsView extends StatelessWidget {
               if (state is FetchingShippingConfigSuccess) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 12.h,
                   children: [
                     Text(
                       AppStrings.generalConfiguration,
@@ -48,19 +50,17 @@ class SettingsView extends StatelessWidget {
                         color: context.colors.mainText,
                       ),
                     ),
-                    Gap(12.h),
                     DeliveryFeesContainer(config: state.shippingConfigEntity)
                         .animate(delay: const Duration(milliseconds: 50))
                         .slideY(begin: 0.15, duration: 300.ms)
                         .fadeIn(duration: 300.ms),
-                    Gap(24.h),
+                    const Gap(0),
                     Text(
                       AppStrings.generalSettings,
                       style: AppTextStyles.font18Bold.copyWith(
                         color: context.colors.mainText,
                       ),
                     ),
-                    Gap(12.h),
                     const SettingsPreferencesCard()
                         .animate(delay: const Duration(milliseconds: 100))
                         .slideY(begin: 0.15, duration: 300.ms)
@@ -69,20 +69,17 @@ class SettingsView extends StatelessWidget {
                 );
               }
               if (state is FetchingShippingConfigFailure) {
-                return Center(
-                  child: Text(
-                    state.error,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.font14Regular.copyWith(
-                      color: context.colors.error,
-                    ),
-                  ),
+                return CustomErrorView(
+                  message: state.error,
+                  onRetry: () =>
+                      context.read<SettingsCubit>().fetchShippingConfig(),
                 );
               }
               return Skeletonizer(
                 enabled: true,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 12.h,
                   children: [
                     Text(
                       AppStrings.generalConfiguration,
@@ -90,16 +87,14 @@ class SettingsView extends StatelessWidget {
                         color: context.colors.mainText,
                       ),
                     ),
-                    Gap(12.h),
                     const DeliveryFeesContainer(config: ShippingConfigEntity()),
-                    Gap(24.h),
+                    const Gap(0),
                     Text(
                       AppStrings.generalSettings,
                       style: AppTextStyles.font18Bold.copyWith(
                         color: context.colors.mainText,
                       ),
                     ),
-                    Gap(12.h),
                     const SettingsPreferencesCard(),
                   ],
                 ),

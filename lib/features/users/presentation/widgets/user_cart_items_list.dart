@@ -6,6 +6,7 @@ import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 import '../../domain/entities/cart_item_entity.dart';
+import 'user_details_tab_empty_state.dart';
 
 class UserCartItemsList extends StatelessWidget {
   const UserCartItemsList({super.key, required this.cartItems, this.physics});
@@ -16,27 +17,9 @@ class UserCartItemsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (cartItems.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 36.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8.h,
-            children: [
-              Icon(
-                Icons.shopping_cart_outlined,
-                size: 40.sp,
-                color: context.colors.subText,
-              ),
-              Text(
-                AppStrings.emptyCart,
-                style: AppTextStyles.font14Medium.copyWith(
-                  color: context.colors.subText,
-                ),
-              ),
-            ],
-          ),
-        ),
+      return UserDetailsTabEmptyState(
+        icon: Icons.shopping_cart_outlined,
+        message: AppStrings.emptyCart,
       );
     }
 
@@ -78,7 +61,7 @@ class UserCartItemsList extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: context.colors.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(8.r),

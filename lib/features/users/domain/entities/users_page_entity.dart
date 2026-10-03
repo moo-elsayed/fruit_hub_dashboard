@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'dashboard_user_entity.dart';
+import 'app_user_entity.dart';
 
 class UsersPageEntity {
   const UsersPageEntity({
@@ -9,7 +9,7 @@ class UsersPageEntity {
     this.lastDocument,
   });
 
-  final List<DashboardUserEntity> users;
+  final List<AppUserEntity> users;
   final bool hasMore;
   final DocumentSnapshot? lastDocument;
 }

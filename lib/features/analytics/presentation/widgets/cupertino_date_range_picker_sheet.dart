@@ -106,7 +106,6 @@ class _CupertinoDateRangePickerSheetState
         mainAxisSize: MainAxisSize.min,
         children: [
           const CustomBottomSheetHandle(),
-          SizedBox(height: 12.h),
           Text(
             AppStrings.selectDateRange,
             style: AppTextStyles.font16Bold.copyWith(color: colors.mainText),

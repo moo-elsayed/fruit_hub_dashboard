@@ -3,7 +3,7 @@ import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
 import '../../../../core/enums/user_filter_type.dart';
 import '../../../../core/enums/user_search_by.dart';
-import '../entities/dashboard_user_entity.dart';
+import '../entities/app_user_entity.dart';
 import '../entities/notification_entity.dart';
 import '../entities/send_notification_input_entity.dart';
 import '../entities/users_page_entity.dart';
@@ -16,7 +16,7 @@ abstract class UsersRepo {
     UserFilterType filter = UserFilterType.all,
   });
   Future<NetworkResponse<UsersStatsEntity>> getUsersStats();
-  Future<NetworkResponse<List<DashboardUserEntity>>> searchUsers({
+  Future<NetworkResponse<List<AppUserEntity>>> searchUsers({
     required String query,
     required UserSearchBy searchBy,
     int limit = 30,

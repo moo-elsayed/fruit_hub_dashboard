@@ -6,7 +6,7 @@ import 'package:fruit_hub_dashboard/core/widgets/full_screen_image_gallery.dart'
 import 'package:fruit_hub_dashboard/features/products/domain/entities/fruit_entity.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/views/products_view.dart';
 import 'package:fruit_hub_dashboard/features/settings/presentation/views/settings_view.dart';
-import 'package:fruit_hub_dashboard/features/users/domain/entities/dashboard_user_entity.dart';
+import 'package:fruit_hub_dashboard/features/users/domain/entities/app_user_entity.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/user_details_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_search_view.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/views/users_view.dart';
@@ -57,7 +57,7 @@ class AppRouter {
       case Routes.usersSearchView:
         return _route(const UsersSearchView());
       case Routes.userDetailsView:
-        final user = _currentSettings!.arguments as DashboardUserEntity;
+        final user = _currentSettings!.arguments as AppUserEntity;
         return _route(UserDetailsView(user: user));
       case Routes.settingsView:
         return _route(const SettingsView());

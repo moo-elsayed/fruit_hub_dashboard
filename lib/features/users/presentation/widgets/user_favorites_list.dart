@@ -5,6 +5,8 @@ import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
+import 'user_details_tab_empty_state.dart';
+
 class UserFavoritesList extends StatelessWidget {
   const UserFavoritesList({super.key, required this.favoriteIds, this.physics});
 
@@ -14,27 +16,9 @@ class UserFavoritesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (favoriteIds.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 36.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8.h,
-            children: [
-              Icon(
-                Icons.favorite_border_rounded,
-                size: 40.sp,
-                color: context.colors.subText,
-              ),
-              Text(
-                AppStrings.emptyFavorites,
-                style: AppTextStyles.font14Medium.copyWith(
-                  color: context.colors.subText,
-                ),
-              ),
-            ],
-          ),
-        ),
+      return UserDetailsTabEmptyState(
+        icon: Icons.favorite_border_rounded,
+        message: AppStrings.emptyFavorites,
       );
     }
 

@@ -460,6 +460,7 @@ abstract class AppStrings {
   static String get success => 'success'.tr();
   static String get settingsUpdatedSuccessfully =>
       'settings_updated_successfully'.tr();
+  static String get noChangesToSave => 'no_changes_to_save'.tr();
   static String get chooseImageSource => 'choose_image_source'.tr();
   static String get camera => 'camera'.tr();
   static String get gallery => 'gallery'.tr();
@@ -543,4 +544,14 @@ abstract class AppStrings {
   static String get statusProcessing => 'status_processing'.tr();
   static String get statusShipped => 'status_shipped'.tr();
   static String get statusDelivered => 'status_delivered'.tr();
+
+  // Time & Media Helpers
+  static String get removePhoto => 'remove_photo'.tr();
+  static String get currentPasswordCannotBeEmpty =>
+      'current_password_cannot_be_empty'.tr();
+  static String get justNow => 'just_now'.tr();
+  static String minutesAgo(int minutes) =>
+      'minutes_ago'.tr(args: [minutes.toString()]);
+  static String hoursAgo(int hours) => 'hours_ago'.tr(args: [hours.toString()]);
+  static String daysAgo(int days) => 'days_ago'.tr(args: [days.toString()]);
 }

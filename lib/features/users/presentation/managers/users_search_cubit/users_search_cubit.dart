@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/core/enums/user_search_by.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 
-import '../../../domain/entities/dashboard_user_entity.dart';
+import '../../../domain/entities/app_user_entity.dart';
 import '../../../domain/use_cases/search_users_use_case.dart';
 
 part 'users_search_state.dart';
@@ -26,13 +26,6 @@ class UsersSearchCubit extends Cubit<UsersSearchState> {
     if (_currentQuery.isEmpty) {
       emit(UsersSearchInitial(searchBy: _currentSearchBy));
       return;
-    }
-
-    if (_currentQuery.contains('@') && _currentSearchBy != UserSearchBy.email) {
-      _currentSearchBy = UserSearchBy.email;
-    } else if (RegExp(r'^\+?[0-9]{5,}$').hasMatch(_currentQuery) &&
-        _currentSearchBy != UserSearchBy.phone) {
-      _currentSearchBy = UserSearchBy.phone;
     }
 
     emit(UsersSearchLoading(searchBy: _currentSearchBy));

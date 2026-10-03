@@ -6,12 +6,12 @@ import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/user_avatar_widget.dart';
 
-import '../../domain/entities/dashboard_user_entity.dart';
+import '../../domain/entities/app_user_entity.dart';
 
 class UserCardItem extends StatelessWidget {
   const UserCardItem({super.key, required this.user, required this.onTap});
 
-  final DashboardUserEntity user;
+  final AppUserEntity user;
   final VoidCallback onTap;
 
   @override
@@ -30,7 +30,7 @@ class UserCardItem extends StatelessWidget {
         child: Row(
           spacing: 12.w,
           children: [
-            UserAvatarWidget(imagePath: user.image, name: user.name, size: 52),
+            UserAvatarWidget(imagePath: user.image, size: 52),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -21,6 +21,7 @@ import '../../../../core/widgets/text_form_field_helper.dart';
 import '../args/login_args.dart';
 import '../managers/signin_cubit/sign_in_cubit.dart';
 import '../managers/social_sign_in_cubit/social_sign_in_cubit.dart';
+import '../widgets/auth_header_section.dart';
 import '../widgets/auth_redirect_text.dart';
 import '../widgets/forget_password.dart';
 import '../widgets/social_auth_section.dart';
@@ -97,58 +98,43 @@ class _LoginViewState extends State<LoginView> {
                 Gap(16.h),
                 FadeInDown(
                   duration: const Duration(milliseconds: 500),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 72.r,
-                        height: 72.r,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.colors.surface,
-                          border: Border.all(
+                  child: AuthHeaderSection(
+                    customBadge: Container(
+                      width: 72.r,
+                      height: 72.r,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: context.colors.surface,
+                        border: Border.all(
+                          color: context.colors.primary.withValues(
+                            alpha: 0.3,
+                          ),
+                          width: 2.w,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
                             color: context.colors.primary.withValues(
-                              alpha: 0.3,
+                              alpha: 0.1,
                             ),
-                            width: 2.w,
+                            blurRadius: 16.r,
+                            offset: const Offset(0, 4),
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: context.colors.primary.withValues(
-                                alpha: 0.1,
-                              ),
-                              blurRadius: 16.r,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: Transform.scale(
-                            scale: 1.6,
-                            child: Image.asset(
-                              context.isDarkMode
-                                  ? AppAssets.imagesSplashAndroid12Dark
-                                  : AppAssets.imagesSplashAndroid12,
-                              fit: BoxFit.contain,
-                            ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: Transform.scale(
+                          scale: 1.6,
+                          child: Image.asset(
+                            context.isDarkMode
+                                ? AppAssets.imagesSplashAndroid12Dark
+                                : AppAssets.imagesSplashAndroid12,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
-                      Gap(16.h),
-                      Text(
-                        AppStrings.welcome,
-                        style: AppTextStyles.font24Bold.copyWith(
-                          color: context.colors.mainText,
-                        ),
-                      ),
-                      Gap(6.h),
-                      Text(
-                        AppStrings.appTagline,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.font14Regular.copyWith(
-                          color: context.colors.subText,
-                        ),
-                      ),
-                    ],
+                    ),
+                    title: AppStrings.welcome,
+                    subtitle: AppStrings.appTagline,
                   ),
                 ),
                 Gap(32.h),
