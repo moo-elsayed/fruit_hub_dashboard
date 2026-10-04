@@ -106,9 +106,7 @@ class _LoginViewState extends State<LoginView> {
                         shape: BoxShape.circle,
                         color: context.colors.surface,
                         border: Border.all(
-                          color: context.colors.primary.withValues(
-                            alpha: 0.3,
-                          ),
+                          color: context.colors.primary.withValues(alpha: 0.3),
                           width: 2.w,
                         ),
                         boxShadow: [

@@ -42,38 +42,34 @@ void main() {
 
         // Badges
         expect(find.byIcon(Icons.shopping_cart_outlined), findsOneWidget);
-        expect(
-          find.text('3 ${AppStrings.itemsCount}'),
-          findsOneWidget,
-        );
+        expect(find.text('3 ${AppStrings.itemsCount}'), findsOneWidget);
         expect(find.byIcon(Icons.favorite_border_rounded), findsOneWidget);
         expect(find.text('2'), findsOneWidget);
         expect(find.text('AR'), findsOneWidget);
       },
     );
 
-    testWidgets(
-      'should display email as title when name is empty',
-      (WidgetTester tester) async {
-        // Arrange
-        const emptyNameUser = AppUserEntity(
-          uid: 'user_2',
-          name: '',
-          email: 'no_name@example.com',
-        );
+    testWidgets('should display email as title when name is empty', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      const emptyNameUser = AppUserEntity(
+        uid: 'user_2',
+        name: '',
+        email: 'no_name@example.com',
+      );
 
-        // Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: UserCardItem(user: emptyNameUser, onTap: () {}),
-          ),
-        );
+      // Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: UserCardItem(user: emptyNameUser, onTap: () {}),
+        ),
+      );
 
-        // Assert
-        expect(find.text(emptyNameUser.email), findsOneWidget);
-        expect(find.text(emptyNameUser.name), findsNothing);
-      },
-    );
+      // Assert
+      expect(find.text(emptyNameUser.email), findsOneWidget);
+      expect(find.text(emptyNameUser.name), findsNothing);
+    });
 
     testWidgets(
       'should not display verified icon or optional badges when not applicable',
@@ -103,24 +99,23 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should trigger onTap callback when user card is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        bool wasTapped = false;
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: UserCardItem(user: tUser, onTap: () => wasTapped = true),
-          ),
-        );
+    testWidgets('should trigger onTap callback when user card is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      bool wasTapped = false;
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: UserCardItem(user: tUser, onTap: () => wasTapped = true),
+        ),
+      );
 
-        // Act
-        await tester.tap(find.byType(UserCardItem));
-        await tester.pump();
+      // Act
+      await tester.tap(find.byType(UserCardItem));
+      await tester.pump();
 
-        // Assert
-        expect(wasTapped, isTrue);
-      },
-    );
+      // Assert
+      expect(wasTapped, isTrue);
+    });
   });
 }

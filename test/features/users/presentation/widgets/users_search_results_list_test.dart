@@ -25,22 +25,21 @@ void main() {
       isVerified: false,
     );
 
-    testWidgets(
-      'should render UserCardItem for each user in the list',
-      (WidgetTester tester) async {
-        // Arrange & Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: const UsersSearchResultsList(users: [tUser1, tUser2]),
-          ),
-        );
+    testWidgets('should render UserCardItem for each user in the list', (
+      WidgetTester tester,
+    ) async {
+      // Arrange & Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: const UsersSearchResultsList(users: [tUser1, tUser2]),
+        ),
+      );
 
-        // Assert
-        expect(find.byType(UserCardItem), findsNWidgets(2));
-        expect(find.text(tUser1.name), findsOneWidget);
-        expect(find.text(tUser2.name), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.byType(UserCardItem), findsNWidgets(2));
+      expect(find.text(tUser1.name), findsOneWidget);
+      expect(find.text(tUser2.name), findsOneWidget);
+    });
 
     testWidgets(
       'should navigate to userDetailsView with selected user on tap',

@@ -44,28 +44,30 @@ void main() {
         expect(find.text(tUserVerified.email), findsOneWidget);
         expect(find.text(tUserVerified.phone), findsOneWidget);
         expect(find.byIcon(Icons.verified_rounded), findsOneWidget);
-        expect(find.byIcon(Icons.notifications_active_outlined), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'should not render verified icon when user is not verified',
-      (WidgetTester tester) async {
-        // Arrange & Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: UserProfileHeader(
-              user: tUserUnverified,
-              onSendNotification: () {},
-            ),
-          ),
+        expect(
+          find.byIcon(Icons.notifications_active_outlined),
+          findsOneWidget,
         );
-
-        // Assert
-        expect(find.text(tUserUnverified.name), findsOneWidget);
-        expect(find.byIcon(Icons.verified_rounded), findsNothing);
       },
     );
+
+    testWidgets('should not render verified icon when user is not verified', (
+      WidgetTester tester,
+    ) async {
+      // Arrange & Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: UserProfileHeader(
+            user: tUserUnverified,
+            onSendNotification: () {},
+          ),
+        ),
+      );
+
+      // Assert
+      expect(find.text(tUserUnverified.name), findsOneWidget);
+      expect(find.byIcon(Icons.verified_rounded), findsNothing);
+    });
 
     testWidgets(
       'should call onSendNotification when notification button is tapped',

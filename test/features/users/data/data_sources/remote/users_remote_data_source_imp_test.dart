@@ -617,8 +617,7 @@ void main() {
 
           // Assert
           expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-          final users =
-              (response as NetworkSuccess<List<AppUserModel>>).data!;
+          final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users, isEmpty);
         },
       );
@@ -634,8 +633,7 @@ void main() {
 
           // Assert
           expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-          final users =
-              (response as NetworkSuccess<List<AppUserModel>>).data!;
+          final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users, isEmpty);
         },
       );
@@ -651,8 +649,7 @@ void main() {
 
           // Assert
           expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-          final users =
-              (response as NetworkSuccess<List<AppUserModel>>).data!;
+          final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users.length, 1);
           expect(users.first.email, 'ahmed@test.com');
         },
@@ -667,8 +664,7 @@ void main() {
 
         // Assert
         expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-        final users =
-            (response as NetworkSuccess<List<AppUserModel>>).data!;
+        final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
         expect(users.length, 2);
         final phones = users.map((u) => u.phone).toList();
         expect(phones, containsAll(['01011112222', '01033334444']));
@@ -683,8 +679,7 @@ void main() {
 
         // Assert
         expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-        final users =
-            (response as NetworkSuccess<List<AppUserModel>>).data!;
+        final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
         expect(users.length, 1);
         expect(users.first.name, 'Mohamed Ali');
       });
@@ -699,8 +694,7 @@ void main() {
 
         // Assert
         expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-        final users =
-            (response as NetworkSuccess<List<AppUserModel>>).data!;
+        final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
         expect(users.length, 1);
       });
 
@@ -715,8 +709,7 @@ void main() {
 
           // Assert
           expect(response, isA<NetworkSuccess<List<AppUserModel>>>());
-          final users =
-              (response as NetworkSuccess<List<AppUserModel>>).data!;
+          final users = (response as NetworkSuccess<List<AppUserModel>>).data!;
           expect(users, isEmpty);
         },
       );

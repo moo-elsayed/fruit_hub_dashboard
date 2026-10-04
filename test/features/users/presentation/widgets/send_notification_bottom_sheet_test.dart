@@ -48,33 +48,32 @@ void main() {
   });
 
   group('SendNotificationBottomSheet Widget Tests', () {
-    testWidgets(
-      'should render all fields and send button',
-      (WidgetTester tester) async {
-        // Arrange & Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: BlocProvider<UserNotificationsCubit>.value(
-              value: mockCubit,
-              child: const Scaffold(
-                body: SendNotificationBottomSheet(
-                  userId: 'user_1',
-                  userName: 'Ahmed',
-                ),
+    testWidgets('should render all fields and send button', (
+      WidgetTester tester,
+    ) async {
+      // Arrange & Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: BlocProvider<UserNotificationsCubit>.value(
+            value: mockCubit,
+            child: const Scaffold(
+              body: SendNotificationBottomSheet(
+                userId: 'user_1',
+                userName: 'Ahmed',
               ),
             ),
           ),
-        );
+        ),
+      );
 
-        // Assert
-        expect(find.text(AppStrings.sendNotification), findsOneWidget);
-        expect(find.text(AppStrings.notificationTitleAr), findsOneWidget);
-        expect(find.text(AppStrings.notificationTitleEn), findsOneWidget);
-        expect(find.text(AppStrings.notificationBodyAr), findsOneWidget);
-        expect(find.text(AppStrings.notificationBodyEn), findsOneWidget);
-        expect(find.text(AppStrings.send), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.text(AppStrings.sendNotification), findsOneWidget);
+      expect(find.text(AppStrings.notificationTitleAr), findsOneWidget);
+      expect(find.text(AppStrings.notificationTitleEn), findsOneWidget);
+      expect(find.text(AppStrings.notificationBodyAr), findsOneWidget);
+      expect(find.text(AppStrings.notificationBodyEn), findsOneWidget);
+      expect(find.text(AppStrings.send), findsOneWidget);
+    });
 
     testWidgets(
       'should trigger validation errors when sending with empty fields',
@@ -150,35 +149,34 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should open bottom sheet via static show method',
-      (WidgetTester tester) async {
-        // Arrange
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: Scaffold(
-              body: Builder(
-                builder: (context) => ElevatedButton(
-                  onPressed: () => SendNotificationBottomSheet.show(
-                    context,
-                    userId: 'user_1',
-                    userName: 'Ahmed',
-                    cubit: mockCubit,
-                  ),
-                  child: const Text('Open BottomSheet'),
+    testWidgets('should open bottom sheet via static show method', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => SendNotificationBottomSheet.show(
+                  context,
+                  userId: 'user_1',
+                  userName: 'Ahmed',
+                  cubit: mockCubit,
                 ),
+                child: const Text('Open BottomSheet'),
               ),
             ),
           ),
-        );
+        ),
+      );
 
-        // Act
-        await tester.tap(find.text('Open BottomSheet'));
-        await tester.pumpAndSettle();
+      // Act
+      await tester.tap(find.text('Open BottomSheet'));
+      await tester.pumpAndSettle();
 
-        // Assert
-        expect(find.byType(SendNotificationBottomSheet), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.byType(SendNotificationBottomSheet), findsOneWidget);
+    });
   });
 }

@@ -5,9 +5,9 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/di.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/routing/routes.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/app_toasts.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_error_view.dart';
 import 'package:fruit_hub_dashboard/core/widgets/header_action_button.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -49,65 +49,58 @@ class _ProductsViewState extends State<ProductsView> {
             Gap(16.w),
           ],
         ),
-        body: Padding(
-          padding: EdgeInsets.only(top: 10.h),
-          child: BlocConsumer<ProductsCubit, ProductsState>(
-            listener: (context, state) {
-              if (state is ProductsSuccess) {
-                if (state.newItemAdded || state.itemUpdated) {
-                  context.pop();
-                  AppToast.show(
-                    context: context,
-                    title: state.newItemAdded
-                        ? AppStrings.productAdded
-                        : AppStrings.productUpdated,
-                    type: ToastificationType.success,
-                  );
-                } else if (state.itemRemoved) {
-                  AppToast.show(
-                    context: context,
-                    title: AppStrings.productRemoved,
-                    type: ToastificationType.success,
-                  );
-                }
-                _fruits = state.products;
-              }
-              if (state is ProductsFailure) {
+        body: BlocConsumer<ProductsCubit, ProductsState>(
+          listener: (context, state) {
+            if (state is ProductsSuccess) {
+              if (state.newItemAdded || state.itemUpdated) {
+                context.pop();
                 AppToast.show(
                   context: context,
-                  title: state.errorMessage,
-                  type: ToastificationType.error,
+                  title: state.newItemAdded
+                      ? AppStrings.productAdded
+                      : AppStrings.productUpdated,
+                  type: ToastificationType.success,
+                );
+              } else if (state.itemRemoved) {
+                AppToast.show(
+                  context: context,
+                  title: AppStrings.productRemoved,
+                  type: ToastificationType.success,
                 );
               }
-            },
-            builder: (context, state) {
-              if (state is ProductsSuccess) {
-                if (state.products.isEmpty) {
-                  return const ProductsEmptyState();
-                }
-                return ProductsGridView(fruits: state.products);
-              } else if (state is ProductsLoading &&
-                  !state.newItemAdded &&
-                  !state.itemUpdated &&
-                  !state.itemRemoved) {
-                return const Skeletonizer(
-                  enabled: true,
-                  child: ProductsGridView(itemCount: 4),
-                );
-              } else if (_fruits.isNotEmpty) {
-                return ProductsGridView(fruits: _fruits);
-              } else {
-                return Center(
-                  child: Text(
-                    AppStrings.somethingWentWrong,
-                    style: AppTextStyles.font14Regular.copyWith(
-                      color: context.colors.subText,
-                    ),
-                  ),
-                );
+              _fruits = state.products;
+            }
+            if (state is ProductsFailure) {
+              AppToast.show(
+                context: context,
+                title: state.errorMessage,
+                type: ToastificationType.error,
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is ProductsSuccess) {
+              if (state.products.isEmpty) {
+                return const ProductsEmptyState();
               }
-            },
-          ),
+              return ProductsGridView(fruits: state.products);
+            } else if (state is ProductsLoading &&
+                !state.newItemAdded &&
+                !state.itemUpdated &&
+                !state.itemRemoved) {
+              return const Skeletonizer(
+                enabled: true,
+                child: ProductsGridView(itemCount: 4),
+              );
+            } else if (_fruits.isNotEmpty) {
+              return ProductsGridView(fruits: _fruits);
+            } else {
+              return CustomErrorView(
+                message: AppStrings.somethingWentWrong,
+                onRetry: () => context.read<ProductsCubit>().getProducts(),
+              );
+            }
+          },
         ),
       ),
     ),

@@ -124,8 +124,7 @@ void main() {
 
         // Assert
         expect(result, isA<NetworkFailure<List<AppUserEntity>>>());
-        final failure =
-            (result as NetworkFailure<List<AppUserEntity>>).failure;
+        final failure = (result as NetworkFailure<List<AppUserEntity>>).failure;
         expect(failure.error, tFailure.error);
 
         verify(

@@ -12,8 +12,7 @@ class ProductsGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GridView.builder(
-    padding: EdgeInsets.symmetric(horizontal: 16.w),
-    physics: const BouncingScrollPhysics(),
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
     itemCount: itemCount ?? fruits?.length ?? 0,
     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,

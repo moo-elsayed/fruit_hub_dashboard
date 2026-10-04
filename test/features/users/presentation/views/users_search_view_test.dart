@@ -54,9 +54,12 @@ void main() {
     mockUsersSearchCubit = MockUsersSearchCubit();
     stateController = StreamController<UsersSearchState>.broadcast();
 
-    when(() => mockUsersSearchCubit.state).thenReturn(const UsersSearchInitial());
-    when(() => mockUsersSearchCubit.stream).thenAnswer((_) => stateController.stream);
-    when(() => mockUsersSearchCubit.currentSearchBy).thenReturn(UserSearchBy.name);
+    when(() => mockUsersSearchCubit.state)
+        .thenReturn(const UsersSearchInitial());
+    when(() => mockUsersSearchCubit.stream)
+        .thenAnswer((_) => stateController.stream);
+    when(() => mockUsersSearchCubit.currentSearchBy)
+        .thenReturn(UserSearchBy.name);
     when(
       () => mockUsersSearchCubit.searchUsers(
         any(),
@@ -101,9 +104,8 @@ void main() {
       'should render UsersStatusView with typeToSearchUsers message when state is UsersSearchInitial',
       (WidgetTester tester) async {
         // Arrange
-        when(() => mockUsersSearchCubit.state).thenReturn(
-          const UsersSearchInitial(),
-        );
+        when(() => mockUsersSearchCubit.state)
+            .thenReturn(const UsersSearchInitial());
 
         // Act
         await tester.pumpWidget(
@@ -128,9 +130,8 @@ void main() {
       'should render UsersSkeletonList when state is UsersSearchLoading',
       (WidgetTester tester) async {
         // Arrange
-        when(() => mockUsersSearchCubit.state).thenReturn(
-          const UsersSearchLoading(searchBy: UserSearchBy.name),
-        );
+        when(() => mockUsersSearchCubit.state)
+            .thenReturn(const UsersSearchLoading(searchBy: UserSearchBy.name));
 
         // Act
         await tester.pumpWidget(
@@ -215,38 +216,37 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should pop view when back arrow is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const UsersSearchView()),
-                ),
-                child: const Text('Open Search'),
+    testWidgets('should pop view when back arrow is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const UsersSearchView()),
               ),
+              child: const Text('Open Search'),
             ),
           ),
-        );
-        await tester.pumpAndSettle();
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        // Open UsersSearchView
-        await tester.tap(find.text('Open Search'));
-        await tester.pumpAndSettle();
-        expect(find.byType(UsersSearchView), findsOneWidget);
+      // Open UsersSearchView
+      await tester.tap(find.text('Open Search'));
+      await tester.pumpAndSettle();
+      expect(find.byType(UsersSearchView), findsOneWidget);
 
-        // Act: tap back arrow
-        await tester.tap(find.byType(CustomArrowBack));
-        await tester.pumpAndSettle();
+      // Act: tap back arrow
+      await tester.tap(find.byType(CustomArrowBack));
+      await tester.pumpAndSettle();
 
-        // Assert
-        expect(find.byType(UsersSearchView), findsNothing);
-        expect(find.text('Open Search'), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.byType(UsersSearchView), findsNothing);
+      expect(find.text('Open Search'), findsOneWidget);
+    });
 
     testWidgets(
       'should trigger searchUsers after debounce when query is typed',
@@ -272,25 +272,24 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should call clearSearch when query becomes empty',
-      (WidgetTester tester) async {
-        // Arrange
-        await tester.pumpWidget(
-          createWidgetForTesting(child: const UsersSearchView()),
-        );
-        await tester.pump(const Duration(milliseconds: 400));
+    testWidgets('should call clearSearch when query becomes empty', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        createWidgetForTesting(child: const UsersSearchView()),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
 
-        // Act: enter text first, then clear it
-        await tester.enterText(find.byType(SearchTextField), 'Kareem');
-        await tester.pump();
-        await tester.enterText(find.byType(SearchTextField), '');
-        await tester.pump();
+      // Act: enter text first, then clear it
+      await tester.enterText(find.byType(SearchTextField), 'Kareem');
+      await tester.pump();
+      await tester.enterText(find.byType(SearchTextField), '');
+      await tester.pump();
 
-        // Assert
-        verify(() => mockUsersSearchCubit.clearSearch()).called(1);
-      },
-    );
+      // Assert
+      verify(() => mockUsersSearchCubit.clearSearch()).called(1);
+    });
 
     testWidgets(
       'should call clearSearch when clear button in search field is tapped',
@@ -310,26 +309,27 @@ void main() {
         await tester.pump();
 
         // Assert
-        verify(() => mockUsersSearchCubit.clearSearch()).called(greaterThanOrEqualTo(1));
+        verify(() => mockUsersSearchCubit.clearSearch())
+            .called(greaterThanOrEqualTo(1));
       },
     );
 
-    testWidgets(
-      'should call setSearchBy when a filter chip is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        await tester.pumpWidget(
-          createWidgetForTesting(child: const UsersSearchView()),
-        );
-        await tester.pump(const Duration(milliseconds: 400));
+    testWidgets('should call setSearchBy when a filter chip is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        createWidgetForTesting(child: const UsersSearchView()),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
 
-        // Act
-        await tester.tap(find.text(AppStrings.searchByEmail));
-        await tester.pumpAndSettle();
+      // Act
+      await tester.tap(find.text(AppStrings.searchByEmail));
+      await tester.pumpAndSettle();
 
-        // Assert
-        verify(() => mockUsersSearchCubit.setSearchBy(UserSearchBy.email)).called(1);
-      },
-    );
+      // Assert
+      verify(() => mockUsersSearchCubit.setSearchBy(UserSearchBy.email))
+          .called(1);
+    });
   });
 }

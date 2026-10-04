@@ -15,6 +15,8 @@ class FullScreenGalleryImageItem extends StatelessWidget {
     if (path.startsWith('http')) {
       return CachedNetworkImage(
         imageUrl: path,
+        width: double.infinity,
+        height: double.infinity,
         fit: BoxFit.contain,
         placeholder: (context, url) => const Center(
           child: CupertinoActivityIndicator(color: AppPalette.white),
@@ -30,6 +32,8 @@ class FullScreenGalleryImageItem extends StatelessWidget {
     } else if (path.startsWith('assets/')) {
       return Image.asset(
         path,
+        width: double.infinity,
+        height: double.infinity,
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) => const Center(
           child: Icon(
@@ -42,6 +46,8 @@ class FullScreenGalleryImageItem extends StatelessWidget {
     } else {
       return Image.file(
         File(path),
+        width: double.infinity,
+        height: double.infinity,
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) => const Center(
           child: Icon(

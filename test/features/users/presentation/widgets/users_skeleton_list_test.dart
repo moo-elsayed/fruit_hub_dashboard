@@ -31,26 +31,22 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should apply custom padding when provided',
-      (WidgetTester tester) async {
-        // Arrange
-        const customPadding = EdgeInsets.all(20);
+    testWidgets('should apply custom padding when provided', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      const customPadding = EdgeInsets.all(20);
 
-        // Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: const UsersSkeletonList(
-              itemCount: 2,
-              padding: customPadding,
-            ),
-          ),
-        );
+      // Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: const UsersSkeletonList(itemCount: 2, padding: customPadding),
+        ),
+      );
 
-        // Assert
-        final listView = tester.widget<ListView>(find.byType(ListView));
-        expect(listView.padding, equals(customPadding));
-      },
-    );
+      // Assert
+      final listView = tester.widget<ListView>(find.byType(ListView));
+      expect(listView.padding, equals(customPadding));
+    });
   });
 }

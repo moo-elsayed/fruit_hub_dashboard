@@ -6,11 +6,9 @@ import 'package:fruit_hub_dashboard/core/services/local_storage/app_preferences_
 part 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
-  SplashCubit(
-    this._appPreferencesService, {
-    FirebaseAuth? firebaseAuth,
-  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        super(SplashInitial());
+  SplashCubit(this._appPreferencesService, {FirebaseAuth? firebaseAuth})
+    : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+      super(SplashInitial());
 
   final AppPreferencesService _appPreferencesService;
   final FirebaseAuth _firebaseAuth;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
-import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 
 class ProductBadge extends StatelessWidget {
@@ -19,22 +18,18 @@ class ProductBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final badge = Container(
-      width: 26.r,
-      height: 26.r,
+      width: 24.r,
+      height: 24.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: context.colors.surface.withValues(alpha: 0.75),
+        color: context.colors.surface.withValues(alpha: 0.85),
         border: Border.all(color: color.withValues(alpha: 0.35), width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: AppPalette.black.withValues(alpha: 0.06),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1)),
         ],
       ),
       child: Center(
-        child: Icon(icon, size: 14.sp, color: color),
+        child: Icon(icon, size: 13.sp, color: color),
       ),
     );
 
@@ -49,11 +44,11 @@ class ProductBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.colors.surface,
           borderRadius: BorderRadius.circular(8.r),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: AppPalette.black.withValues(alpha: 0.15),
+              color: Colors.black26,
               blurRadius: 8,
-              offset: const Offset(0, 3),
+              offset: Offset(0, 3),
             ),
           ],
         ),

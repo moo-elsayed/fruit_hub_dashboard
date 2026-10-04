@@ -69,39 +69,38 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should change tabController index when a tab is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: CustomScrollView(
-              slivers: [
-                UserDetailsTabBar(
-                  tabController: tabController,
-                  cartItemsCount: 1,
-                  favoritesCount: 2,
-                  notificationsCount: 3,
-                ),
-              ],
-            ),
+    testWidgets('should change tabController index when a tab is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: CustomScrollView(
+            slivers: [
+              UserDetailsTabBar(
+                tabController: tabController,
+                cartItemsCount: 1,
+                favoritesCount: 2,
+                notificationsCount: 3,
+              ),
+            ],
           ),
-        );
+        ),
+      );
 
-        // Act - Tap favorites tab
-        await tester.tap(find.text('${AppStrings.favorites} (2)'));
-        await tester.pumpAndSettle();
+      // Act - Tap favorites tab
+      await tester.tap(find.text('${AppStrings.favorites} (2)'));
+      await tester.pumpAndSettle();
 
-        // Assert
-        expect(tabController.index, equals(1));
+      // Assert
+      expect(tabController.index, equals(1));
 
-        // Act - Tap notifications tab
-        await tester.tap(find.text('${AppStrings.notifications} (3)'));
-        await tester.pumpAndSettle();
+      // Act - Tap notifications tab
+      await tester.tap(find.text('${AppStrings.notifications} (3)'));
+      await tester.pumpAndSettle();
 
-        // Assert
-        expect(tabController.index, equals(2));
-      },
-    );
+      // Assert
+      expect(tabController.index, equals(2));
+    });
   });
 }

@@ -33,8 +33,9 @@ class _FullScreenImageGalleryState extends State<FullScreenImageGallery> {
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: AppPalette.black,
+    extendBodyBehindAppBar: true,
     appBar: AppBar(
-      backgroundColor: AppPalette.black,
+      backgroundColor: AppPalette.transparent,
       iconTheme: const IconThemeData(color: AppPalette.white),
       elevation: 0,
       centerTitle: true,
@@ -56,12 +57,14 @@ class _FullScreenImageGalleryState extends State<FullScreenImageGallery> {
         return InteractiveViewer(
           minScale: 1.0,
           maxScale: 4.0,
-          child: path.isNotEmpty
-              ? Hero(
-                  tag: path,
-                  child: FullScreenGalleryImageItem(path: path),
-                )
-              : FullScreenGalleryImageItem(path: path),
+          child: Center(
+            child: path.isNotEmpty
+                ? Hero(
+                    tag: path,
+                    child: FullScreenGalleryImageItem(path: path),
+                  )
+                : FullScreenGalleryImageItem(path: path),
+          ),
         );
       },
     ),

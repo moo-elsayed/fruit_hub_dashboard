@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
@@ -42,51 +42,56 @@ class _CustomSwitchContainerState extends State<CustomSwitchContainer> {
     behavior: HitTestBehavior.opaque,
     child: AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(
         color: context.colors.surface,
         border: Border.all(
-          color: _isChecked
-              ? context.colors.primary.withValues(alpha: 0.5)
-              : context.colors.border,
+          color: _isChecked ? context.colors.primary : context.colors.border,
           width: 1.2,
         ),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.icon != null) ...[
-                Icon(
-                  widget.icon,
-                  size: 18.sp,
-                  color: _isChecked
-                      ? context.colors.primary
-                      : context.colors.subText,
-                ),
-                Gap(6.w),
-              ],
-              Text(
-                widget.text,
-                style: AppTextStyles.font13SemiBold.copyWith(
-                  color: _isChecked
-                      ? context.colors.primary
-                      : context.colors.mainText,
-                ),
+          if (widget.icon != null) ...[
+            Icon(
+              widget.icon,
+              size: 18.sp,
+              color: _isChecked
+                  ? context.colors.primary
+                  : context.colors.subText,
+            ),
+            Gap(6.w),
+          ],
+          Expanded(
+            child: Text(
+              widget.text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.font13SemiBold.copyWith(
+                color: _isChecked
+                    ? context.colors.primary
+                    : context.colors.mainText,
               ),
-            ],
+            ),
           ),
+          Gap(6.w),
           IgnorePointer(
-            child: Transform.scale(
-              scale: 0.8,
-              child: CupertinoSwitch(
-                activeTrackColor: context.colors.primary,
-                inactiveTrackColor: context.colors.border,
-                value: _isChecked,
-                onChanged: null,
+            child: SizedBox(
+              height: 42.h,
+              width: 50.w,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Switch.adaptive(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  activeThumbColor: context.colors.primary,
+                  activeTrackColor: context.colors.primary,
+                  trackOutlineColor: WidgetStatePropertyAll(
+                    context.colors.border,
+                  ),
+                  value: _isChecked,
+                  onChanged: null,
+                ),
               ),
             ),
           ),

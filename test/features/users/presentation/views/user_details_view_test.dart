@@ -85,9 +85,8 @@ void main() {
         expect(find.byType(UserProfileHeader), findsOneWidget);
         expect(find.byType(UserDetailsTabBar), findsOneWidget);
 
-        verify(
-          () => mockUserNotificationsCubit.getUserNotifications(tUser.uid),
-        ).called(1);
+        verify(() => mockUserNotificationsCubit.getUserNotifications(tUser.uid))
+            .called(1);
       },
     );
 
@@ -104,7 +103,9 @@ void main() {
         expect(find.byType(UserCartItemsList), findsOneWidget);
 
         // Act: Switch to Tab 1 (Favorites)
-        await tester.tap(find.text('${AppStrings.favorites} (${tUser.favoriteIds.length})'));
+        await tester.tap(
+          find.text('${AppStrings.favorites} (${tUser.favoriteIds.length})'),
+        );
         await tester.pumpAndSettle();
 
         // Assert Tab 1 (Favorites)
@@ -119,40 +120,39 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should pop view when back arrow is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const UserDetailsView(user: tUser),
-                  ),
+    testWidgets('should pop view when back arrow is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const UserDetailsView(user: tUser),
                 ),
-                child: const Text('Open User Details'),
               ),
+              child: const Text('Open User Details'),
             ),
           ),
-        );
-        await tester.pumpAndSettle();
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        // Open details
-        await tester.tap(find.text('Open User Details'));
-        await tester.pumpAndSettle();
-        expect(find.byType(UserDetailsView), findsOneWidget);
+      // Open details
+      await tester.tap(find.text('Open User Details'));
+      await tester.pumpAndSettle();
+      expect(find.byType(UserDetailsView), findsOneWidget);
 
-        // Act: tap back arrow
-        await tester.tap(find.byType(CustomArrowBack));
-        await tester.pumpAndSettle();
+      // Act: tap back arrow
+      await tester.tap(find.byType(CustomArrowBack));
+      await tester.pumpAndSettle();
 
-        // Assert
-        expect(find.byType(UserDetailsView), findsNothing);
-        expect(find.text('Open User Details'), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.byType(UserDetailsView), findsNothing);
+      expect(find.text('Open User Details'), findsOneWidget);
+    });
 
     testWidgets(
       'should open SendNotificationBottomSheet when send notification icon is tapped',

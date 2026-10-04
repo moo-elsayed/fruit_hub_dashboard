@@ -17,9 +17,7 @@ void main() {
       (WidgetTester tester) async {
         // Arrange & Act
         await tester.pumpWidget(
-          createWidgetForTesting(
-            child: const UserCartItemsList(cartItems: []),
-          ),
+          createWidgetForTesting(child: const UserCartItemsList(cartItems: [])),
         );
 
         // Assert
@@ -35,9 +33,7 @@ void main() {
         // Arrange & Act
         await tester.pumpWidget(
           createWidgetForTesting(
-            child: const UserCartItemsList(
-              cartItems: [tCartItem1, tCartItem2],
-            ),
+            child: const UserCartItemsList(cartItems: [tCartItem1, tCartItem2]),
           ),
         );
 

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/widgets/user_notification_item.dart';
 import 'package:fruit_hub_dashboard/features/users/presentation/widgets/user_notifications_skeleton_list.dart';
+
 import '../../../../helpers/test_widget_wrapper.dart';
 
 void main() {
@@ -10,9 +11,7 @@ void main() {
       (WidgetTester tester) async {
         // Arrange & Act
         await tester.pumpWidget(
-          createWidgetForTesting(
-            child: const UserNotificationsSkeletonList(),
-          ),
+          createWidgetForTesting(child: const UserNotificationsSkeletonList()),
         );
 
         expect(

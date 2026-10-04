@@ -18,10 +18,7 @@ class AppUserModel {
     this.favoriteIds = const [],
   });
 
-  factory AppUserModel.fromFirestore(
-    Map<String, dynamic> json,
-    String docId,
-  ) {
+  factory AppUserModel.fromFirestore(Map<String, dynamic> json, String docId) {
     final rawLastTokenUpdate = json['lastTokenUpdate'];
     DateTime? parsedLastTokenUpdate;
     if (rawLastTokenUpdate is Timestamp) {

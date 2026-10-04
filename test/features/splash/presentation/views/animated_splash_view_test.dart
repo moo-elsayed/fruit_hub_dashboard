@@ -100,30 +100,29 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should render dark splash image in dark mode',
-      (WidgetTester tester) async {
-        // Arrange & Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            themeMode: ThemeMode.dark,
-            child: const AnimatedSplashView(),
-          ),
-        );
-        await tester.pump(const Duration(milliseconds: 1500));
+    testWidgets('should render dark splash image in dark mode', (
+      WidgetTester tester,
+    ) async {
+      // Arrange & Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          themeMode: ThemeMode.dark,
+          child: const AnimatedSplashView(),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 1500));
 
-        // Assert
-        expect(
-          find.byWidgetPredicate(
-            (widget) =>
-                widget is Image &&
-                (widget.image as AssetImage).assetName ==
-                    AppAssets.imagesSplashAndroid12Dark,
-          ),
-          findsOneWidget,
-        );
-      },
-    );
+      // Assert
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Image &&
+              (widget.image as AssetImage).assetName ==
+                  AppAssets.imagesSplashAndroid12Dark,
+        ),
+        findsOneWidget,
+      );
+    });
 
     testWidgets(
       'should navigate to loginView when state is SplashNavigation.login',
@@ -144,9 +143,7 @@ void main() {
         await tester.pump();
 
         // Act
-        stateController.add(
-          SplashNavigationState(SplashNavigation.login),
-        );
+        stateController.add(SplashNavigationState(SplashNavigation.login));
         await tester.pumpAndSettle();
 
         // Assert
@@ -174,9 +171,7 @@ void main() {
         await tester.pump();
 
         // Act
-        stateController.add(
-          SplashNavigationState(SplashNavigation.home),
-        );
+        stateController.add(SplashNavigationState(SplashNavigation.home));
         await tester.pumpAndSettle();
 
         // Assert

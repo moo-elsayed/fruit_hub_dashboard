@@ -117,10 +117,8 @@ void setupServiceLocator() {
   );
 
   getIt.registerFactory<SocialSignInCubit>(
-    () => SocialSignInCubit(
-      getIt<GoogleSignInUseCase>(),
-      getIt<UserInfoCubit>(),
-    ),
+    () =>
+        SocialSignInCubit(getIt<GoogleSignInUseCase>(), getIt<UserInfoCubit>()),
   );
 
   getIt.registerFactory<SignupCubit>(
@@ -132,10 +130,7 @@ void setupServiceLocator() {
   );
 
   getIt.registerFactory<SignOutCubit>(
-    () => SignOutCubit(
-      getIt<SignOutUseCase>(),
-      getIt<UserInfoCubit>(),
-    ),
+    () => SignOutCubit(getIt<SignOutUseCase>(), getIt<UserInfoCubit>()),
   );
 
   /// splash

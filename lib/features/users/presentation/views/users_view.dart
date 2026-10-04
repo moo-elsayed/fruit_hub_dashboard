@@ -115,8 +115,9 @@ class _UsersViewState extends State<UsersView> {
                               hint: AppStrings.searchUsers,
                               onTap: isLoading
                                   ? null
-                                  : () =>
-                                        context.pushNamed(Routes.usersSearchView),
+                                  : () => context.pushNamed(
+                                      Routes.usersSearchView,
+                                    ),
                             ),
                           ),
                         ),
@@ -156,37 +157,38 @@ class _UsersViewState extends State<UsersView> {
                               right: 16.w,
                               bottom: 16.h,
                             ),
-                            itemCount: users.length + (hasLoadingFooter ? 1 : 0),
+                            itemCount:
+                                users.length + (hasLoadingFooter ? 1 : 0),
                             separatorBuilder: (_, _) => SizedBox(height: 10.h),
                             itemBuilder: (context, index) {
-                            if (index >= users.length) {
-                              return const Center(
-                                child: CupertinoActivityIndicator(),
+                              if (index >= users.length) {
+                                return const Center(
+                                  child: CupertinoActivityIndicator(),
+                                );
+                              }
+
+                              final user = users[index];
+                              return UserCardItem(
+                                user: user,
+                                onTap: () => context.pushNamed(
+                                  Routes.userDetailsView,
+                                  arguments: user,
+                                ),
                               );
-                            }
+                            },
+                          );
+                        }
 
-                            final user = users[index];
-                            return UserCardItem(
-                              user: user,
-                              onTap: () => context.pushNamed(
-                                Routes.userDetailsView,
-                                arguments: user,
-                              ),
-                            );
-                          },
-                        );
-                      }
-
-                      return const SizedBox.shrink();
-                    },
+                        return const SizedBox.shrink();
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     ),
-  ),
-);
+  );
 }

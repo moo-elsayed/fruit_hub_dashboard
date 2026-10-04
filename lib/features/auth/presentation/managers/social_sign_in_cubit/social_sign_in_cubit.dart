@@ -8,10 +8,8 @@ import 'package:fruit_hub_dashboard/features/auth/presentation/managers/user_inf
 part 'social_sign_in_state.dart';
 
 class SocialSignInCubit extends Cubit<SocialSignInState> {
-  SocialSignInCubit(
-    this._googleSignInUseCase,
-    this._userInfoCubit,
-  ) : super(SocialSignInInitial());
+  SocialSignInCubit(this._googleSignInUseCase, this._userInfoCubit)
+    : super(SocialSignInInitial());
 
   final GoogleSignInUseCase _googleSignInUseCase;
   final UserInfoCubit _userInfoCubit;

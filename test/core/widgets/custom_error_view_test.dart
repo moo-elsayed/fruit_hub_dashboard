@@ -53,22 +53,21 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should render custom icon when provided',
-      (WidgetTester tester) async {
-        // Arrange & Act
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: const CustomErrorView(
-              message: 'Network disconnected',
-              icon: Icons.wifi_off_rounded,
-            ),
+    testWidgets('should render custom icon when provided', (
+      WidgetTester tester,
+    ) async {
+      // Arrange & Act
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: const CustomErrorView(
+            message: 'Network disconnected',
+            icon: Icons.wifi_off_rounded,
           ),
-        );
+        ),
+      );
 
-        // Assert
-        expect(find.byIcon(Icons.wifi_off_rounded), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.byIcon(Icons.wifi_off_rounded), findsOneWidget);
+    });
   });
 }

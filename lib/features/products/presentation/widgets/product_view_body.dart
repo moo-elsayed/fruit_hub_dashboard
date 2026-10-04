@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../core/helpers/app_strings.dart';
@@ -26,6 +25,15 @@ class ProductViewBody extends StatelessWidget {
 
   void _handleSubmit(BuildContext context) {
     if (productArgs.isValid) {
+      if (isEdit && !productArgs.hasChanges) {
+        AppToast.show(
+          context: context,
+          title: AppStrings.noChangesToSave,
+          type: ToastificationType.info,
+        );
+        return;
+      }
+
       final entity = productArgs.toEntity();
       if (isEdit) {
         context.read<ProductsCubit>().updateProduct(entity);
@@ -38,14 +46,13 @@ class ProductViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) => CustomKeyboardUnfocus(
     child: SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Form(
         key: productArgs.formKey,
         child: Column(
+          spacing: 16.h,
           children: [
-            Gap(20.h),
             ProductFormFields(productArgs: productArgs),
-            Gap(28.h),
             BlocConsumer<ProductsCubit, ProductsState>(
               listenWhen: (previous, current) => current is ProductsFailure,
               listener: (context, state) {
@@ -73,7 +80,6 @@ class ProductViewBody extends StatelessWidget {
                 ),
               ),
             ),
-            Gap(24.h),
           ],
         ),
       ),

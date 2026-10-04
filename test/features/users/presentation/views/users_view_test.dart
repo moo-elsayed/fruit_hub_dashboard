@@ -104,9 +104,8 @@ void main() {
         createWidgetForTesting(
           child: Builder(
             builder: (context) => ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const UsersView()),
-              ),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const UsersView())),
               child: const Text('Open Users'),
             ),
           ),
@@ -175,7 +174,8 @@ void main() {
         await tester.pump();
 
         // Assert
-        verify(() => mockUsersCubit.setFilter(UserFilterType.verified)).called(1);
+        verify(() => mockUsersCubit.setFilter(UserFilterType.verified))
+            .called(1);
       },
     );
 
@@ -229,9 +229,8 @@ void main() {
       (WidgetTester tester) async {
         // Arrange
         const errorMessage = 'Failed to load users';
-        when(() => mockUsersCubit.state).thenReturn(
-          const UsersFailure(errorMessage),
-        );
+        when(() => mockUsersCubit.state)
+            .thenReturn(const UsersFailure(errorMessage));
 
         // Act
         await tester.pumpWidget(
@@ -249,9 +248,8 @@ void main() {
       'should render UsersEmptyState when users list is empty in UsersSuccess',
       (WidgetTester tester) async {
         // Arrange
-        when(() => mockUsersCubit.state).thenReturn(
-          const UsersSuccess(users: []),
-        );
+        when(() => mockUsersCubit.state)
+            .thenReturn(const UsersSuccess(users: []));
 
         // Act
         await tester.pumpWidget(
@@ -269,9 +267,8 @@ void main() {
       (WidgetTester tester) async {
         // Arrange
         AppUserEntity? passedUser;
-        when(() => mockUsersCubit.state).thenReturn(
-          const UsersSuccess(users: [tUser1, tUser2]),
-        );
+        when(() => mockUsersCubit.state)
+            .thenReturn(const UsersSuccess(users: [tUser1, tUser2]));
 
         await tester.pumpWidget(
           createWidgetForTesting(
@@ -308,12 +305,9 @@ void main() {
       'should render loading indicator at footer when isLoadingMore is true',
       (WidgetTester tester) async {
         // Arrange
-        when(() => mockUsersCubit.state).thenReturn(
-          const UsersSuccess(
-            users: [tUser1],
-            isLoadingMore: true,
-          ),
-        );
+        when(
+          () => mockUsersCubit.state,
+        ).thenReturn(const UsersSuccess(users: [tUser1], isLoadingMore: true));
 
         // Act
         await tester.pumpWidget(
@@ -330,13 +324,10 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      when(() => mockUsersCubit.state).thenReturn(
-        const UsersSuccess(users: [tUser1, tUser2]),
-      );
+      when(() => mockUsersCubit.state)
+          .thenReturn(const UsersSuccess(users: [tUser1, tUser2]));
 
-      await tester.pumpWidget(
-        createWidgetForTesting(child: const UsersView()),
-      );
+      await tester.pumpWidget(createWidgetForTesting(child: const UsersView()));
       await tester.pump();
 
       // Clear the initial invocation count

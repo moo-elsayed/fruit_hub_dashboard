@@ -10,7 +10,7 @@ class ProductArgs {
       codeController = TextEditingController(),
       descriptionController = TextEditingController(),
       caloriesController = TextEditingController(),
-      weightInGramsController = TextEditingController(text: '1000'),
+      weightInGramsController = TextEditingController(),
       daysUntilExpirationController = TextEditingController(),
       imageController = TextEditingController();
 
@@ -24,11 +24,31 @@ class ProductArgs {
   final TextEditingController daysUntilExpirationController;
   final TextEditingController imageController;
 
+  FruitEntity? originalFruit;
   bool isFeatured = false;
   bool isOrganic = false;
   bool isEditMode = false;
 
   bool get isValid => formKey.currentState!.validate();
+
+  bool get hasChanges {
+    if (originalFruit == null) return true;
+    final current = toEntity();
+    final original = originalFruit!;
+    final originalWeight = original.weightInGrams > 0
+        ? original.weightInGrams
+        : 1000;
+    return current.name != original.name ||
+        current.price != original.price ||
+        current.code != original.code ||
+        current.description != original.description ||
+        current.isFeatured != original.isFeatured ||
+        current.isOrganic != original.isOrganic ||
+        current.daysUntilExpiration != original.daysUntilExpiration ||
+        current.numberOfCalories != original.numberOfCalories ||
+        current.weightInGrams != originalWeight ||
+        imageController.text.trim() != original.imagePath;
+  }
 
   void dispose() {
     nameController.dispose();
@@ -42,6 +62,7 @@ class ProductArgs {
   }
 
   void setValues(FruitEntity fruit) {
+    originalFruit = fruit;
     nameController.text = fruit.name;
     priceController.text = fruit.price.toString();
     codeController.text = fruit.code;
@@ -78,6 +99,9 @@ class ProductArgs {
       weightInGrams: int.tryParse(weightInGramsController.text.trim()) ?? 0,
       daysUntilExpiration:
           int.tryParse(daysUntilExpirationController.text.trim()) ?? 0,
+      ratingCount: originalFruit?.ratingCount ?? 0,
+      avgRating: originalFruit?.avgRating ?? 0,
+      reviews: originalFruit?.reviews ?? const [],
     );
   }
 }

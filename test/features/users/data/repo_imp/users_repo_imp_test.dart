@@ -289,8 +289,7 @@ void main() {
 
         // Assert
         expect(result, isA<NetworkSuccess<List<AppUserEntity>>>());
-        final list =
-            (result as NetworkSuccess<List<AppUserEntity>>).data!;
+        final list = (result as NetworkSuccess<List<AppUserEntity>>).data!;
         expect(list.length, 1);
         expect(list.first.uid, 'user_1');
         expect(list.first.name, 'Ahmed Mohamed');
@@ -324,8 +323,7 @@ void main() {
 
           // Assert
           expect(result, isA<NetworkSuccess<List<AppUserEntity>>>());
-          final list =
-              (result as NetworkSuccess<List<AppUserEntity>>).data!;
+          final list = (result as NetworkSuccess<List<AppUserEntity>>).data!;
           expect(list, isEmpty);
         },
       );
@@ -348,8 +346,7 @@ void main() {
 
         // Assert
         expect(result, isA<NetworkFailure<List<AppUserEntity>>>());
-        final failure =
-            (result as NetworkFailure<List<AppUserEntity>>).failure;
+        final failure = (result as NetworkFailure<List<AppUserEntity>>).failure;
         expect(failure.error, tFailure.error);
       });
     });

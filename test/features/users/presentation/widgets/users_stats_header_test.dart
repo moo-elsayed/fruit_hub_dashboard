@@ -44,31 +44,30 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should trigger onSelectFilter when verified tab is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        UserFilterType? selectedFilter;
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: UsersStatsHeader(
-              totalCount: 50,
-              verifiedCount: 30,
-              activeCartCount: 10,
-              activeFilter: UserFilterType.all,
-              onSelectFilter: (filter) => selectedFilter = filter,
-            ),
+    testWidgets('should trigger onSelectFilter when verified tab is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      UserFilterType? selectedFilter;
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: UsersStatsHeader(
+            totalCount: 50,
+            verifiedCount: 30,
+            activeCartCount: 10,
+            activeFilter: UserFilterType.all,
+            onSelectFilter: (filter) => selectedFilter = filter,
           ),
-        );
+        ),
+      );
 
-        // Act
-        await tester.tap(find.text(AppStrings.verifiedUsers));
-        await tester.pump();
+      // Act
+      await tester.tap(find.text(AppStrings.verifiedUsers));
+      await tester.pump();
 
-        // Assert
-        expect(selectedFilter, equals(UserFilterType.verified));
-      },
-    );
+      // Assert
+      expect(selectedFilter, equals(UserFilterType.verified));
+    });
 
     testWidgets(
       'should trigger onSelectFilter when active cart tab is tapped',
@@ -99,30 +98,29 @@ void main() {
       },
     );
 
-    testWidgets(
-      'should trigger onSelectFilter when all tab is tapped',
-      (WidgetTester tester) async {
-        // Arrange
-        UserFilterType? selectedFilter;
-        await tester.pumpWidget(
-          createWidgetForTesting(
-            child: UsersStatsHeader(
-              totalCount: 50,
-              verifiedCount: 30,
-              activeCartCount: 10,
-              activeFilter: UserFilterType.verified,
-              onSelectFilter: (filter) => selectedFilter = filter,
-            ),
+    testWidgets('should trigger onSelectFilter when all tab is tapped', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      UserFilterType? selectedFilter;
+      await tester.pumpWidget(
+        createWidgetForTesting(
+          child: UsersStatsHeader(
+            totalCount: 50,
+            verifiedCount: 30,
+            activeCartCount: 10,
+            activeFilter: UserFilterType.verified,
+            onSelectFilter: (filter) => selectedFilter = filter,
           ),
-        );
+        ),
+      );
 
-        // Act
-        await tester.tap(find.text(AppStrings.all));
-        await tester.pump();
+      // Act
+      await tester.tap(find.text(AppStrings.all));
+      await tester.pump();
 
-        // Assert
-        expect(selectedFilter, equals(UserFilterType.all));
-      },
-    );
+      // Assert
+      expect(selectedFilter, equals(UserFilterType.all));
+    });
   });
 }

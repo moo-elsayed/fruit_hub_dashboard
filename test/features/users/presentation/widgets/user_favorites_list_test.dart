@@ -37,14 +37,8 @@ void main() {
 
         // Assert
         expect(find.byType(UserDetailsTabEmptyState), findsNothing);
-        expect(
-          find.text('${AppStrings.productCode}: fav_111'),
-          findsOneWidget,
-        );
-        expect(
-          find.text('${AppStrings.productCode}: fav_222'),
-          findsOneWidget,
-        );
+        expect(find.text('${AppStrings.productCode}: fav_111'), findsOneWidget);
+        expect(find.text('${AppStrings.productCode}: fav_222'), findsOneWidget);
         expect(find.byIcon(Icons.favorite_rounded), findsNWidgets(2));
       },
     );

@@ -4,12 +4,11 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/helpers/validator.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
-import 'package:fruit_hub_dashboard/core/widgets/image_picker_field.dart';
 import 'package:fruit_hub_dashboard/core/widgets/text_form_field_helper.dart';
 import 'package:fruit_hub_dashboard/features/products/presentation/args/product_args.dart';
-import 'package:gap/gap.dart';
 
 import 'custom_switch_container.dart';
+import 'product_image_picker_card.dart';
 
 class ProductFormFields extends StatelessWidget {
   const ProductFormFields({super.key, required this.productArgs});
@@ -18,14 +17,12 @@ class ProductFormFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
+    spacing: 16.h,
     children: [
-      ImagePickerField(
+      ProductImagePickerCard(
         controller: productArgs.imageController,
-        label: AppStrings.productImage,
-        icon: Icons.add_photo_alternate_rounded,
         validator: Validator.validateRequiredField,
       ),
-      Gap(16.h),
       TextFormFieldHelper(
         controller: productArgs.nameController,
         labelText: AppStrings.productName,
@@ -33,38 +30,30 @@ class ProductFormFields extends StatelessWidget {
         onValidate: Validator.validateName,
         action: TextInputAction.next,
       ),
-      Gap(16.h),
-      TextFormFieldHelper(
-        controller: productArgs.priceController,
-        labelText: AppStrings.price,
-        suffixText: AppStrings.pounds,
-        suffixStyle: AppTextStyles.font13Medium.copyWith(
-          color: context.colors.subText,
-        ),
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        onValidate: Validator.validateRequiredField,
-        action: TextInputAction.next,
-      ),
-      Gap(16.h),
-      TextFormFieldHelper(
-        controller: productArgs.descriptionController,
-        labelText: AppStrings.productDescription,
-        keyboardType: TextInputType.multiline,
-        onValidate: Validator.validateDescription,
-        maxLines: 4,
-        minLines: 4,
-        action: TextInputAction.next,
-      ),
-      Gap(16.h),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 16.w,
+        spacing: 12.w,
         children: [
           Expanded(
             child: TextFormFieldHelper(
-              controller: productArgs.daysUntilExpirationController,
-              labelText: AppStrings.daysUntilExpiration,
-              suffixText: AppStrings.days,
+              controller: productArgs.priceController,
+              labelText: AppStrings.price,
+              suffixText: AppStrings.pounds,
+              suffixStyle: AppTextStyles.font13Medium.copyWith(
+                color: context.colors.subText,
+              ),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              onValidate: Validator.validateRequiredField,
+              action: TextInputAction.next,
+            ),
+          ),
+          Expanded(
+            child: TextFormFieldHelper(
+              controller: productArgs.weightInGramsController,
+              labelText: AppStrings.weightInGrams,
+              suffixText: AppStrings.gram,
               suffixStyle: AppTextStyles.font12Medium.copyWith(
                 color: context.colors.subText,
               ),
@@ -73,6 +62,12 @@ class ProductFormFields extends StatelessWidget {
               action: TextInputAction.next,
             ),
           ),
+        ],
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 12.w,
+        children: [
           Expanded(
             child: TextFormFieldHelper(
               controller: productArgs.codeController,
@@ -96,19 +91,11 @@ class ProductFormFields extends StatelessWidget {
               action: TextInputAction.next,
             ),
           ),
-        ],
-      ),
-      Gap(16.h),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 16.w,
-        children: [
           Expanded(
             child: TextFormFieldHelper(
-              controller: productArgs.caloriesController,
-              labelText: AppStrings.numberOfCalories,
-              hint: 'e.g. 52',
-              suffixText: AppStrings.calories,
+              controller: productArgs.daysUntilExpirationController,
+              labelText: AppStrings.daysUntilExpiration,
+              suffixText: AppStrings.days,
               suffixStyle: AppTextStyles.font12Medium.copyWith(
                 color: context.colors.subText,
               ),
@@ -117,23 +104,28 @@ class ProductFormFields extends StatelessWidget {
               action: TextInputAction.next,
             ),
           ),
-          Expanded(
-            child: TextFormFieldHelper(
-              controller: productArgs.weightInGramsController,
-              labelText: AppStrings.weightInGrams,
-              hint: '1000',
-              suffixText: AppStrings.gram,
-              suffixStyle: AppTextStyles.font12Medium.copyWith(
-                color: context.colors.subText,
-              ),
-              keyboardType: TextInputType.number,
-              onValidate: Validator.validateRequiredField,
-              action: TextInputAction.done,
-            ),
-          ),
         ],
       ),
-      Gap(16.h),
+      TextFormFieldHelper(
+        controller: productArgs.caloriesController,
+        labelText: AppStrings.numberOfCalories,
+        suffixText: AppStrings.calories,
+        suffixStyle: AppTextStyles.font12Medium.copyWith(
+          color: context.colors.subText,
+        ),
+        keyboardType: TextInputType.number,
+        onValidate: Validator.validateRequiredField,
+        action: TextInputAction.next,
+      ),
+      TextFormFieldHelper(
+        controller: productArgs.descriptionController,
+        labelText: AppStrings.productDescription,
+        keyboardType: TextInputType.multiline,
+        onValidate: Validator.validateDescription,
+        maxLines: 4,
+        minLines: 4,
+        action: TextInputAction.done,
+      ),
       Row(
         spacing: 12.w,
         children: [

@@ -68,11 +68,27 @@ class AppRouter {
       case Routes.fullScreenImageGalleryView:
         final item =
             _currentSettings!.arguments as FullScreenImageGalleryInputItem;
-        return _route(FullScreenImageGallery(item: item));
+        return _fadeRoute(FullScreenImageGallery(item: item));
       default:
         return null;
     }
   }
+
+  PageRouteBuilder<dynamic> _fadeRoute(Widget view) => PageRouteBuilder(
+    settings: _currentSettings,
+    opaque: false,
+    transitionDuration: const Duration(milliseconds: 300),
+    reverseTransitionDuration: const Duration(milliseconds: 250),
+    pageBuilder: (context, animation, secondaryAnimation) => view,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final fadeTween = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).chain(CurveTween(curve: Curves.easeOutCubic));
+
+      return FadeTransition(opacity: animation.drive(fadeTween), child: child);
+    },
+  );
 
   PageRouteBuilder<dynamic> _route(Widget view) => PageRouteBuilder(
     settings: _currentSettings,

@@ -21,7 +21,7 @@ class HeaderActionButton extends StatelessWidget {
     onTap: onTap,
     borderRadius: BorderRadius.circular(12.r),
     child: Ink(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: context.colors.primary,
         borderRadius: BorderRadius.circular(12.r),
