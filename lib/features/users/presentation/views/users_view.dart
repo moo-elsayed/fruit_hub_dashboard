@@ -9,6 +9,7 @@ import 'package:fruit_hub_dashboard/core/routing/routes.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_app_bar.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_keyboard_unfocus.dart';
 import 'package:fruit_hub_dashboard/core/widgets/search_text_field.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../managers/users_cubit/users_cubit.dart';
@@ -70,6 +71,37 @@ class _UsersViewState extends State<UsersView> {
               spacing: 12.h,
               children: [
                 BlocBuilder<UsersCubit, UsersState>(
+                  buildWhen: (previous, current) =>
+                      (previous is UsersLoading) != (current is UsersLoading),
+                  builder: (context, state) {
+                    final cubit = context.read<UsersCubit>();
+                    final isInitialLoading =
+                        state is UsersLoading && cubit.totalCount == 0;
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Skeletonizer(
+                        enabled: isInitialLoading,
+                        child: Hero(
+                          tag: 'search_bar_hero_tag',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: SearchTextField(
+                              readOnly: true,
+                              enabled: !isInitialLoading,
+                              hint: AppStrings.searchUsers,
+                              onTap: isInitialLoading
+                                  ? null
+                                  : () => context.pushNamed(
+                                      Routes.usersSearchView,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<UsersCubit, UsersState>(
                   buildWhen: (_, current) =>
                       current is UsersSuccess || current is UsersLoading,
                   builder: (context, state) {
@@ -93,35 +125,6 @@ class _UsersViewState extends State<UsersView> {
                       activeCartCount: cubit.activeCartCount,
                       activeFilter: cubit.activeFilter,
                       onSelectFilter: (filter) => cubit.setFilter(filter),
-                    );
-                  },
-                ),
-                BlocBuilder<UsersCubit, UsersState>(
-                  buildWhen: (previous, current) =>
-                      (previous is UsersLoading) != (current is UsersLoading),
-                  builder: (context, state) {
-                    final isLoading = state is UsersLoading;
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Skeletonizer(
-                        enabled: isLoading,
-                        child: Hero(
-                          tag: 'search_bar_hero_tag',
-                          child: Material(
-                            color: Colors.transparent,
-                            child: SearchTextField(
-                              readOnly: true,
-                              enabled: !isLoading,
-                              hint: AppStrings.searchUsers,
-                              onTap: isLoading
-                                  ? null
-                                  : () => context.pushNamed(
-                                      Routes.usersSearchView,
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ),
                     );
                   },
                 ),
@@ -155,11 +158,11 @@ class _UsersViewState extends State<UsersView> {
                             padding: EdgeInsets.only(
                               left: 16.w,
                               right: 16.w,
-                              bottom: 16.h,
+                              bottom: 12.h,
                             ),
                             itemCount:
                                 users.length + (hasLoadingFooter ? 1 : 0),
-                            separatorBuilder: (_, _) => SizedBox(height: 10.h),
+                            separatorBuilder: (_, _) => Gap(8.h),
                             itemBuilder: (context, index) {
                               if (index >= users.length) {
                                 return const Center(

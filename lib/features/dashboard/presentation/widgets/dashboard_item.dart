@@ -23,12 +23,12 @@ class DashboardItem extends StatelessWidget {
           color: context.colors.surface,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: entity.color.withValues(alpha: 0.3),
+            color: entity.color.withValues(alpha: 0.4),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: entity.color.withValues(alpha: 0.06),
+              color: entity.color.withValues(alpha: 0.1),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -38,30 +38,13 @@ class DashboardItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10.r),
-                  decoration: BoxDecoration(
-                    color: entity.color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(14.r),
-                  ),
-                  child: Icon(entity.icon, size: 26.sp, color: entity.color),
-                ),
-                Container(
-                  padding: EdgeInsets.all(6.r),
-                  decoration: BoxDecoration(
-                    color: context.colors.background,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 14.sp,
-                    color: context.colors.subText,
-                  ),
-                ),
-              ],
+            Container(
+              padding: EdgeInsets.all(10.r),
+              decoration: BoxDecoration(
+                color: entity.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(14.r),
+              ),
+              child: Icon(entity.icon, size: 26.sp, color: entity.color),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

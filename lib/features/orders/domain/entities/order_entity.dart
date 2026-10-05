@@ -28,6 +28,28 @@ class OrderEntity extends Equatable {
   final String date;
   final OrderStatus status;
 
+  OrderEntity copyWith({
+    String? uid,
+    String? docId,
+    int? orderId,
+    double? totalPrice,
+    List<OrderItemEntity>? products,
+    AddressEntity? address,
+    PaymentOptionEntity? paymentOption,
+    String? date,
+    OrderStatus? status,
+  }) => OrderEntity(
+    uid: uid ?? this.uid,
+    docId: docId ?? this.docId,
+    orderId: orderId ?? this.orderId,
+    totalPrice: totalPrice ?? this.totalPrice,
+    products: products ?? this.products,
+    address: address ?? this.address,
+    paymentOption: paymentOption ?? this.paymentOption,
+    date: date ?? this.date,
+    status: status ?? this.status,
+  );
+
   @override
   List<Object?> get props => [
     uid,

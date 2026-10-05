@@ -4,6 +4,7 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_count_badge.dart';
 
 import '../../domain/entities/cart_item_entity.dart';
 import 'user_details_tab_empty_state.dart';
@@ -60,18 +61,12 @@ class UserCartItemsList extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
+              CustomCountBadge.quantity(
+                quantity: item.quantity,
+                borderRadius: 8.r,
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: context.colors.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Text(
-                  'x${item.quantity}',
-                  style: AppTextStyles.font13Bold.copyWith(
-                    color: context.colors.primary,
-                  ),
-                ),
+                textStyle: AppTextStyles.font13Bold,
+                backgroundColor: context.colors.primary.withValues(alpha: 0.08),
               ),
             ],
           ),

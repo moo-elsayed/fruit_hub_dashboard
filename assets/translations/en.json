@@ -538,5 +538,9 @@
   "status_processing": "Processing",
   "status_shipped": "Shipped",
   "status_delivered": "Delivered",
-  "remove_photo": "Remove Photo"
+  "remove_photo": "Remove Photo",
+  "search_orders": "Search orders by ID, customer name, phone...",
+  "search_by_order_id": "Order ID",
+  "type_to_search_orders": "Type to search by order ID, customer name, or phone",
+  "no_orders_matching_filter": "No orders matching this filter"
 }

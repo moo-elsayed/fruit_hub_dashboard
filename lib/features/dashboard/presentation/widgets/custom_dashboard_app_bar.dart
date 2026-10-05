@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,10 +107,13 @@ class CustomDashboardAppBar extends StatelessWidget
                   borderRadius: BorderRadius.circular(12.r),
                   border: Border.all(color: context.colors.border),
                 ),
-                child: Icon(
-                  Icons.logout_rounded,
-                  color: context.colors.error,
-                  size: 20.sp,
+                child: Transform.rotate(
+                  angle: context.isArabic ? 0 : pi,
+                  child: Icon(
+                    Icons.logout_rounded,
+                    color: context.colors.error,
+                    size: 20.sp,
+                  ),
                 ),
               ),
             ),

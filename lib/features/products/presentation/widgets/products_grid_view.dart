@@ -12,13 +12,13 @@ class ProductsGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GridView.builder(
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
     itemCount: itemCount ?? fruits?.length ?? 0,
     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
       childAspectRatio: 163 / 214,
       mainAxisSpacing: 8.h,
-      crossAxisSpacing: 16.w,
+      crossAxisSpacing: 8.w,
     ),
     itemBuilder: (context, index) {
       final fruitEntity = itemCount != null

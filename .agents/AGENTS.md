@@ -18,6 +18,9 @@
 ## Buttons & Action Controls
 - **Use a Consistent Custom Button**: Never use raw `ElevatedButton`, `MaterialButton`, or generic buttons for primary actions, forms, bottom sheets, and dialogs. Always use a shared custom button widget to guarantee uniform brand styling, loading state handling, consistent dimensions, and rounded corners.
 
+## Badges & Count Indicators
+- **Use `CustomCountBadge`**: Never construct ad-hoc raw `Container` widgets with background colors and text to display counts, quantities, or badge pills (e.g. item counts, filter tab counts, `x2` product quantities). Always use the shared `CustomCountBadge` (or its named constructor `CustomCountBadge.quantity(...)`) to ensure uniform padding, radius/circular styling, theme alpha backgrounds, and typography.
+
 ## Form & Keyboard Interactions
 - **Use a Consistent Custom TextField**: Never use raw `TextField` or `TextFormField` directly. Always wrap them in a shared helper widget across all forms, dialogs, and bottom sheets to guarantee automatic bidirectional text direction (RTL/LTR), consistent theme borders, and unified styling.
 - **Keyboard Unfocus**: Always wrap screens or forms containing text input fields with a keyboard-dismissing wrapper widget so the user can easily dismiss the keyboard by tapping outside.

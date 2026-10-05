@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
-import 'package:gap/gap.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_price_text.dart';
 
 class OrderFinancialSummary extends StatelessWidget {
   const OrderFinancialSummary({
@@ -26,25 +26,31 @@ class OrderFinancialSummary extends StatelessWidget {
       border: Border.all(color: context.colors.border, width: 0.8),
     ),
     child: Column(
+      spacing: 6.h,
       children: [
         _RowItem(
           title: AppStrings.subtotal,
-          amount: '\$${subtotal.toStringAsFixed(2)}',
+          trailing: CustomPriceText(price: subtotal),
         ),
-        Gap(6.h),
         _RowItem(
           title: AppStrings.delivery,
-          amount: shippingCost > 0
-              ? '\$${shippingCost.toStringAsFixed(2)}'
-              : AppStrings.freeShipping,
+          trailing: shippingCost > 0
+              ? CustomPriceText(price: shippingCost)
+              : Text(
+                  AppStrings.freeShipping,
+                  style: AppTextStyles.font12Medium.copyWith(
+                    color: context.colors.primary,
+                  ),
+                ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
-          child: Divider(color: context.colors.border, height: 1),
-        ),
+        Divider(color: context.colors.border, height: 0.h, thickness: 1.h),
         _RowItem(
           title: AppStrings.grandTotal,
-          amount: '\$${totalPrice.toStringAsFixed(2)}',
+          trailing: CustomPriceText(
+            price: totalPrice,
+            isLarge: true,
+            color: context.colors.primary,
+          ),
           isTotal: true,
         ),
       ],
@@ -55,12 +61,12 @@ class OrderFinancialSummary extends StatelessWidget {
 class _RowItem extends StatelessWidget {
   const _RowItem({
     required this.title,
-    required this.amount,
+    required this.trailing,
     this.isTotal = false,
   });
 
   final String title;
-  final String amount;
+  final Widget trailing;
   final bool isTotal;
 
   @override
@@ -75,14 +81,7 @@ class _RowItem extends StatelessWidget {
                 color: context.colors.subText,
               ),
       ),
-      Text(
-        amount,
-        style: isTotal
-            ? AppTextStyles.font15Bold.copyWith(color: context.colors.primary)
-            : AppTextStyles.font12Medium.copyWith(
-                color: context.colors.mainText,
-              ),
-      ),
+      trailing,
     ],
   );
 }

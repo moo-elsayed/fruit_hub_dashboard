@@ -13,4 +13,5 @@ class Routes {
   static const fullScreenImageGalleryView = 'fullScreenImageGalleryView';
   static const userDetailsView = 'userDetailsView';
   static const usersSearchView = 'usersSearchView';
+  static const ordersSearchView = 'ordersSearchView';
 }

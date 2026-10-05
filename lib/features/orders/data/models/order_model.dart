@@ -46,6 +46,9 @@ class OrderModel {
     date: map['date']?.toString() ?? '',
   );
 
+  factory OrderModel.fromFirestore(Map<String, dynamic> map, String docId) =>
+      OrderModel.fromJson({...map, 'docId': docId});
+
   final String uId;
   final String docId;
   final int orderId;

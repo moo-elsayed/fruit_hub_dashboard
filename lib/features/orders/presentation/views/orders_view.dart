@@ -13,7 +13,7 @@ class OrdersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider<OrdersCubit>(
-    create: (context) => getIt<OrdersCubit>()..streamOrders(),
+    create: (context) => getIt<OrdersCubit>()..initOrders(),
     child: Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.orders,

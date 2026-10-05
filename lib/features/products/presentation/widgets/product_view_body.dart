@@ -46,7 +46,7 @@ class ProductViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) => CustomKeyboardUnfocus(
     child: SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: Form(
         key: productArgs.formKey,
         child: Column(

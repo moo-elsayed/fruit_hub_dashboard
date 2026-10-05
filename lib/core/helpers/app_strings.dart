@@ -185,6 +185,7 @@ abstract class AppStrings {
   static String get trackOrder => 'track_order'.tr();
   static String get itWasDoneSuccessfully => 'It_was_done_successfully!'.tr();
   static String get orderNumber => 'order_number'.tr();
+  static String get orderedItems => 'ordered_items'.tr();
   static String get system => 'system'.tr();
   static String get light => 'light'.tr();
   static String get dark => 'dark'.tr();
@@ -554,4 +555,11 @@ abstract class AppStrings {
       'minutes_ago'.tr(args: [minutes.toString()]);
   static String hoursAgo(int hours) => 'hours_ago'.tr(args: [hours.toString()]);
   static String daysAgo(int days) => 'days_ago'.tr(args: [days.toString()]);
+
+  // Orders Search
+  static String get searchOrders => 'search_orders'.tr();
+  static String get searchByOrderId => 'search_by_order_id'.tr();
+  static String get typeToSearchOrders => 'type_to_search_orders'.tr();
+  static String get noOrdersMatchingFilter =>
+      'no_orders_matching_filter'.tr();
 }

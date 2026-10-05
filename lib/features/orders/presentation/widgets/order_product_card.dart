@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_count_badge.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_network_image.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_price_text.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_item_entity.dart';
-import 'package:gap/gap.dart';
 
 class OrderProductCard extends StatelessWidget {
   const OrderProductCard({super.key, required this.product});
@@ -21,6 +22,7 @@ class OrderProductCard extends StatelessWidget {
       border: Border.all(color: context.colors.border, width: 0.8),
     ),
     child: Row(
+      spacing: 10.w,
       children: [
         Container(
           width: 44.r,
@@ -31,13 +33,16 @@ class OrderProductCard extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
-            child: CustomNetworkImage(image: product.imagePath, fit: .cover),
+            child: CustomNetworkImage(
+              image: product.imagePath,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-        Gap(10.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 2.h,
             children: [
               Text(
                 product.name,
@@ -47,39 +52,26 @@ class OrderProductCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              Gap(2.h),
-              Text(
-                '${AppStrings.codeLabel}${product.code}',
-                style: AppTextStyles.font11Medium.copyWith(
-                  color: context.colors.subText,
+              if (product.code.isNotEmpty)
+                Text(
+                  '${AppStrings.codeLabel}${product.code}',
+                  style: AppTextStyles.font11Medium.copyWith(
+                    color: context.colors.subText,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
-        Gap(8.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
+          spacing: 4.h,
           children: [
-            Text(
-              '\$${(product.price * product.quantity).toStringAsFixed(2)}',
-              style: AppTextStyles.font13Bold.copyWith(
-                color: context.colors.mainText,
-              ),
-            ),
-            Gap(2.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-              decoration: BoxDecoration(
-                color: context.colors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-              child: Text(
-                'x${product.quantity}',
-                style: AppTextStyles.font10Bold.copyWith(
-                  color: context.colors.primary,
-                ),
-              ),
+            CustomPriceText(price: product.price * product.quantity),
+            CustomCountBadge.quantity(
+              quantity: product.quantity,
+              borderRadius: 4.r,
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+              textStyle: AppTextStyles.font10Bold,
             ),
           ],
         ),

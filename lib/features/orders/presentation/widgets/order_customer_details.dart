@@ -4,7 +4,6 @@ import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/address_entity.dart';
-import 'package:gap/gap.dart';
 
 class OrderCustomerDetails extends StatelessWidget {
   const OrderCustomerDetails({super.key, required this.address});
@@ -21,15 +20,16 @@ class OrderCustomerDetails extends StatelessWidget {
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 6.h,
       children: [
         Row(
+          spacing: 4.w,
           children: [
             Icon(
               Icons.local_shipping_outlined,
               size: 16.sp,
               color: context.colors.primary,
             ),
-            Gap(6.w),
             Text(
               AppStrings.shippingAddress,
               style: AppTextStyles.font13Bold.copyWith(
@@ -38,30 +38,46 @@ class OrderCustomerDetails extends StatelessWidget {
             ),
           ],
         ),
-        Gap(8.h),
+        if (address.name.isNotEmpty)
+          Row(
+            spacing: 4.w,
+            children: [
+              Icon(
+                Icons.person_outline_rounded,
+                size: 13.sp,
+                color: context.colors.subText,
+              ),
+              Text(
+                address.name,
+                style: AppTextStyles.font12Medium.copyWith(
+                  color: context.colors.mainText,
+                ),
+              ),
+            ],
+          ),
         Text(
           address.formattedLocation,
           style: AppTextStyles.font12Medium.copyWith(
             color: context.colors.bodyText,
           ),
         ),
-        Gap(6.h),
-        Row(
-          children: [
-            Icon(
-              Icons.phone_outlined,
-              size: 13.sp,
-              color: context.colors.subText,
-            ),
-            Gap(4.w),
-            Text(
-              address.phone,
-              style: AppTextStyles.font12Medium.copyWith(
+        if (address.phone.isNotEmpty)
+          Row(
+            spacing: 4.w,
+            children: [
+              Icon(
+                Icons.phone_outlined,
+                size: 13.sp,
                 color: context.colors.subText,
               ),
-            ),
-          ],
-        ),
+              Text(
+                address.phone,
+                style: AppTextStyles.font12Medium.copyWith(
+                  color: context.colors.subText,
+                ),
+              ),
+            ],
+          ),
       ],
     ),
   );

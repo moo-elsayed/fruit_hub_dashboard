@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../domain/entities/app_user_entity.dart';
@@ -23,9 +24,9 @@ class UsersSkeletonList extends StatelessWidget {
     enabled: true,
     child: ListView.separated(
       padding:
-          padding ?? EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+          padding ?? EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.h),
       itemCount: itemCount,
-      separatorBuilder: (_, _) => SizedBox(height: 10.h),
+      separatorBuilder: (_, _) => Gap(8.h),
       itemBuilder: (_, _) => UserCardItem(user: _dummyUser, onTap: () {}),
     ),
   );

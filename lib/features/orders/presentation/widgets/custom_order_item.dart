@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
+import 'package:fruit_hub_dashboard/core/theming/app_palette.dart';
+import 'package:fruit_hub_dashboard/core/utils/custom_bottom_sheet_selection_item.dart';
+import 'package:fruit_hub_dashboard/core/widgets/custom_bottom_sheet.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_entity.dart';
+import 'package:fruit_hub_dashboard/features/orders/presentation/managers/orders_cubit/orders_cubit.dart';
 import 'package:gap/gap.dart';
 
 import 'order_card_header.dart';
 import 'order_customer_details.dart';
-import 'order_customer_summary.dart';
 import 'order_financial_summary.dart';
-import 'order_footer_actions.dart';
-import 'order_items_preview_bar.dart';
 import 'order_products_list.dart';
+import 'order_summary_bar.dart';
 
 class CustomOrderItem extends StatefulWidget {
   const CustomOrderItem({super.key, required this.orderEntity});
@@ -26,6 +31,26 @@ class _CustomOrderItemState extends State<CustomOrderItem>
   late final AnimationController _expandController;
   late final Animation<double> _expandAnimation;
   final ValueNotifier<bool> _isExpandedNotifier = ValueNotifier<bool>(false);
+
+  void _showUpdateStatusSheet(BuildContext context, OrderEntity orderEntity) {
+    final cubit = context.read<OrdersCubit>();
+    final items = OrderStatus.values
+        .map(
+          (status) => CustomBottomSheetSelectionItem(
+            title: status.getName,
+            value: status,
+            isSelected: orderEntity.status == status,
+            onTap: () => cubit.updateOrderStatus(orderEntity.docId, status),
+          ),
+        )
+        .toList();
+
+    CustomBottomSheet.show(
+      context: context,
+      title: AppStrings.updateOrderStatus,
+      items: items,
+    );
+  }
 
   @override
   void initState() {
@@ -66,23 +91,15 @@ class _CustomOrderItemState extends State<CustomOrderItem>
       (sum, item) => sum + (item.price * item.quantity),
     );
 
-    final statusColor = order.status.color;
-
     return Container(
       padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
-        color: Color.alphaBlend(
-          statusColor.withValues(alpha: 0.035),
-          context.colors.surface,
-        ),
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: statusColor.withValues(alpha: 0.3),
-          width: 1.2,
-        ),
+        border: Border.all(color: context.colors.border, width: 1),
         boxShadow: [
           BoxShadow(
-            color: statusColor.withValues(alpha: 0.06),
+            color: AppPalette.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -95,19 +112,14 @@ class _CustomOrderItemState extends State<CustomOrderItem>
             orderId: order.orderId,
             date: order.date,
             status: order.status,
+            onStatusTap: () => _showUpdateStatusSheet(context, order),
           ),
-          Gap(12.h),
-          OrderCustomerSummary(
-            address: order.address,
-            totalPrice: order.totalPrice,
-            paymentType: order.paymentOption.type,
-          ),
-          Gap(8.h),
-          Divider(color: context.colors.border, height: 1),
+          Divider(color: context.colors.border, height: 24.h, thickness: 1.h),
           ValueListenableBuilder<bool>(
             valueListenable: _isExpandedNotifier,
-            builder: (context, isExpanded, _) => OrderItemsPreviewBar(
-              products: order.products,
+            builder: (context, isExpanded, _) => OrderSummaryBar(
+              totalPrice: order.totalPrice,
+              paymentType: order.paymentOption.type,
               isExpanded: isExpanded,
               onToggle: _toggleExpand,
             ),
@@ -118,22 +130,17 @@ class _CustomOrderItemState extends State<CustomOrderItem>
             child: FadeTransition(
               opacity: _expandAnimation,
               child: Column(
+                spacing: 12.h,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Gap(6.h),
-                  Divider(color: context.colors.border, height: 1),
-                  Gap(12.h),
+                  const Gap(0),
                   OrderCustomerDetails(address: order.address),
-                  Gap(12.h),
                   OrderProductsList(products: order.products),
-                  Gap(12.h),
                   OrderFinancialSummary(
                     subtotal: subtotal,
                     shippingCost: order.paymentOption.shippingCost,
                     totalPrice: order.totalPrice,
                   ),
-                  Gap(12.h),
-                  OrderFooterActions(orderEntity: order),
                 ],
               ),
             ),

@@ -538,5 +538,9 @@
   "status_processing": "قيد التجهيز",
   "status_shipped": "تم الشحن",
   "status_delivered": "مكتمل",
-  "remove_photo": "حذف الصورة"
+  "remove_photo": "حذف الصورة",
+  "search_orders": "البحث في الطلبات برقم الطلب، اسم العميل، الهاتف...",
+  "search_by_order_id": "رقم الطلب",
+  "type_to_search_orders": "اكتب للبحث برقم الطلب، اسم العميل، أو الهاتف",
+  "no_orders_matching_filter": "لا توجد طلبات مطابقة لهذا الفلتر"
 }

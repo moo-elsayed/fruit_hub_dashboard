@@ -32,7 +32,7 @@ class SettingsView extends StatelessWidget {
           onTap: () => context.pop(),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
           child: BlocBuilder<SettingsCubit, SettingsState>(
             buildWhen: (previous, current) =>
                 current is FetchingShippingConfigSuccess ||

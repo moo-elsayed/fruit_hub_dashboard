@@ -17,6 +17,7 @@ import '../../features/auth/presentation/views/forget_password_view.dart';
 import '../../features/auth/presentation/views/login_view.dart';
 import '../../features/auth/presentation/views/register_view.dart';
 import '../../features/dashboard/presentation/views/dashboard_view.dart';
+import '../../features/orders/presentation/views/orders_search_view.dart';
 import '../../features/orders/presentation/views/orders_view.dart';
 import '../../features/products/presentation/managers/products_cubit/products_cubit.dart';
 import '../../features/products/presentation/views/product_view.dart';
@@ -63,6 +64,8 @@ class AppRouter {
         return _route(const SettingsView());
       case Routes.ordersView:
         return _route(const OrdersView());
+      case Routes.ordersSearchView:
+        return _route(const OrdersSearchView());
       case Routes.analyticsView:
         return _route(const AnalyticsView());
       case Routes.fullScreenImageGalleryView:

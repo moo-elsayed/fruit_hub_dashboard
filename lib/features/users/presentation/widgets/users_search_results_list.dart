@@ -13,9 +13,9 @@ class UsersSearchResultsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView.separated(
-    padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+    padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.h),
     itemCount: users.length,
-    separatorBuilder: (context, index) => SizedBox(height: 10.h),
+    separatorBuilder: (context, index) => SizedBox(height: 8.h),
     itemBuilder: (context, index) {
       final user = users[index];
       return UserCardItem(

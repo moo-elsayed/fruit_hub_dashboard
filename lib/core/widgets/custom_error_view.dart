@@ -23,7 +23,7 @@ class CustomErrorView extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        spacing: 16.h,
+        spacing: 8.h,
         children: [
           Container(
             padding: EdgeInsets.all(18.r),

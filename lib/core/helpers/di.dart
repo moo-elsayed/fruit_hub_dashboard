@@ -23,9 +23,12 @@ import 'package:fruit_hub_dashboard/features/auth/presentation/managers/user_inf
 import 'package:fruit_hub_dashboard/features/orders/data/data_sources/remote/orders_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/orders/data/repo_imp/orders_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/repo/orders_repo.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_stats_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/get_orders_use_case.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/search_orders_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/use_cases/update_order_status_use_case.dart';
 import 'package:fruit_hub_dashboard/features/orders/presentation/managers/orders_cubit/orders_cubit.dart';
+import 'package:fruit_hub_dashboard/features/orders/presentation/managers/orders_search_cubit/orders_search_cubit.dart';
 import 'package:fruit_hub_dashboard/features/products/data/data_sources/remote/products_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/products/data/repo_imp/products_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/products/domain/repo/products_repo.dart';
@@ -194,6 +197,14 @@ void setupServiceLocator() {
     () => GetOrdersUseCase(getIt<OrdersRepo>()),
   );
 
+  getIt.registerLazySingleton<GetOrdersStatsUseCase>(
+    () => GetOrdersStatsUseCase(getIt<OrdersRepo>()),
+  );
+
+  getIt.registerLazySingleton<SearchOrdersUseCase>(
+    () => SearchOrdersUseCase(getIt<OrdersRepo>()),
+  );
+
   getIt.registerLazySingleton<UpdateOrderStatusUseCase>(
     () => UpdateOrderStatusUseCase(getIt<OrdersRepo>()),
   );
@@ -201,8 +212,13 @@ void setupServiceLocator() {
   getIt.registerFactory<OrdersCubit>(
     () => OrdersCubit(
       getIt<GetOrdersUseCase>(),
+      getIt<GetOrdersStatsUseCase>(),
       getIt<UpdateOrderStatusUseCase>(),
     ),
+  );
+
+  getIt.registerFactory<OrdersSearchCubit>(
+    () => OrdersSearchCubit(getIt<SearchOrdersUseCase>()),
   );
 
   /// analytics

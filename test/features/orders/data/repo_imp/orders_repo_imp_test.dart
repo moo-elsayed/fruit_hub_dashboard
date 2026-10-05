@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fruit_hub_dashboard/core/enums/order_search_by.dart';
 import 'package:fruit_hub_dashboard/core/enums/order_status.dart';
 import 'package:fruit_hub_dashboard/core/errors/failures.dart';
 import 'package:fruit_hub_dashboard/core/network/network_response.dart';
@@ -6,8 +7,12 @@ import 'package:fruit_hub_dashboard/features/orders/data/data_sources/remote/ord
 import 'package:fruit_hub_dashboard/features/orders/data/models/address_model.dart';
 import 'package:fruit_hub_dashboard/features/orders/data/models/order_item_model.dart';
 import 'package:fruit_hub_dashboard/features/orders/data/models/order_model.dart';
+import 'package:fruit_hub_dashboard/features/orders/data/models/orders_page_model.dart';
+import 'package:fruit_hub_dashboard/features/orders/data/models/orders_stats_model.dart';
 import 'package:fruit_hub_dashboard/features/orders/data/repo_imp/orders_repo_imp.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_entity.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/entities/orders_page_entity.dart';
+import 'package:fruit_hub_dashboard/features/orders/domain/entities/orders_stats_entity.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockOrdersRemoteDataSources extends Mock
@@ -51,230 +56,182 @@ void main() {
     date: '2026-09-17T10:00:00Z',
   );
 
-  final tOrderModel2 = OrderModel(
-    uId: 'user_2',
-    docId: 'doc_2',
-    orderId: 102,
-    totalPrice: 200.0,
-    status: 'shipped',
-    paymentMethod: 'credit_card',
-    shippingAddress: tAddressModel,
-    orderItems: [tOrderItemModel],
-    date: '2026-09-17T11:00:00Z',
+  final tOrdersPageModel = OrdersPageModel(
+    orders: [tOrderModel1],
+    hasMore: true,
+    lastDocument: null,
   );
+
+  const tOrdersStatsModel = OrdersStatsModel(
+    totalCount: 50,
+    pendingCount: 10,
+    processingCount: 8,
+    shippedCount: 12,
+    deliveredCount: 18,
+    cancelledCount: 2,
+  );
+
+  setUpAll(() {
+    registerFallbackValue(OrderStatus.pending);
+    registerFallbackValue(OrderSearchBy.orderId);
+  });
 
   setUp(() {
     mockRemoteDataSource = MockOrdersRemoteDataSources();
     sut = OrdersRepoImp(mockRemoteDataSource);
   });
 
-  group('OrdersRepoImp', () {
-    group('getOrders', () {
-      test('should emit NetworkSuccess with empty list when remote data source emits empty list', () async {
-        // Arrange
-        when(() => mockRemoteDataSource.getOrders())
-            .thenAnswer((_) => Stream.value(const NetworkSuccess([])));
+  group('OrdersRepoImp - getOrders', () {
+    test('should return NetworkSuccess with OrdersPageEntity when remote data source returns NetworkSuccess', () async {
+      // Arrange
+      when(
+        () => mockRemoteDataSource.getOrders(
+          limit: any(named: 'limit'),
+          lastDocument: any(named: 'lastDocument'),
+          status: any(named: 'status'),
+        ),
+      ).thenAnswer((_) async => NetworkSuccess(tOrdersPageModel));
 
-        // Act
-        final stream = sut.getOrders();
+      // Act
+      final result = await sut.getOrders(limit: 15);
 
-        // Assert
-        await expectLater(
-          stream,
-          emits(
-            predicate<NetworkResponse<List<OrderEntity>>>((response) {
-              if (response is! NetworkSuccess<List<OrderEntity>>) return false;
-              return response.data != null && response.data!.isEmpty;
-            }),
-          ),
-        );
-        verify(() => mockRemoteDataSource.getOrders()).called(1);
-      });
-
-      test('should map OrderModels to OrderEntities and emit NetworkSuccess when remote data source emits models', () async {
-        // Arrange
-        final models = [tOrderModel1, tOrderModel2];
-        final expectedEntities = models.map((m) => m.toEntity()).toList();
-
-        when(() => mockRemoteDataSource.getOrders())
-            .thenAnswer((_) => Stream.value(NetworkSuccess(models)));
-
-        // Act
-        final stream = sut.getOrders();
-
-        // Assert
-        await expectLater(
-          stream,
-          emits(
-            predicate<NetworkResponse<List<OrderEntity>>>((response) {
-              if (response is! NetworkSuccess<List<OrderEntity>>) return false;
-              final data = response.data;
-              if (data == null || data.length != 2) return false;
-              return data[0] == expectedEntities[0] &&
-                  data[1] == expectedEntities[1];
-            }),
-          ),
-        );
-        verify(() => mockRemoteDataSource.getOrders()).called(1);
-      });
-
-      test('should emit NetworkSuccess with null data when remote data source emits NetworkSuccess with null data', () async {
-        // Arrange
-        when(() => mockRemoteDataSource.getOrders())
-            .thenAnswer((_) => Stream.value(const NetworkSuccess(null)));
-
-        // Act
-        final stream = sut.getOrders();
-
-        // Assert
-        await expectLater(
-          stream,
-          emits(
-            predicate<NetworkResponse<List<OrderEntity>>>((response) {
-              if (response is! NetworkSuccess<List<OrderEntity>>) return false;
-              return response.data == null;
-            }),
-          ),
-        );
-        verify(() => mockRemoteDataSource.getOrders()).called(1);
-      });
-
-      test('should emit NetworkFailure when remote data source emits NetworkFailure', () async {
-        // Arrange
-        when(() => mockRemoteDataSource.getOrders())
-            .thenAnswer((_) => Stream.value(const NetworkFailure(tFailure)));
-
-        // Act
-        final stream = sut.getOrders();
-
-        // Assert
-        await expectLater(
-          stream,
-          emits(
-            predicate<NetworkResponse<List<OrderEntity>>>((response) {
-              if (response is! NetworkFailure<List<OrderEntity>>) return false;
-              return response.failure == tFailure;
-            }),
-          ),
-        );
-        verify(() => mockRemoteDataSource.getOrders()).called(1);
-      });
-
-      test('should emit multiple sequential responses as they arrive from remote data source stream', () async {
-        // Arrange
-        final batch1 = [tOrderModel1];
-        final batch2 = [tOrderModel1, tOrderModel2];
-
-        when(() => mockRemoteDataSource.getOrders()).thenAnswer(
-          (_) => Stream.fromIterable([
-            NetworkSuccess(batch1),
-            NetworkSuccess(batch2),
-            const NetworkFailure<List<OrderModel>>(tFailure),
-          ]),
-        );
-
-        // Act
-        final stream = sut.getOrders();
-
-        // Assert
-        await expectLater(
-          stream,
-          emitsInOrder([
-            predicate<NetworkResponse<List<OrderEntity>>>(
-              (res) =>
-                  res is NetworkSuccess<List<OrderEntity>> &&
-                  res.data?.length == 1 &&
-                  res.data?.first == tOrderModel1.toEntity(),
-            ),
-            predicate<NetworkResponse<List<OrderEntity>>>(
-              (res) =>
-                  res is NetworkSuccess<List<OrderEntity>> &&
-                  res.data?.length == 2,
-            ),
-            predicate<NetworkResponse<List<OrderEntity>>>(
-              (res) =>
-                  res is NetworkFailure<List<OrderEntity>> &&
-                  res.failure == tFailure,
-            ),
-          ]),
-        );
-        verify(() => mockRemoteDataSource.getOrders()).called(1);
-      });
+      // Assert
+      expect(result, isA<NetworkSuccess<OrdersPageEntity>>());
+      final page = (result as NetworkSuccess<OrdersPageEntity>).data;
+      expect(page?.orders.length, 1);
+      expect(page?.orders.first.orderId, 101);
+      expect(page?.hasMore, true);
+      verify(() => mockRemoteDataSource.getOrders(limit: 15)).called(1);
     });
 
-    group('updateOrderStatus', () {
-      test('should forward call to remote data source and return NetworkSuccess(null) on success', () async {
-        // Arrange
-        when(
-          () => mockRemoteDataSource.updateOrderStatus(
-            tDocId,
-            OrderStatus.delivered,
-          ),
-        ).thenAnswer((_) async => const NetworkSuccess(null));
+    test('should return NetworkFailure when remote data source returns NetworkFailure', () async {
+      // Arrange
+      when(
+        () => mockRemoteDataSource.getOrders(
+          limit: any(named: 'limit'),
+          lastDocument: any(named: 'lastDocument'),
+          status: any(named: 'status'),
+        ),
+      ).thenAnswer((_) async => const NetworkFailure(tFailure));
 
-        // Act
-        final result = await sut.updateOrderStatus(
-          tDocId,
-          OrderStatus.delivered,
-        );
+      // Act
+      final result = await sut.getOrders();
 
-        // Assert
-        expect(result, isA<NetworkSuccess<void>>());
-        verify(
-          () => mockRemoteDataSource.updateOrderStatus(
-            tDocId,
-            OrderStatus.delivered,
-          ),
-        ).called(1);
-        verifyNoMoreInteractions(mockRemoteDataSource);
-      });
+      // Assert
+      expect(result, isA<NetworkFailure<OrdersPageEntity>>());
+      expect((result as NetworkFailure<OrdersPageEntity>).failure, tFailure);
+    });
+  });
 
-      for (final status in OrderStatus.values) {
-        test(
-          'should pass OrderStatus.${status.name} to remote data source correctly',
-          () async {
-            // Arrange
-            when(() => mockRemoteDataSource.updateOrderStatus(tDocId, status))
-                .thenAnswer((_) async => const NetworkSuccess(null));
+  group('OrdersRepoImp - getOrdersStats', () {
+    test('should return NetworkSuccess with OrdersStatsEntity when remote data source returns NetworkSuccess', () async {
+      // Arrange
+      when(() => mockRemoteDataSource.getOrdersStats())
+          .thenAnswer((_) async => const NetworkSuccess(tOrdersStatsModel));
 
-            // Act
-            final result = await sut.updateOrderStatus(tDocId, status);
+      // Act
+      final result = await sut.getOrdersStats();
 
-            // Assert
-            expect(result, isA<NetworkSuccess<void>>());
-            verify(() => mockRemoteDataSource.updateOrderStatus(tDocId, status))
-                .called(1);
-          },
-        );
-      }
+      // Assert
+      expect(result, isA<NetworkSuccess<OrdersStatsEntity>>());
+      final stats = (result as NetworkSuccess<OrdersStatsEntity>).data;
+      expect(stats?.totalCount, 50);
+      expect(stats?.pendingCount, 10);
+      verify(() => mockRemoteDataSource.getOrdersStats()).called(1);
+    });
 
-      test('should return NetworkFailure when remote data source returns NetworkFailure', () async {
-        // Arrange
-        when(
-          () => mockRemoteDataSource.updateOrderStatus(
-            tDocId,
-            OrderStatus.cancelled,
-          ),
-        ).thenAnswer((_) async => const NetworkFailure(tFailure));
+    test('should return NetworkFailure when remote data source returns NetworkFailure', () async {
+      // Arrange
+      when(() => mockRemoteDataSource.getOrdersStats())
+          .thenAnswer((_) async => const NetworkFailure(tFailure));
 
-        // Act
-        final result = await sut.updateOrderStatus(
-          tDocId,
-          OrderStatus.cancelled,
-        );
+      // Act
+      final result = await sut.getOrdersStats();
 
-        // Assert
-        expect(result, isA<NetworkFailure<void>>());
-        final failure = (result as NetworkFailure<void>).failure;
-        expect(failure, tFailure);
-        verify(
-          () => mockRemoteDataSource.updateOrderStatus(
-            tDocId,
-            OrderStatus.cancelled,
-          ),
-        ).called(1);
-        verifyNoMoreInteractions(mockRemoteDataSource);
-      });
+      // Assert
+      expect(result, isA<NetworkFailure<OrdersStatsEntity>>());
+      expect((result as NetworkFailure<OrdersStatsEntity>).failure, tFailure);
+    });
+  });
+
+  group('OrdersRepoImp - searchOrders', () {
+    test('should return NetworkSuccess with List<OrderEntity> when search succeeds', () async {
+      // Arrange
+      when(
+        () => mockRemoteDataSource.searchOrders(
+          query: any(named: 'query'),
+          searchBy: any(named: 'searchBy'),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) async => NetworkSuccess([tOrderModel1]));
+
+      // Act
+      final result = await sut.searchOrders(
+        query: '101',
+        searchBy: OrderSearchBy.orderId,
+      );
+
+      // Assert
+      expect(result, isA<NetworkSuccess<List<OrderEntity>>>());
+      final orders = (result as NetworkSuccess<List<OrderEntity>>).data;
+      expect(orders?.length, 1);
+      expect(orders?.first.orderId, 101);
+    });
+
+    test('should return NetworkFailure when search fails', () async {
+      // Arrange
+      when(
+        () => mockRemoteDataSource.searchOrders(
+          query: any(named: 'query'),
+          searchBy: any(named: 'searchBy'),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) async => const NetworkFailure(tFailure));
+
+      // Act
+      final result = await sut.searchOrders(
+        query: '101',
+        searchBy: OrderSearchBy.orderId,
+      );
+
+      // Assert
+      expect(result, isA<NetworkFailure<List<OrderEntity>>>());
+      expect((result as NetworkFailure<List<OrderEntity>>).failure, tFailure);
+    });
+  });
+
+  group('OrdersRepoImp - updateOrderStatus', () {
+    test('should call remote data source and return NetworkSuccess(null)', () async {
+      // Arrange
+      when(
+        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
+      ).thenAnswer((_) async => const NetworkSuccess(null));
+
+      // Act
+      final result = await sut.updateOrderStatus(tDocId, OrderStatus.shipped);
+
+      // Assert
+      expect(result, isA<NetworkSuccess<void>>());
+      verify(
+        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
+      ).called(1);
+    });
+
+    test('should return NetworkFailure when remote data source returns NetworkFailure', () async {
+      // Arrange
+      when(
+        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
+      ).thenAnswer((_) async => const NetworkFailure(tFailure));
+
+      // Act
+      final result = await sut.updateOrderStatus(tDocId, OrderStatus.shipped);
+
+      // Assert
+      expect(result, isA<NetworkFailure<void>>());
+      expect((result as NetworkFailure<void>).failure, tFailure);
+      verify(
+        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
+      ).called(1);
     });
   });
 }
