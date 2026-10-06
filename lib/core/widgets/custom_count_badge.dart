@@ -25,8 +25,8 @@ class CustomCountBadge extends StatelessWidget {
     this.borderRadius,
     this.isCircle = false,
     this.textStyle,
-  })  : count = null,
-        text = 'x$quantity';
+  }) : count = null,
+       text = 'x$quantity';
 
   final int? count;
   final String? text;
@@ -41,7 +41,8 @@ class CustomCountBadge extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: padding ?? EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.h),
     decoration: BoxDecoration(
-      color: backgroundColor ??
+      color:
+          backgroundColor ??
           (textColor ?? context.colors.primary).withValues(alpha: 0.1),
       shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
       borderRadius: isCircle

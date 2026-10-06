@@ -68,6 +68,5 @@ class OrdersRepoImp implements OrdersRepo {
   Future<NetworkResponse<void>> updateOrderStatus(
     String docId,
     OrderStatus status,
-  ) async =>
-      await _ordersRemoteDataSources.updateOrderStatus(docId, status);
+  ) async => await _ordersRemoteDataSources.updateOrderStatus(docId, status);
 }

@@ -29,18 +29,27 @@ class CustomOrderItem extends StatefulWidget {
 class _CustomOrderItemState extends State<CustomOrderItem>
     with SingleTickerProviderStateMixin {
   late final AnimationController _expandController;
-  late final Animation<double> _expandAnimation;
+  late final CurvedAnimation _expandAnimation;
   final ValueNotifier<bool> _isExpandedNotifier = ValueNotifier<bool>(false);
 
   void _showUpdateStatusSheet(BuildContext context, OrderEntity orderEntity) {
-    final cubit = context.read<OrdersCubit>();
+    OrdersCubit? cubit;
+    try {
+      cubit = context.read<OrdersCubit>();
+    } catch (_) {
+      cubit = null;
+    }
+    if (cubit == null) return;
+    final activeCubit = cubit;
+
     final items = OrderStatus.values
         .map(
           (status) => CustomBottomSheetSelectionItem(
             title: status.getName,
             value: status,
             isSelected: orderEntity.status == status,
-            onTap: () => cubit.updateOrderStatus(orderEntity.docId, status),
+            onTap: () =>
+                activeCubit.updateOrderStatus(orderEntity.docId, status),
           ),
         )
         .toList();
@@ -62,12 +71,12 @@ class _CustomOrderItemState extends State<CustomOrderItem>
     _expandAnimation = CurvedAnimation(
       parent: _expandController,
       curve: Curves.fastOutSlowIn,
-      reverseCurve: Curves.fastOutSlowIn,
     );
   }
 
   @override
   void dispose() {
+    _expandAnimation.dispose();
     _expandController.dispose();
     _isExpandedNotifier.dispose();
     super.dispose();

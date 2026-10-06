@@ -560,6 +560,5 @@ abstract class AppStrings {
   static String get searchOrders => 'search_orders'.tr();
   static String get searchByOrderId => 'search_by_order_id'.tr();
   static String get typeToSearchOrders => 'type_to_search_orders'.tr();
-  static String get noOrdersMatchingFilter =>
-      'no_orders_matching_filter'.tr();
+  static String get noOrdersMatchingFilter => 'no_orders_matching_filter'.tr();
 }

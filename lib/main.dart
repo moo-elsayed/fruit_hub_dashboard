@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub_dashboard/simple_bloc_observer.dart';
 
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'core/helpers/backend_endpoints.dart';
 import 'core/helpers/di.dart';
 import 'core/routing/app_router.dart';
 import 'firebase_options.dart';
@@ -16,6 +19,9 @@ void main() async {
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
+    GoogleSignIn.instance.initialize(
+      serverClientId: BackendEndpoints.googleServerClientId,
+    ),
   ]);
 
   setupServiceLocator();

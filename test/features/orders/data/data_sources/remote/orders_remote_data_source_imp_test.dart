@@ -63,43 +63,37 @@ void main() {
     });
 
     group('getOrders', () {
-      test(
-        'should return NetworkSuccess with an empty page when collection has no documents',
-        () async {
-          // Act
-          final result = await sut.getOrders();
+      test('should return NetworkSuccess with an empty page when collection has no documents', () async {
+        // Act
+        final result = await sut.getOrders();
 
-          // Assert
-          expect(result, isA<NetworkSuccess<OrdersPageModel>>());
-          final page = (result as NetworkSuccess<OrdersPageModel>).data;
-          expect(page?.orders, isEmpty);
-          expect(page?.hasMore, isFalse);
-          expect(page?.lastDocument, isNull);
-        },
-      );
+        // Assert
+        expect(result, isA<NetworkSuccess<OrdersPageModel>>());
+        final page = (result as NetworkSuccess<OrdersPageModel>).data;
+        expect(page?.orders, isEmpty);
+        expect(page?.hasMore, isFalse);
+        expect(page?.lastDocument, isNull);
+      });
 
-      test(
-        'should return paginated orders with hasMore true when documents are greater than limit',
-        () async {
-          // Arrange
-          for (int i = 1; i <= 3; i++) {
-            await fakeFirestore
-                .collection(ordersCollection)
-                .doc('doc_$i')
-                .set(createOrderMap(orderId: 100 + i));
-          }
+      test('should return paginated orders with hasMore true when documents are greater than limit', () async {
+        // Arrange
+        for (int i = 1; i <= 3; i++) {
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_$i')
+              .set(createOrderMap(orderId: 100 + i));
+        }
 
-          // Act
-          final result = await sut.getOrders(limit: 2);
+        // Act
+        final result = await sut.getOrders(limit: 2);
 
-          // Assert
-          expect(result, isA<NetworkSuccess<OrdersPageModel>>());
-          final page = (result as NetworkSuccess<OrdersPageModel>).data;
-          expect(page?.orders.length, 2);
-          expect(page?.hasMore, isTrue);
-          expect(page?.lastDocument, isNotNull);
-        },
-      );
+        // Assert
+        expect(result, isA<NetworkSuccess<OrdersPageModel>>());
+        final page = (result as NetworkSuccess<OrdersPageModel>).data;
+        expect(page?.orders.length, 2);
+        expect(page?.hasMore, isTrue);
+        expect(page?.lastDocument, isNotNull);
+      });
 
       test(
         'should return next page of orders when lastDocument is provided',
@@ -114,15 +108,20 @@ void main() {
 
           // Act - fetch first page
           final firstResult = await sut.getOrders(limit: 2);
-          final firstPage = (firstResult as NetworkSuccess<OrdersPageModel>).data;
+          final firstPage =
+              (firstResult as NetworkSuccess<OrdersPageModel>).data;
           final lastDoc = firstPage?.lastDocument;
 
           // Act - fetch second page
-          final secondResult = await sut.getOrders(limit: 2, lastDocument: lastDoc);
+          final secondResult = await sut.getOrders(
+            limit: 2,
+            lastDocument: lastDoc,
+          );
 
           // Assert
           expect(secondResult, isA<NetworkSuccess<OrdersPageModel>>());
-          final secondPage = (secondResult as NetworkSuccess<OrdersPageModel>).data;
+          final secondPage =
+              (secondResult as NetworkSuccess<OrdersPageModel>).data;
           expect(secondPage?.orders.length, 1);
           expect(secondPage?.orders.first.orderId, 103);
           expect(secondPage?.hasMore, isFalse);
@@ -168,20 +167,23 @@ void main() {
     });
 
     group('getOrdersStats', () {
-      test('should return zeros for all counts when collection is empty', () async {
-        // Act
-        final result = await sut.getOrdersStats();
+      test(
+        'should return zeros for all counts when collection is empty',
+        () async {
+          // Act
+          final result = await sut.getOrdersStats();
 
-        // Assert
-        expect(result, isA<NetworkSuccess<OrdersStatsModel>>());
-        final stats = (result as NetworkSuccess<OrdersStatsModel>).data;
-        expect(stats?.totalCount, 0);
-        expect(stats?.pendingCount, 0);
-        expect(stats?.processingCount, 0);
-        expect(stats?.shippedCount, 0);
-        expect(stats?.deliveredCount, 0);
-        expect(stats?.cancelledCount, 0);
-      });
+          // Assert
+          expect(result, isA<NetworkSuccess<OrdersStatsModel>>());
+          final stats = (result as NetworkSuccess<OrdersStatsModel>).data;
+          expect(stats?.totalCount, 0);
+          expect(stats?.pendingCount, 0);
+          expect(stats?.processingCount, 0);
+          expect(stats?.shippedCount, 0);
+          expect(stats?.deliveredCount, 0);
+          expect(stats?.cancelledCount, 0);
+        },
+      );
 
       test('should return correct counts aggregated by status', () async {
         // Arrange
@@ -250,61 +252,70 @@ void main() {
         expect((result as NetworkSuccess<List<OrderModel>>).data, isEmpty);
       });
 
-      test('should return orders matching orderId with integer query', () async {
-        // Arrange
-        await fakeFirestore
-            .collection(ordersCollection)
-            .doc('doc_1')
-            .set(createOrderMap(orderId: 9001));
-        await fakeFirestore
-            .collection(ordersCollection)
-            .doc('doc_2')
-            .set(createOrderMap(orderId: 9002));
+      test(
+        'should return orders matching orderId with integer query',
+        () async {
+          // Arrange
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_1')
+              .set(createOrderMap(orderId: 9001));
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_2')
+              .set(createOrderMap(orderId: 9002));
 
-        // Act
-        final result = await sut.searchOrders(
-          query: '9001',
-          searchBy: OrderSearchBy.orderId,
-        );
+          // Act
+          final result = await sut.searchOrders(
+            query: '9001',
+            searchBy: OrderSearchBy.orderId,
+          );
 
-        // Assert
-        expect(result, isA<NetworkSuccess<List<OrderModel>>>());
-        final orders = (result as NetworkSuccess<List<OrderModel>>).data;
-        expect(orders?.length, 1);
-        expect(orders?.first.orderId, 9001);
-      });
+          // Assert
+          expect(result, isA<NetworkSuccess<List<OrderModel>>>());
+          final orders = (result as NetworkSuccess<List<OrderModel>>).data;
+          expect(orders?.length, 1);
+          expect(orders?.first.orderId, 9001);
+        },
+      );
 
-      test('should return orders matching orderId when query includes # prefix', () async {
-        // Arrange
-        await fakeFirestore
-            .collection(ordersCollection)
-            .doc('doc_1')
-            .set(createOrderMap(orderId: 9001));
+      test(
+        'should return orders matching orderId when query includes # prefix',
+        () async {
+          // Arrange
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_1')
+              .set(createOrderMap(orderId: 9001));
 
-        // Act
-        final result = await sut.searchOrders(
-          query: '#9001',
-          searchBy: OrderSearchBy.orderId,
-        );
+          // Act
+          final result = await sut.searchOrders(
+            query: '#9001',
+            searchBy: OrderSearchBy.orderId,
+          );
 
-        // Assert
-        expect(result, isA<NetworkSuccess<List<OrderModel>>>());
-        final orders = (result as NetworkSuccess<List<OrderModel>>).data;
-        expect(orders?.length, 1);
-        expect(orders?.first.orderId, 9001);
-      });
+          // Assert
+          expect(result, isA<NetworkSuccess<List<OrderModel>>>());
+          final orders = (result as NetworkSuccess<List<OrderModel>>).data;
+          expect(orders?.length, 1);
+          expect(orders?.first.orderId, 9001);
+        },
+      );
 
-      test('should return empty list when orderId query is not a valid number', () async {
-        // Act
-        final result = await sut.searchOrders(
-          query: 'not_a_number',
-          searchBy: OrderSearchBy.orderId,
-        );
+      test(
+        'should return empty list when orderId query is not a valid number',
+        () async {
+          // Act
+          final result = await sut.searchOrders(
+            query: 'not_a_number',
+            searchBy: OrderSearchBy.orderId,
+          );
 
-        // Assert
-        expect(result, isA<NetworkSuccess<List<OrderModel>>>());
-        expect((result as NetworkSuccess<List<OrderModel>>).data, isEmpty);
-      });
+          // Assert
+          expect(result, isA<NetworkSuccess<List<OrderModel>>>());
+          expect((result as NetworkSuccess<List<OrderModel>>).data, isEmpty);
+        },
+      );
 
       test('should return orders matching customerName prefix', () async {
         // Arrange
@@ -355,27 +366,80 @@ void main() {
         expect(orders!.length, 1);
         expect(orders.first.shippingAddress.phone, '01012345678');
       });
+
+      test(
+        'should return search results sorted by date descending (newest first)',
+        () async {
+          // Arrange
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_old')
+              .set(
+                createOrderMap(
+                  orderId: 9001,
+                  customerName: 'Ahmed Ali',
+                  date: '2026-09-01T10:00:00Z',
+                ),
+              );
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_new')
+              .set(
+                createOrderMap(
+                  orderId: 9002,
+                  customerName: 'Ahmed Ibrahim',
+                  date: '2026-10-05T10:00:00Z',
+                ),
+              );
+
+          // Act
+          final result = await sut.searchOrders(
+            query: 'Ahmed',
+            searchBy: OrderSearchBy.customerName,
+          );
+
+          // Assert
+          expect(result, isA<NetworkSuccess<List<OrderModel>>>());
+          final orders = (result as NetworkSuccess<List<OrderModel>>).data;
+          expect(orders, isNotNull);
+          expect(orders!.length, 2);
+          expect(orders[0].orderId, 9002);
+          expect(orders[1].orderId, 9001);
+        },
+      );
     });
 
     group('updateOrderStatus', () {
-      test('should successfully update status and preserve existing fields', () async {
-        // Arrange
-        await fakeFirestore
-            .collection(ordersCollection)
-            .doc('doc_1')
-            .set(createOrderMap(status: 'pending', customerName: 'Ahmed Ali'));
+      test(
+        'should successfully update status and preserve existing fields',
+        () async {
+          // Arrange
+          await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_1')
+              .set(
+                createOrderMap(status: 'pending', customerName: 'Ahmed Ali'),
+              );
 
-        // Act
-        final result = await sut.updateOrderStatus('doc_1', OrderStatus.delivered);
+          // Act
+          final result = await sut.updateOrderStatus(
+            'doc_1',
+            OrderStatus.delivered,
+          );
 
-        // Assert
-        expect(result, isA<NetworkSuccess<void>>());
-        final doc = await fakeFirestore.collection(ordersCollection).doc('doc_1').get();
-        expect(doc.data()?['status'], 'delivered');
-        expect(doc.data()?['uId'], 'user_1');
-        final address = doc.data()?['shippingAddress'] as Map<String, dynamic>?;
-        expect(address?['name'], 'Ahmed Ali');
-      });
+          // Assert
+          expect(result, isA<NetworkSuccess<void>>());
+          final doc = await fakeFirestore
+              .collection(ordersCollection)
+              .doc('doc_1')
+              .get();
+          expect(doc.data()?['status'], 'delivered');
+          expect(doc.data()?['uId'], 'user_1');
+          final address =
+              doc.data()?['shippingAddress'] as Map<String, dynamic>?;
+          expect(address?['name'], 'Ahmed Ali');
+        },
+      );
     });
 
     group('Model and Entity Mappings', () {
@@ -476,7 +540,10 @@ void main() {
 
         // Act & Assert
         expect(cardOrder.toEntity().paymentOption.type, PaymentMethodType.card);
-        expect(paypalOrder.toEntity().paymentOption.type, PaymentMethodType.paypal);
+        expect(
+          paypalOrder.toEntity().paymentOption.type,
+          PaymentMethodType.paypal,
+        );
       });
 
       test('OrderModel.fromJson should handle numeric coercion and default fallbacks for missing fields', () {

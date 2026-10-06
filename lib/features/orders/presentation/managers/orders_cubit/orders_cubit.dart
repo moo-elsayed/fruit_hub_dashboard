@@ -48,7 +48,12 @@ class OrdersCubit extends Cubit<OrdersState> {
     if (response is NetworkSuccess<OrdersStatsEntity>) {
       _stats = response.data ?? const OrdersStatsEntity();
       if (state is OrdersSuccess) {
-        emit((state as OrdersSuccess).copyWith(stats: _stats));
+        emit(
+          (state as OrdersSuccess).copyWith(
+            stats: _stats,
+            orderState: OrderState.getOrders,
+          ),
+        );
       }
     }
   }
@@ -148,8 +153,9 @@ class OrdersCubit extends Cubit<OrdersState> {
         // 3. Rollback on failure
         final currentIndex = _orders.indexWhere((o) => o.docId == docId);
         if (currentIndex != -1) {
-          _orders[currentIndex] =
-              _orders[currentIndex].copyWith(status: previousStatus);
+          _orders[currentIndex] = _orders[currentIndex].copyWith(
+            status: previousStatus,
+          );
         }
         emit(
           OrdersFailure(

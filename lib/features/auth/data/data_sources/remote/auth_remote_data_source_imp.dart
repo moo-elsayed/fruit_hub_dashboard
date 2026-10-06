@@ -8,17 +8,22 @@ import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/sign_up_input_model.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
 
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'auth_remote_data_source.dart';
 
 class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   AuthRemoteDataSourceImp({
     FirebaseAuth? firebaseAuth,
     FirebaseFirestore? firestore,
+    GoogleSignIn? googleSignIn,
   }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-       _firestore = firestore ?? FirebaseFirestore.instance;
+       _firestore = firestore ?? FirebaseFirestore.instance,
+       _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
 
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
+  final GoogleSignIn _googleSignIn;
   static const String _usersCollection = BackendEndpoints.usersCollection;
 
   @override
@@ -96,9 +101,16 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   @override
   Future<NetworkResponse<UserModel>> googleSignIn() async =>
       ApiHelper.executeSafely(() async {
-        final googleProvider = GoogleAuthProvider();
-        final userCredential = await _firebaseAuth.signInWithProvider(
-          googleProvider,
+        final googleAccount = await _googleSignIn.authenticate();
+        final idToken = googleAccount.authentication.idToken;
+        if (idToken == null) {
+          throw BusinessException(AppStrings.unexpectedError);
+        }
+
+        final credential = GoogleAuthProvider.credential(idToken: idToken);
+
+        final userCredential = await _firebaseAuth.signInWithCredential(
+          credential,
         );
 
         final user = userCredential.user;
@@ -145,7 +157,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
   @override
   Future<NetworkResponse<void>> signOut() async =>
       ApiHelper.executeSafely(() async {
-        await _firebaseAuth.signOut();
+        await Future.wait([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
       }, functionName: 'signOut');
 
   // -------------------------------------------------------------------

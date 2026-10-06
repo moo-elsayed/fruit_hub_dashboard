@@ -70,30 +70,33 @@ void main() {
       verifyNoMoreInteractions(mockOrdersRepo);
     });
 
-    test('should return NetworkFailure when repo returns NetworkFailure', () async {
-      // Arrange
-      when(
-        () => mockOrdersRepo.getOrders(
-          limit: any(named: 'limit'),
-          lastDocument: any(named: 'lastDocument'),
-          status: any(named: 'status'),
-        ),
-      ).thenAnswer((_) async => const NetworkFailure(tFailure));
+    test(
+      'should return NetworkFailure when repo returns NetworkFailure',
+      () async {
+        // Arrange
+        when(
+          () => mockOrdersRepo.getOrders(
+            limit: any(named: 'limit'),
+            lastDocument: any(named: 'lastDocument'),
+            status: any(named: 'status'),
+          ),
+        ).thenAnswer((_) async => const NetworkFailure(tFailure));
 
-      // Act
-      final result = await sut(limit: 20, status: OrderStatus.pending);
+        // Act
+        final result = await sut(limit: 20, status: OrderStatus.pending);
 
-      // Assert
-      expect(result, isA<NetworkFailure<OrdersPageEntity>>());
-      expect((result as NetworkFailure<OrdersPageEntity>).failure, tFailure);
-      verify(
-        () => mockOrdersRepo.getOrders(
-          limit: 20,
-          lastDocument: null,
-          status: OrderStatus.pending,
-        ),
-      ).called(1);
-      verifyNoMoreInteractions(mockOrdersRepo);
-    });
+        // Assert
+        expect(result, isA<NetworkFailure<OrdersPageEntity>>());
+        expect((result as NetworkFailure<OrdersPageEntity>).failure, tFailure);
+        verify(
+          () => mockOrdersRepo.getOrders(
+            limit: 20,
+            lastDocument: null,
+            status: OrderStatus.pending,
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(mockOrdersRepo);
+      },
+    );
   });
 }

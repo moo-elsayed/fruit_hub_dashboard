@@ -5,7 +5,6 @@ import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
 import 'package:fruit_hub_dashboard/core/widgets/custom_count_badge.dart';
 import 'package:fruit_hub_dashboard/features/orders/domain/entities/order_item_entity.dart';
-import 'package:gap/gap.dart';
 
 import 'order_product_card.dart';
 
@@ -26,7 +25,7 @@ class OrderProductsList extends StatefulWidget {
 class _OrderProductsListState extends State<OrderProductsList>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  late final Animation<double> _expandAnimation;
+  late final CurvedAnimation _expandAnimation;
   late final Animation<double> _arrowAnimation;
   late bool _isExpanded;
 
@@ -51,6 +50,7 @@ class _OrderProductsListState extends State<OrderProductsList>
 
   @override
   void dispose() {
+    _expandAnimation.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -102,13 +102,11 @@ class _OrderProductsListState extends State<OrderProductsList>
         alignment: Alignment.topCenter,
         child: Padding(
           padding: EdgeInsets.only(top: 12.h),
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.products.length,
-            separatorBuilder: (context, index) => Gap(8.h),
-            itemBuilder: (context, index) =>
-                OrderProductCard(product: widget.products[index]),
+          child: Column(
+            spacing: 8.h,
+            children: widget.products
+                .map((product) => OrderProductCard(product: product))
+                .toList(),
           ),
         ),
       ),

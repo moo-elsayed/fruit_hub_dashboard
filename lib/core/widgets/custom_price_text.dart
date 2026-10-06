@@ -48,7 +48,10 @@ class CustomPriceText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: '${price.formattedPrice} ', style: effectivePriceStyle),
+          TextSpan(
+            text: '${price.formattedPrice} ',
+            style: effectivePriceStyle,
+          ),
           TextSpan(text: AppStrings.pounds, style: effectiveCurrencyStyle),
         ],
       ),

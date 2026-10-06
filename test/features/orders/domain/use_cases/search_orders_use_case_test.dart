@@ -34,40 +34,37 @@ void main() {
   });
 
   group('SearchOrdersUseCase', () {
-    test(
-      'should call repo with given parameters and return NetworkSuccess with orders list',
-      () async {
-        // Arrange
-        when(
-          () => mockOrdersRepo.searchOrders(
-            query: any(named: 'query'),
-            searchBy: any(named: 'searchBy'),
-            limit: any(named: 'limit'),
-          ),
-        ).thenAnswer(
-          (_) async => const NetworkSuccess<List<OrderEntity>>(tOrders),
-        );
+    test('should call repo with given parameters and return NetworkSuccess with orders list', () async {
+      // Arrange
+      when(
+        () => mockOrdersRepo.searchOrders(
+          query: any(named: 'query'),
+          searchBy: any(named: 'searchBy'),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer(
+        (_) async => const NetworkSuccess<List<OrderEntity>>(tOrders),
+      );
 
-        // Act
-        final result = await sut(query: '101', searchBy: OrderSearchBy.orderId);
+      // Act
+      final result = await sut(query: '101', searchBy: OrderSearchBy.orderId);
 
-        // Assert
-        expect(result, isA<NetworkSuccess<List<OrderEntity>>>());
-        final list = (result as NetworkSuccess<List<OrderEntity>>).data!;
-        expect(list, tOrders);
-        expect(list.length, 1);
-        expect(list.first.orderId, 101);
+      // Assert
+      expect(result, isA<NetworkSuccess<List<OrderEntity>>>());
+      final list = (result as NetworkSuccess<List<OrderEntity>>).data!;
+      expect(list, tOrders);
+      expect(list.length, 1);
+      expect(list.first.orderId, 101);
 
-        verify(
-          () => mockOrdersRepo.searchOrders(
-            query: '101',
-            searchBy: OrderSearchBy.orderId,
-            limit: 30,
-          ),
-        ).called(1);
-        verifyNoMoreInteractions(mockOrdersRepo);
-      },
-    );
+      verify(
+        () => mockOrdersRepo.searchOrders(
+          query: '101',
+          searchBy: OrderSearchBy.orderId,
+          limit: 30,
+        ),
+      ).called(1);
+      verifyNoMoreInteractions(mockOrdersRepo);
+    });
 
     test('should forward custom limit parameter to repo correctly', () async {
       // Arrange

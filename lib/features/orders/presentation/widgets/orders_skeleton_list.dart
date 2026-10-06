@@ -8,11 +8,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'custom_order_item.dart';
 
 class OrdersSkeletonList extends StatelessWidget {
-  const OrdersSkeletonList({
-    super.key,
-    this.itemCount = 4,
-    this.padding,
-  });
+  const OrdersSkeletonList({super.key, this.itemCount = 4, this.padding});
 
   final int itemCount;
   final EdgeInsetsGeometry? padding;
@@ -28,12 +24,7 @@ class OrdersSkeletonList extends StatelessWidget {
   Widget build(BuildContext context) => Skeletonizer(
     enabled: true,
     child: ListView.separated(
-      padding: padding ??
-          EdgeInsets.only(
-            right: 16.w,
-            left: 16.w,
-            bottom: 8.h,
-          ),
+      padding: padding ?? EdgeInsets.only(right: 16.w, left: 16.w, bottom: 8.h),
       itemCount: itemCount,
       separatorBuilder: (context, index) => Gap(8.h),
       itemBuilder: (context, index) =>

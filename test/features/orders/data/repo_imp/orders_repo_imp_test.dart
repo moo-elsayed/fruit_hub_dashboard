@@ -201,26 +201,36 @@ void main() {
   });
 
   group('OrdersRepoImp - updateOrderStatus', () {
-    test('should call remote data source and return NetworkSuccess(null)', () async {
-      // Arrange
-      when(
-        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
-      ).thenAnswer((_) async => const NetworkSuccess(null));
+    test(
+      'should call remote data source and return NetworkSuccess(null)',
+      () async {
+        // Arrange
+        when(
+          () => mockRemoteDataSource.updateOrderStatus(
+            tDocId,
+            OrderStatus.shipped,
+          ),
+        ).thenAnswer((_) async => const NetworkSuccess(null));
 
-      // Act
-      final result = await sut.updateOrderStatus(tDocId, OrderStatus.shipped);
+        // Act
+        final result = await sut.updateOrderStatus(tDocId, OrderStatus.shipped);
 
-      // Assert
-      expect(result, isA<NetworkSuccess<void>>());
-      verify(
-        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
-      ).called(1);
-    });
+        // Assert
+        expect(result, isA<NetworkSuccess<void>>());
+        verify(
+          () => mockRemoteDataSource.updateOrderStatus(
+            tDocId,
+            OrderStatus.shipped,
+          ),
+        ).called(1);
+      },
+    );
 
     test('should return NetworkFailure when remote data source returns NetworkFailure', () async {
       // Arrange
       when(
-        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
+        () =>
+            mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
       ).thenAnswer((_) async => const NetworkFailure(tFailure));
 
       // Act
@@ -230,7 +240,8 @@ void main() {
       expect(result, isA<NetworkFailure<void>>());
       expect((result as NetworkFailure<void>).failure, tFailure);
       verify(
-        () => mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
+        () =>
+            mockRemoteDataSource.updateOrderStatus(tDocId, OrderStatus.shipped),
       ).called(1);
     });
   });

@@ -16,4 +16,8 @@ abstract class BackendEndpoints {
   // Firestore Document IDs
   static const String shippingConfigDocId = 'shipping_config';
   static const String analyticsSummaryDocId = 'summary';
+
+  // Auth / Google Sign-In
+  static const String googleServerClientId =
+      '868341775085-ffcp8k56vvbbrlg5m6e5vqemdgtet5oe.apps.googleusercontent.com';
 }

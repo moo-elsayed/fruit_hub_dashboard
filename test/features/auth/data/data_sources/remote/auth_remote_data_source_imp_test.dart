@@ -7,6 +7,7 @@ import 'package:fruit_hub_dashboard/core/network/network_response.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/data_sources/remote/auth_remote_data_source_imp.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/sign_up_input_model.dart';
 import 'package:fruit_hub_dashboard/features/auth/data/models/user_model.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
@@ -19,9 +20,19 @@ class MockAdditionalUserInfo extends Mock implements AdditionalUserInfo {}
 
 class FakeAuthProvider extends Fake implements AuthProvider {}
 
+class FakeAuthCredential extends Fake implements AuthCredential {}
+
+class MockGoogleSignIn extends Mock implements GoogleSignIn {}
+
+class MockGoogleSignInAccount extends Mock implements GoogleSignInAccount {}
+
+class MockGoogleSignInAuthentication extends Mock
+    implements GoogleSignInAuthentication {}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(FakeAuthProvider());
+    registerFallbackValue(FakeAuthCredential());
   });
 
   late MockFirebaseAuth mockFirebaseAuth;
@@ -29,6 +40,9 @@ void main() {
   late MockUserCredential mockUserCredential;
   late MockUser mockUser;
   late MockUser mockCurrentUser;
+  late MockGoogleSignIn mockGoogleSignIn;
+  late MockGoogleSignInAccount mockGoogleSignInAccount;
+  late MockGoogleSignInAuthentication mockGoogleSignInAuthentication;
   late AuthRemoteDataSourceImp sut;
 
   const tUid = 'test_uid_123';
@@ -50,6 +64,9 @@ void main() {
     mockUserCredential = MockUserCredential();
     mockUser = MockUser();
     mockCurrentUser = MockUser();
+    mockGoogleSignIn = MockGoogleSignIn();
+    mockGoogleSignInAccount = MockGoogleSignInAccount();
+    mockGoogleSignInAuthentication = MockGoogleSignInAuthentication();
 
     when(() => mockUser.uid).thenReturn(tUid);
     when(() => mockUser.email).thenReturn(tEmail);
@@ -71,9 +88,20 @@ void main() {
     when(() => mockFirebaseAuth.signOut()).thenAnswer((_) async {});
     when(() => mockFirebaseAuth.currentUser).thenReturn(mockCurrentUser);
 
+    when(() => mockGoogleSignIn.signOut()).thenAnswer((_) async {});
+    when(() => mockGoogleSignIn.authenticate())
+        .thenAnswer((_) async => mockGoogleSignInAccount);
+    when(() => mockGoogleSignInAccount.authentication)
+        .thenReturn(mockGoogleSignInAuthentication);
+    when(() => mockGoogleSignInAuthentication.idToken)
+        .thenReturn('mock_id_token');
+    when(() => mockFirebaseAuth.signInWithCredential(any()))
+        .thenAnswer((_) async => mockUserCredential);
+
     sut = AuthRemoteDataSourceImp(
       firebaseAuth: mockFirebaseAuth,
       firestore: fakeFirestore,
+      googleSignIn: mockGoogleSignIn,
     );
   });
 
@@ -471,12 +499,6 @@ void main() {
       when(() => mockUserCredential.additionalUserInfo)
           .thenReturn(mockAdditionalInfo);
 
-      when(
-        () => mockFirebaseAuth.signInWithProvider(
-          any(that: isA<GoogleAuthProvider>()),
-        ),
-      ).thenAnswer((_) async => mockUserCredential);
-
       // Act
       final result = await sut.googleSignIn();
 
@@ -491,17 +513,30 @@ void main() {
           .doc(tUid)
           .get();
       expect(doc.exists, isTrue);
+      verify(() => mockGoogleSignIn.authenticate()).called(1);
+      verify(() => mockFirebaseAuth.signInWithCredential(any())).called(1);
     });
+
+    test(
+      'should return NetworkFailure with unexpectedError when idToken is null',
+      () async {
+        // Arrange
+        when(() => mockGoogleSignInAuthentication.idToken).thenReturn(null);
+
+        // Act
+        final result = await sut.googleSignIn();
+
+        // Assert
+        expect(result, isA<NetworkFailure<UserModel>>());
+        final failure = (result as NetworkFailure<UserModel>).failure;
+        expect(failure.error, AppStrings.unexpectedError);
+      },
+    );
 
     test(
       'should return NetworkFailure with unexpectedError when user is null',
       () async {
         // Arrange
-        when(
-          () => mockFirebaseAuth.signInWithProvider(
-            any(that: isA<GoogleAuthProvider>()),
-          ),
-        ).thenAnswer((_) async => mockUserCredential);
         when(() => mockUserCredential.user).thenReturn(null);
 
         // Act
@@ -514,13 +549,14 @@ void main() {
       },
     );
 
-    test('should return NetworkFailure with googleSignInCancelled when popup-closed-by-user exception is thrown', () async {
+    test('should return NetworkFailure with googleSignInCancelled when cancelled exception is thrown', () async {
       // Arrange
-      when(
-        () => mockFirebaseAuth.signInWithProvider(
-          any(that: isA<GoogleAuthProvider>()),
+      when(() => mockGoogleSignIn.authenticate()).thenThrow(
+        const GoogleSignInException(
+          code: GoogleSignInExceptionCode.canceled,
+          description: 'canceled',
         ),
-      ).thenThrow(FirebaseAuthException(code: 'popup-closed-by-user'));
+      );
 
       // Act
       final result = await sut.googleSignIn();
@@ -533,11 +569,7 @@ void main() {
 
     test('should return NetworkFailure with accountExistsWithDifferentCredential when account-exists-with-different-credential code is thrown', () async {
       // Arrange
-      when(
-        () => mockFirebaseAuth.signInWithProvider(
-          any(that: isA<GoogleAuthProvider>()),
-        ),
-      ).thenThrow(
+      when(() => mockFirebaseAuth.signInWithCredential(any())).thenThrow(
         FirebaseAuthException(code: 'account-exists-with-different-credential'),
       );
 
@@ -566,12 +598,6 @@ void main() {
       when(() => mockAdditionalInfo.profile).thenReturn(null);
       when(() => mockUserCredential.additionalUserInfo)
           .thenReturn(mockAdditionalInfo);
-
-      when(
-        () => mockFirebaseAuth.signInWithProvider(
-          any(that: isA<GoogleAuthProvider>()),
-        ),
-      ).thenAnswer((_) async => mockUserCredential);
 
       // Act
       final result = await sut.googleSignIn();
@@ -607,12 +633,6 @@ void main() {
       when(() => mockUserCredential.additionalUserInfo)
           .thenReturn(mockAdditionalInfo);
 
-      when(
-        () => mockFirebaseAuth.signInWithProvider(
-          any(that: isA<GoogleAuthProvider>()),
-        ),
-      ).thenAnswer((_) async => mockUserCredential);
-
       // Act
       final result = await sut.googleSignIn();
 
@@ -632,11 +652,8 @@ void main() {
       'should return NetworkFailure with unexpectedError on generic error',
       () async {
         // Arrange
-        when(
-          () => mockFirebaseAuth.signInWithProvider(
-            any(that: isA<GoogleAuthProvider>()),
-          ),
-        ).thenThrow(Exception('Google OAuth failed'));
+        when(() => mockGoogleSignIn.authenticate())
+            .thenThrow(Exception('Google auth failed'));
 
         // Act
         final result = await sut.googleSignIn();
@@ -785,19 +802,17 @@ void main() {
   });
 
   group('signOut', () {
-    test(
-      'should call firebaseAuth.signOut and return NetworkSuccess',
-      () async {
-        // Arrange - default mock handles signOut successfully
+    test('should call firebaseAuth.signOut and googleSignIn.signOut and return NetworkSuccess', () async {
+      // Arrange - default mocks handle signOut successfully
 
-        // Act
-        final result = await sut.signOut();
+      // Act
+      final result = await sut.signOut();
 
-        // Assert
-        expect(result, isA<NetworkSuccess<void>>());
-        verify(() => mockFirebaseAuth.signOut()).called(1);
-      },
-    );
+      // Assert
+      expect(result, isA<NetworkSuccess<void>>());
+      verify(() => mockFirebaseAuth.signOut()).called(1);
+      verify(() => mockGoogleSignIn.signOut()).called(1);
+    });
 
     test('should return NetworkFailure with unexpectedError when signOut throws an exception', () async {
       // Arrange

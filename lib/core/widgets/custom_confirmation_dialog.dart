@@ -100,6 +100,7 @@ class CustomConfirmationDialog extends StatelessWidget {
           Gap(24.h),
           showCancelButton
               ? Row(
+                  spacing: 12.w,
                   children: [
                     Expanded(
                       child: CustomMaterialButton(
@@ -115,7 +116,6 @@ class CustomConfirmationDialog extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: 12.w),
                     Expanded(
                       child: CustomMaterialButton(
                         onPressed: onConfirm,

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
@@ -38,9 +37,15 @@ class _OrdersViewBodyState extends State<OrdersViewBody> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<OrdersCubit>().loadMoreOrders();
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final cubit = context.read<OrdersCubit>();
+    if (maxScroll > 0 &&
+        currentScroll >= maxScroll - 200 &&
+        cubit.hasMore &&
+        !cubit.isLoadingMore) {
+      cubit.loadMoreOrders();
     }
   }
 
@@ -159,10 +164,10 @@ class _OrdersViewBodyState extends State<OrdersViewBody> {
                           }
 
                           final order = orders[index];
-                          return CustomOrderItem(orderEntity: order)
-                              .animate(delay: const Duration(milliseconds: 30))
-                              .slideY(begin: 0.1, duration: 250.ms)
-                              .fadeIn(duration: 250.ms);
+                          return CustomOrderItem(
+                            key: ValueKey(order.docId),
+                            orderEntity: order,
+                          );
                         },
                       );
                     },

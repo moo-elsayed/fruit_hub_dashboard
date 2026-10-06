@@ -277,6 +277,7 @@ class _EmptyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
+    spacing: 12.w,
     children: [
       Container(
         padding: EdgeInsets.all(8.r),
@@ -286,7 +287,6 @@ class _EmptyContent extends StatelessWidget {
         ),
         child: Icon(icon, color: context.colors.primary, size: 22.sp),
       ),
-      Gap(12.w),
       Expanded(
         child: Text(
           label,

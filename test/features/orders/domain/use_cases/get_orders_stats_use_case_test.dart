@@ -29,40 +29,35 @@ void main() {
   });
 
   group('GetOrdersStatsUseCase', () {
-    test(
-      'should return NetworkSuccess with OrdersStatsEntity when repo call is successful',
-      () async {
-        // Arrange
-        when(
-          () => mockOrdersRepo.getOrdersStats(),
-        ).thenAnswer((_) async => const NetworkSuccess(tStats));
+    test('should return NetworkSuccess with OrdersStatsEntity when repo call is successful', () async {
+      // Arrange
+      when(() => mockOrdersRepo.getOrdersStats())
+          .thenAnswer((_) async => const NetworkSuccess(tStats));
 
-        // Act
-        final result = await sut();
+      // Act
+      final result = await sut();
 
-        // Assert
-        expect(result, isA<NetworkSuccess<OrdersStatsEntity>>());
-        final entity = (result as NetworkSuccess<OrdersStatsEntity>).data!;
-        expect(entity, tStats);
-        expect(entity.totalCount, 50);
-        expect(entity.pendingCount, 10);
-        expect(entity.processingCount, 8);
-        expect(entity.shippedCount, 12);
-        expect(entity.deliveredCount, 18);
-        expect(entity.cancelledCount, 2);
+      // Assert
+      expect(result, isA<NetworkSuccess<OrdersStatsEntity>>());
+      final entity = (result as NetworkSuccess<OrdersStatsEntity>).data!;
+      expect(entity, tStats);
+      expect(entity.totalCount, 50);
+      expect(entity.pendingCount, 10);
+      expect(entity.processingCount, 8);
+      expect(entity.shippedCount, 12);
+      expect(entity.deliveredCount, 18);
+      expect(entity.cancelledCount, 2);
 
-        verify(() => mockOrdersRepo.getOrdersStats()).called(1);
-        verifyNoMoreInteractions(mockOrdersRepo);
-      },
-    );
+      verify(() => mockOrdersRepo.getOrdersStats()).called(1);
+      verifyNoMoreInteractions(mockOrdersRepo);
+    });
 
     test(
       'should return NetworkFailure when repo call returns failure',
       () async {
         // Arrange
-        when(
-          () => mockOrdersRepo.getOrdersStats(),
-        ).thenAnswer((_) async => const NetworkFailure(tFailure));
+        when(() => mockOrdersRepo.getOrdersStats())
+            .thenAnswer((_) async => const NetworkFailure(tFailure));
 
         // Act
         final result = await sut();

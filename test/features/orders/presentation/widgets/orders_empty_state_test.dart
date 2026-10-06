@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fruit_hub_dashboard/core/helpers/app_strings.dart';
+import 'package:fruit_hub_dashboard/features/orders/presentation/widgets/orders_empty_state.dart';
+
+import '../../../../helpers/test_widget_wrapper.dart';
+
+void main() {
+  group('OrdersEmptyState Widget Tests', () {
+    testWidgets(
+      'should render icon, noOrdersYet title, and subtitle correctly',
+      (WidgetTester tester) async {
+        // Arrange & Act
+        await tester.pumpWidget(
+          createWidgetForTesting(child: const OrdersEmptyState()),
+        );
+
+        // Assert
+        expect(find.byIcon(Icons.receipt_long_outlined), findsOneWidget);
+        expect(find.text(AppStrings.noOrdersYet), findsOneWidget);
+        expect(find.text(AppStrings.noOrdersYetSubtitle), findsOneWidget);
+      },
+    );
+  });
+}

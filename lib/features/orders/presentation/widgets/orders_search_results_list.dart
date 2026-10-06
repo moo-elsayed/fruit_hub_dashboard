@@ -15,7 +15,9 @@ class OrdersSearchResultsList extends StatelessWidget {
     padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.h),
     itemCount: orders.length,
     separatorBuilder: (context, index) => Gap(8.h),
-    itemBuilder: (context, index) =>
-        CustomOrderItem(orderEntity: orders[index]),
+    itemBuilder: (context, index) => CustomOrderItem(
+      key: ValueKey(orders[index].docId),
+      orderEntity: orders[index],
+    ),
   );
 }

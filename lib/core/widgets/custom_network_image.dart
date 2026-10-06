@@ -18,17 +18,28 @@ class CustomNetworkImage extends StatelessWidget {
   final BoxFit? fit;
 
   @override
-  Widget build(BuildContext context) => image == ''
-      ? Image.asset(
-          AppAssets.imagesWatermelonTest,
-          fit: fit,
-          height: height,
-          width: width,
-        )
-      : CachedNetworkImage(
-          imageUrl: image,
-          height: height,
-          width: width,
-          fit: fit,
-        );
+  Widget build(BuildContext context) {
+    final trimmedImage = image.trim();
+    if (trimmedImage.isEmpty || !trimmedImage.startsWith('http')) {
+      return Image.asset(
+        AppAssets.imagesWatermelonTest,
+        fit: fit,
+        height: height,
+        width: width,
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: trimmedImage,
+      height: height,
+      width: width,
+      fit: fit,
+      errorWidget: (context, url, error) => Image.asset(
+        AppAssets.imagesWatermelonTest,
+        fit: fit,
+        height: height,
+        width: width,
+      ),
+    );
+  }
 }

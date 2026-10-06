@@ -28,6 +28,8 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
       query = query.where('status', isEqualTo: status.databaseValue);
     }
 
+    query = query.orderBy('date', descending: true);
+
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
     }
@@ -131,7 +133,7 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
     queryRef = queryRef.limit(limit);
     final snapshot = await queryRef.get();
 
-    return snapshot.docs
+    final orders = snapshot.docs
         .map(
           (doc) => OrderModel.fromFirestore(
             doc.data() as Map<String, dynamic>,
@@ -139,6 +141,17 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
           ),
         )
         .toList();
+
+    orders.sort((a, b) {
+      final dateA = DateTime.tryParse(a.date);
+      final dateB = DateTime.tryParse(b.date);
+      if (dateA != null && dateB != null) {
+        return dateB.compareTo(dateA);
+      }
+      return b.date.compareTo(a.date);
+    });
+
+    return orders;
   }, functionName: 'searchOrders');
 
   @override
@@ -146,9 +159,8 @@ class OrdersRemoteDataSourceImp implements OrdersRemoteDataSources {
     String docId,
     OrderStatus status,
   ) async => ApiHelper.executeSafely(() async {
-    await _firestore
-        .collection(_ordersCollection)
-        .doc(docId)
-        .update({'status': status.databaseValue});
+    await _firestore.collection(_ordersCollection).doc(docId).update({
+      'status': status.databaseValue,
+    });
   }, functionName: 'updateOrderStatus');
 }
