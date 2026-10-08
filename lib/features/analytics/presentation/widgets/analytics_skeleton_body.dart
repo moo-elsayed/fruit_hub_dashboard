@@ -89,6 +89,7 @@ class AnalyticsSkeletonBody extends StatelessWidget {
         PaymentMethodsCard(paymentMethodStats: _mockData.paymentMethodStats),
         const SizedBox(height: 16),
         TopSellingProductsCard(topProducts: _mockData.topProducts),
+        const SizedBox(height: 8),
       ],
     ),
   );

@@ -23,7 +23,7 @@ class AnalyticsKpiSection extends StatelessWidget {
       crossAxisCount: 2,
       crossAxisSpacing: 12.w,
       mainAxisSpacing: 12.h,
-      childAspectRatio: 1.3,
+      childAspectRatio: 1.4,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
@@ -43,7 +43,7 @@ class AnalyticsKpiSection extends StatelessWidget {
           title: AppStrings.averageOrderValue,
           value: '$avgOrderValue ${AppStrings.pounds}',
           icon: Icons.trending_up_rounded,
-          accentColor: AppPalette.dashboardProducts,
+          accentColor: AppPalette.dashboardAnalytics,
         ),
         AnalyticsKpiCard(
           title: AppStrings.totalUsers,
@@ -51,13 +51,13 @@ class AnalyticsKpiSection extends StatelessWidget {
             children: [
               TextSpan(
                 text: '${AppStrings.totalUsers} ',
-                style: AppTextStyles.font11Regular.copyWith(
+                style: AppTextStyles.font12Medium.copyWith(
                   color: context.colors.subText,
                 ),
               ),
               TextSpan(
                 text: '(${kpi.verifiedUsers} ${AppStrings.verifiedUsers})',
-                style: AppTextStyles.font11Medium.copyWith(
+                style: AppTextStyles.font12SemiBold.copyWith(
                   color: AppPalette.accentGreen,
                 ),
               ),
@@ -65,7 +65,7 @@ class AnalyticsKpiSection extends StatelessWidget {
           ),
           value: '${kpi.totalUsers}',
           icon: Icons.people_alt_rounded,
-          accentColor: AppPalette.dashboardUsers,
+          accentColor: AppPalette.kpiUsers,
         ),
       ],
     );

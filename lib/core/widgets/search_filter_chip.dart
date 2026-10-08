@@ -9,13 +9,13 @@ class SearchFilterChip extends StatelessWidget {
   const SearchFilterChip({
     super.key,
     required this.label,
-    required this.icon,
+    this.icon,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
-  final IconData icon;
+  final IconData? icon;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -37,11 +37,12 @@ class SearchFilterChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 6.w,
         children: [
-          Icon(
-            icon,
-            size: 15.sp,
-            color: isSelected ? AppPalette.white : context.colors.subText,
-          ),
+          if (icon != null)
+            Icon(
+              icon,
+              size: 15.sp,
+              color: isSelected ? AppPalette.white : context.colors.subText,
+            ),
           Text(
             label,
             style: AppTextStyles.font12Regular.copyWith(

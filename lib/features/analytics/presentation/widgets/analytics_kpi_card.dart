@@ -24,13 +24,16 @@ class AnalyticsKpiCard extends StatelessWidget {
     padding: EdgeInsets.all(14.r),
     decoration: BoxDecoration(
       color: context.colors.surface,
-      borderRadius: BorderRadius.circular(16.r),
-      border: Border.all(color: context.colors.border),
+      borderRadius: BorderRadius.circular(18.r),
+      border: Border.all(
+        color: accentColor.withValues(alpha: 0.25),
+        width: 1.2,
+      ),
       boxShadow: [
         BoxShadow(
-          color: context.colors.mainText.withValues(alpha: 0.03),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
+          color: accentColor.withValues(alpha: 0.08),
+          blurRadius: 14,
+          offset: const Offset(0, 5),
         ),
       ],
     ),
@@ -39,37 +42,51 @@ class AnalyticsKpiCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          padding: EdgeInsets.all(8.r),
+          padding: EdgeInsets.all(6.r),
           decoration: BoxDecoration(
             color: accentColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: accentColor.withValues(alpha: 0.2),
+              width: 1,
+            ),
           ),
-          child: Icon(icon, size: 20.r, color: accentColor),
+          child: Icon(icon, size: 22.sp, color: accentColor),
         ),
-        SizedBox(height: 10.h),
-        Text(
-          value,
-          style: AppTextStyles.font18Bold.copyWith(
-            color: context.colors.mainText,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        SizedBox(height: 4.h),
-        titleSpan != null
-            ? Text.rich(
-                titleSpan!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-            : Text(
-                title,
-                style: AppTextStyles.font12Regular.copyWith(
-                  color: context.colors.subText,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 2.h,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                value,
+                style: AppTextStyles.font18Bold.copyWith(
+                  color: context.colors.mainText,
+                  height: 1.2,
                 ),
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
+            ),
+            titleSpan != null
+                ? Text.rich(
+                    titleSpan!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                : Text(
+                    title,
+                    style: AppTextStyles.font12Medium.copyWith(
+                      color: context.colors.subText,
+                      height: 1.2,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+          ],
+        ),
       ],
     ),
   );

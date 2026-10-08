@@ -16,7 +16,7 @@ class DashboardBannerCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(20.r),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [AppPalette.primaryGreen, AppPalette.secondaryGreen],
@@ -33,63 +33,66 @@ class DashboardBannerCard extends StatelessWidget {
         ],
       ),
       child: Stack(
+        alignment: .centerEnd,
         children: [
           PositionedDirectional(
-            end: -15.w,
-            bottom: -20.h,
-            child: Icon(
-              Icons.storefront_rounded,
-              size: 110.sp,
-              color: AppPalette.white.withValues(alpha: 0.12),
+            start: 0.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 4.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppPalette.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 6.w,
+                    children: [
+                      Container(
+                        width: 6.w,
+                        height: 6.h,
+                        decoration: const BoxDecoration(
+                          color: AppPalette.white,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Text(
+                        AppStrings.storeControlPanel,
+                        style: AppTextStyles.font11SemiBold.copyWith(
+                          color: AppPalette.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gap(12.h),
+                Text(
+                  AppStrings.welcomeToDashboard,
+                  style: AppTextStyles.font18Bold.copyWith(
+                    color: AppPalette.white,
+                    height: 1.2,
+                  ),
+                ),
+                Gap(6.h),
+                Text(
+                  AppStrings.controlPanelSubtitle,
+                  style: AppTextStyles.font12Regular.copyWith(
+                    color: AppPalette.white.withValues(alpha: 0.85),
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: AppPalette.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(30.r),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 6.w,
-                      height: 6.h,
-                      decoration: const BoxDecoration(
-                        color: AppPalette.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Gap(6.w),
-                    Text(
-                      AppStrings.storeControlPanel,
-                      style: AppTextStyles.font11SemiBold.copyWith(
-                        color: AppPalette.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Gap(12.h),
-              Text(
-                AppStrings.welcomeToDashboard,
-                style: AppTextStyles.font18Bold.copyWith(
-                  color: AppPalette.white,
-                  height: 1.2,
-                ),
-              ),
-              Gap(6.h),
-              Text(
-                AppStrings.controlPanelSubtitle,
-                style: AppTextStyles.font12Regular.copyWith(
-                  color: AppPalette.white.withValues(alpha: 0.85),
-                  height: 1.4,
-                ),
-              ),
-            ],
+          Icon(
+            Icons.dashboard_customize,
+            size: 90.sp,
+            color: AppPalette.white.withValues(alpha: 0.12),
           ),
         ],
       ),

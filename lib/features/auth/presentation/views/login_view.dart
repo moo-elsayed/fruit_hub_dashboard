@@ -23,7 +23,6 @@ import '../managers/signin_cubit/sign_in_cubit.dart';
 import '../managers/social_sign_in_cubit/social_sign_in_cubit.dart';
 import '../widgets/auth_header_section.dart';
 import '../widgets/auth_redirect_text.dart';
-import '../widgets/forget_password.dart';
 import '../widgets/social_auth_section.dart';
 
 class LoginView extends StatefulWidget {
@@ -157,10 +156,19 @@ class _LoginViewState extends State<LoginView> {
                         action: TextInputAction.done,
                       ),
                       Gap(16.h),
-                      ForgetPassword(
-                        onTap: () async => await _navigate(
-                          context: context,
-                          routeName: Routes.forgetPasswordView,
+                      Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: GestureDetector(
+                          onTap: () async => await _navigate(
+                            context: context,
+                            routeName: Routes.forgetPasswordView,
+                          ),
+                          child: Text(
+                            AppStrings.forgotPassword,
+                            style: AppTextStyles.font13SemiBold.copyWith(
+                              color: context.colors.primary,
+                            ),
+                          ),
                         ),
                       ),
                       Gap(28.h),

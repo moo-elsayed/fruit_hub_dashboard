@@ -32,10 +32,12 @@ class OrderStatusDistributionCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                AppStrings.orderStatusDistribution,
-                style: AppTextStyles.font15Bold.copyWith(
-                  color: context.colors.mainText,
+              Expanded(
+                child: Text(
+                  AppStrings.orderStatusDistribution,
+                  style: AppTextStyles.font15Bold.copyWith(
+                    color: context.colors.mainText,
+                  ),
                 ),
               ),
               Text(
@@ -55,11 +57,23 @@ class OrderStatusDistributionCard extends StatelessWidget {
                 PieChartData(
                   sectionsSpace: 2,
                   centerSpaceRadius: 42.r,
-                  sections: _buildSections(totalCount),
+                  sections: statusStats.map((stat) {
+                    final pct = totalCount > 0
+                        ? (stat.count / totalCount) * 100
+                        : 0.0;
+                    return PieChartSectionData(
+                      color: stat.status.color,
+                      value: stat.count.toDouble(),
+                      title: stat.count > 0 ? '${pct.toStringAsFixed(0)}%' : '',
+                      radius: 36.r,
+                      titleStyle: AppTextStyles.font10Bold.copyWith(
+                        color: AppPalette.white,
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),
-            SizedBox(height: 16.h),
             Wrap(
               spacing: 12.w,
               runSpacing: 8.h,
@@ -80,19 +94,6 @@ class OrderStatusDistributionCard extends StatelessWidget {
       ),
     );
   }
-
-  List<PieChartSectionData> _buildSections(int totalCount) => statusStats.map((
-    stat,
-  ) {
-    final pct = totalCount > 0 ? (stat.count / totalCount) * 100 : 0.0;
-    return PieChartSectionData(
-      color: stat.status.color,
-      value: stat.count.toDouble(),
-      title: stat.count > 0 ? '${pct.toStringAsFixed(0)}%' : '',
-      radius: 36.r,
-      titleStyle: AppTextStyles.font10Bold.copyWith(color: AppPalette.white),
-    );
-  }).toList();
 }
 
 class _StatusChip extends StatelessWidget {

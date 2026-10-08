@@ -30,10 +30,12 @@ class TopSellingProductsCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              AppStrings.topSellingProducts,
-              style: AppTextStyles.font15Bold.copyWith(
-                color: context.colors.mainText,
+            Expanded(
+              child: Text(
+                AppStrings.topSellingProducts,
+                style: AppTextStyles.font15Bold.copyWith(
+                  color: context.colors.mainText,
+                ),
               ),
             ),
             Text(
@@ -99,7 +101,7 @@ class _ProductLeaderboardItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              '#${product.code}',
+              '${AppStrings.codeLabel}${product.code}',
               style: AppTextStyles.font11Regular.copyWith(
                 color: context.colors.subText,
               ),

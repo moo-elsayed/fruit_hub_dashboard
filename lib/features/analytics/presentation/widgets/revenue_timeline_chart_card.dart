@@ -34,23 +34,25 @@ class RevenueTimelineChartCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 2.h,
-                children: [
-                  Text(
-                    AppStrings.revenueTimeline,
-                    style: AppTextStyles.font15Bold.copyWith(
-                      color: context.colors.mainText,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 2.h,
+                  children: [
+                    Text(
+                      AppStrings.revenueTimeline,
+                      style: AppTextStyles.font15Bold.copyWith(
+                        color: context.colors.mainText,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${totalRangeRevenue.toStringAsFixed(0)} ${AppStrings.pounds}',
-                    style: AppTextStyles.font18Bold.copyWith(
-                      color: AppPalette.primaryGreen,
+                    Text(
+                      '${totalRangeRevenue.toStringAsFixed(0)} ${AppStrings.pounds}',
+                      style: AppTextStyles.font18Bold.copyWith(
+                        color: AppPalette.primaryGreen,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),

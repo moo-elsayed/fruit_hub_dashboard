@@ -76,7 +76,7 @@ class _AnalyticsViewBodyState extends State<AnalyticsViewBody> {
                   ),
                   SizedBox(height: 16.h),
                   TopSellingProductsCard(topProducts: data.topProducts),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 8.h),
                 ],
               ),
             },

@@ -98,9 +98,9 @@ class AnalyticsRemoteDataSourceImp implements AnalyticsRemoteDataSource {
           ),
         );
 
-        // Aggregate order statuses if present in daily document
-        final dailyStatuses = dayData['orderStatuses'] as Map<String, dynamic>?;
-        if (dailyStatuses != null) {
+        // Aggregate order statuses if present in daily document (nested or flattened dot keys)
+        final dailyStatuses = _extractOrderStatuses(dayData);
+        if (dailyStatuses.isNotEmpty) {
           for (final status in OrderStatus.values) {
             final fieldName = '${status.name}Orders';
             final c = (dailyStatuses[fieldName] as num?)?.toInt() ?? 0;
@@ -108,10 +108,9 @@ class AnalyticsRemoteDataSourceImp implements AnalyticsRemoteDataSource {
           }
         }
 
-        // Aggregate payment methods if present in daily document
-        final dailyPayments =
-            dayData['paymentMethods'] as Map<String, dynamic>?;
-        if (dailyPayments != null) {
+        // Aggregate payment methods if present in daily document (nested or flattened dot keys)
+        final dailyPayments = _extractPaymentMethods(dayData);
+        if (dailyPayments.isNotEmpty) {
           for (final entry in dailyPayments.entries) {
             final count = (entry.value as num?)?.toInt() ?? 0;
             rangePaymentCounts[entry.key] =
@@ -132,12 +131,11 @@ class AnalyticsRemoteDataSourceImp implements AnalyticsRemoteDataSource {
 
     for (final dayDoc in dailySnap.docs) {
       final dayData = dayDoc.data();
-      final rawProducts = dayData['products'] as Map<String, dynamic>?;
-      if (rawProducts == null) continue;
+      final products = _extractProducts(dayData);
+      if (products.isEmpty) continue;
 
-      for (final entry in rawProducts.entries) {
-        final p = entry.value as Map<String, dynamic>?;
-        if (p == null) continue;
+      for (final entry in products.entries) {
+        final p = entry.value;
         final code = entry.key;
         final qty = (p['quantitySold'] as num?)?.toInt() ?? 0;
         final rev = (p['revenue'] as num?)?.toDouble() ?? 0.0;
@@ -152,8 +150,11 @@ class AnalyticsRemoteDataSourceImp implements AnalyticsRemoteDataSource {
     }
 
     final topProducts =
-        (productMap.entries.toList()
-              ..sort((a, b) => b.value.qty.compareTo(a.value.qty)))
+        (productMap.entries.toList()..sort((a, b) {
+              final qtyComparison = b.value.qty.compareTo(a.value.qty);
+              if (qtyComparison != 0) return qtyComparison;
+              return b.value.rev.compareTo(a.value.rev);
+            }))
             .take(10)
             .map(
               (e) => TopProductModel(
@@ -216,4 +217,63 @@ class AnalyticsRemoteDataSourceImp implements AnalyticsRemoteDataSource {
       '${dt.year.toString().padLeft(4, '0')}-'
       '${dt.month.toString().padLeft(2, '0')}-'
       '${dt.day.toString().padLeft(2, '0')}';
+
+  /// Extracts order statuses supporting both nested map and flat dot-notation keys.
+  Map<String, dynamic> _extractOrderStatuses(Map<String, dynamic> dayData) {
+    final result = <String, dynamic>{};
+    final nested = dayData['orderStatuses'] as Map<String, dynamic>?;
+    if (nested != null) {
+      result.addAll(nested);
+    }
+    for (final entry in dayData.entries) {
+      if (entry.key.startsWith('orderStatuses.')) {
+        final subKey = entry.key.substring('orderStatuses.'.length);
+        result[subKey] = entry.value;
+      }
+    }
+    return result;
+  }
+
+  /// Extracts payment methods supporting both nested map and flat dot-notation keys.
+  Map<String, dynamic> _extractPaymentMethods(Map<String, dynamic> dayData) {
+    final result = <String, dynamic>{};
+    final nested = dayData['paymentMethods'] as Map<String, dynamic>?;
+    if (nested != null) {
+      result.addAll(nested);
+    }
+    for (final entry in dayData.entries) {
+      if (entry.key.startsWith('paymentMethods.')) {
+        final subKey = entry.key.substring('paymentMethods.'.length);
+        result[subKey] = entry.value;
+      }
+    }
+    return result;
+  }
+
+  /// Extracts products supporting both nested map and flat dot-notation keys.
+  Map<String, Map<String, dynamic>> _extractProducts(
+    Map<String, dynamic> dayData,
+  ) {
+    final result = <String, Map<String, dynamic>>{};
+    final nested = dayData['products'] as Map<String, dynamic>?;
+    if (nested != null) {
+      for (final entry in nested.entries) {
+        if (entry.value is Map) {
+          result[entry.key] = Map<String, dynamic>.from(entry.value as Map);
+        }
+      }
+    }
+    for (final entry in dayData.entries) {
+      if (entry.key.startsWith('products.')) {
+        final parts = entry.key.split('.');
+        if (parts.length >= 3) {
+          final code = parts[1];
+          final field = parts.sublist(2).join('.');
+          result.putIfAbsent(code, () => <String, dynamic>{})[field] =
+              entry.value;
+        }
+      }
+    }
+    return result;
+  }
 }

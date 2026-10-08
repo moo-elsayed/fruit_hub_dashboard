@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruit_hub_dashboard/features/dashboard/presentation/items/dashboard_item.dart';
 import 'package:gap/gap.dart';
 
-import '../../domain/entities/dashboard_item_entity.dart';
 import 'dashboard_banner_card.dart';
 import 'dashboard_grid_view.dart';
 import 'dashboard_quick_actions_header.dart';
@@ -15,17 +15,17 @@ class DashboardViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final _ = EasyLocalization.of(context)?.locale;
     final dashboardItems = getDashboardItems(context);
-    return ListView(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      physics: const BouncingScrollPhysics(),
-      children: [
-        const DashboardBannerCard(),
-        Gap(20.h),
-        DashboardQuickActionsHeader(itemCount: dashboardItems.length),
-        Gap(12.h),
-        DashboardGridView(dashboardItems: dashboardItems),
-        Gap(24.h),
-      ],
+      child: Column(
+        children: [
+          const DashboardBannerCard(),
+          Gap(20.h),
+          DashboardQuickActionsHeader(itemCount: dashboardItems.length),
+          Gap(12.h),
+          Expanded(child: DashboardGridView(dashboardItems: dashboardItems)),
+        ],
+      ),
     );
   }
 }

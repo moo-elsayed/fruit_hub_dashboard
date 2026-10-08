@@ -513,6 +513,53 @@ void main() {
         expect(data.topProducts[2].totalRevenue, 20.0);
       });
 
+      test(
+        'sorts topProducts by revenue descending when quantitySold is equal',
+        () async {
+          // Arrange
+          final day = DateTime(2026, 9, 1);
+          await fakeFirestore
+              .collection(dailyCollection)
+              .doc('2026-09-01')
+              .set(
+                createDailyDocMap(
+                  ordersCount: 2,
+                  revenue: 300.0,
+                  orderStatuses: {'deliveredOrders': 2},
+                  paymentMethods: {'credit_card': 2},
+                  products: {
+                    'prod_low_rev': {
+                      'name': 'Lower Revenue Product',
+                      'imagePath': 'low.png',
+                      'quantitySold': 5,
+                      'revenue': 100.0,
+                    },
+                    'prod_high_rev': {
+                      'name': 'Higher Revenue Product',
+                      'imagePath': 'high.png',
+                      'quantitySold': 5,
+                      'revenue': 200.0,
+                    },
+                  },
+                ),
+              );
+
+          // Act
+          final response = await sut.getAnalytics(from: day, to: day);
+
+          // Assert
+          expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+          final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+          expect(data.topProducts.length, 2);
+          expect(data.topProducts[0].code, 'prod_high_rev');
+          expect(data.topProducts[0].totalQuantitySold, 5);
+          expect(data.topProducts[0].totalRevenue, 200.0);
+          expect(data.topProducts[1].code, 'prod_low_rev');
+          expect(data.topProducts[1].totalQuantitySold, 5);
+          expect(data.topProducts[1].totalRevenue, 100.0);
+        },
+      );
+
       test('limits topProducts to top 10 products when more than 10 products are sold', () async {
         final day = DateTime(2026, 9, 1);
 
@@ -728,6 +775,84 @@ void main() {
           expect(data.kpi.totalOrders, 3);
         },
       );
+
+      test('should parse flattened dot-notation fields for orderStatuses, paymentMethods, and products correctly', () async {
+        // Arrange
+        final day = DateTime(2026, 9, 30);
+        final flattenedData = {
+          'date': '2026-09-30',
+          'revenue': 475,
+          'ordersCount': 2,
+          'orderStatuses.pendingOrders': 2,
+          'paymentMethods.cash_on_delivery': 1,
+          'paymentMethods.credit_card': 1,
+          'products.006824.code': '006824',
+          'products.006824.name': 'ابو تريكه',
+          'products.006824.imagePath': 'https://storage/img1.jpg',
+          'products.006824.quantitySold': 1,
+          'products.006824.revenue': 200,
+          'products.009624.code': '009624',
+          'products.009624.name': 'امبتكم',
+          'products.009624.imagePath': 'https://storage/img2.jpg',
+          'products.009624.quantitySold': 1,
+          'products.009624.revenue': 230,
+        };
+
+        await fakeFirestore
+            .collection(dailyCollection)
+            .doc('2026-09-30')
+            .set(flattenedData);
+
+        // Act
+        final response = await sut.getAnalytics(from: day, to: day);
+
+        // Assert
+        expect(response, isA<NetworkSuccess<AnalyticsDataModel>>());
+        final data = (response as NetworkSuccess<AnalyticsDataModel>).data!;
+
+        expect(data.kpi.totalRevenue, 475.0);
+        expect(data.kpi.totalOrders, 2);
+        expect(data.kpi.pendingOrders, 2);
+
+        // Order statuses
+        final pendingStat = data.orderStatusStats.firstWhere(
+          (s) => s.status == OrderStatus.pending,
+        );
+        expect(pendingStat.count, 2);
+
+        // Payment methods
+        final codStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.cash,
+        );
+        expect(codStat.count, 1);
+        final cardStat = data.paymentMethodStats.firstWhere(
+          (p) => p.type == PaymentMethodType.card,
+        );
+        expect(cardStat.count, 1);
+
+        // Top products
+        expect(data.topProducts.length, 2);
+        expect(
+          data.topProducts.any(
+            (p) =>
+                p.code == '006824' &&
+                p.name == 'ابو تريكه' &&
+                p.totalQuantitySold == 1 &&
+                p.totalRevenue == 200.0,
+          ),
+          isTrue,
+        );
+        expect(
+          data.topProducts.any(
+            (p) =>
+                p.code == '009624' &&
+                p.name == 'امبتكم' &&
+                p.totalQuantitySold == 1 &&
+                p.totalRevenue == 230.0,
+          ),
+          isTrue,
+        );
+      });
     });
   });
 }

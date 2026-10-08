@@ -35,10 +35,12 @@ class PaymentMethodsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                AppStrings.paymentMethodsBreakdown,
-                style: AppTextStyles.font15Bold.copyWith(
-                  color: context.colors.mainText,
+              Expanded(
+                child: Text(
+                  AppStrings.paymentMethodsBreakdown,
+                  style: AppTextStyles.font15Bold.copyWith(
+                    color: context.colors.mainText,
+                  ),
                 ),
               ),
               Text(

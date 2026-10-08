@@ -34,10 +34,17 @@ class AppPalette {
   static const Color dashboardUsers = Color(
     0xff10B981,
   ); // Vibrant Emerald Green
-  static const Color dashboardProducts = Color(0xff3B82F6); // Ocean Blue
+  static const Color dashboardProducts = Color(
+    0xff0284C7,
+  ); // Vibrant Cerulean / Sky Blue
   static const Color dashboardOrders = Color(0xffF59E0B); // Warm Amber
-  static const Color dashboardAnalytics = Color(0xff8B5CF6); // Modern Purple
+  static const Color dashboardAnalytics = Color(
+    0xff7C3AED,
+  ); // Royal Violet / Deep Purple
   static const Color dashboardSettings = Color(0xffEC4899); // Rose Pink
+  static const Color kpiUsers = Color(
+    0xff0284C7,
+  ); // Vibrant Cerulean / Sky Blue for Users KPI
 
   // --- Rating Sentiment Colors ---
   static const Color ratingPoor = Color(0xFFEF4444); // Red

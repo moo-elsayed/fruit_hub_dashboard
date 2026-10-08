@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruit_hub_dashboard/core/helpers/extensions.dart';
 import 'package:fruit_hub_dashboard/core/theming/app_text_styles.dart';
-import 'package:gap/gap.dart';
+import 'package:fruit_hub_dashboard/features/dashboard/presentation/items/dashboard_item.dart';
 
-import '../../domain/entities/dashboard_item_entity.dart';
+class DashboardItemWidget extends StatelessWidget {
+  const DashboardItemWidget({super.key, required this.entity});
 
-class DashboardItem extends StatelessWidget {
-  const DashboardItem({super.key, required this.entity});
-
-  final DashboardItemEntity entity;
+  final DashboardItem entity;
 
   @override
   Widget build(BuildContext context) => Material(
@@ -49,6 +47,7 @@ class DashboardItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
+              spacing: 2.h,
               children: [
                 Text(
                   entity.title,
@@ -58,7 +57,6 @@ class DashboardItem extends StatelessWidget {
                     color: context.colors.mainText,
                   ),
                 ),
-                Gap(2.h),
                 Text(
                   entity.subtitle,
                   maxLines: 1,

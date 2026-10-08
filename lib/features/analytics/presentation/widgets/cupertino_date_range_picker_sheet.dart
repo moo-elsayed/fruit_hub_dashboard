@@ -102,91 +102,91 @@ class _CupertinoDateRangePickerSheetState
         ],
       ),
       padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 16.h),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CustomBottomSheetHandle(),
-          Text(
-            AppStrings.selectDateRange,
-            style: AppTextStyles.font16Bold.copyWith(color: colors.mainText),
-          ),
-          SizedBox(height: 16.h),
-          ValueListenableBuilder<int>(
-            valueListenable: _selectedTabNotifier,
-            builder: (context, activeIndex, _) => Row(
-              spacing: 12.w,
-              children: [
-                Expanded(
-                  child: ValueListenableBuilder<DateTime>(
-                    valueListenable: _startDateNotifier,
-                    builder: (context, startDate, _) => _DateSelectorTab(
-                      label: AppStrings.startDate,
-                      date: startDate,
-                      isActive: activeIndex == 0,
-                      onTap: () => _selectedTabNotifier.value = 0,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ValueListenableBuilder<DateTime>(
-                    valueListenable: _endDateNotifier,
-                    builder: (context, endDate, _) => _DateSelectorTab(
-                      label: AppStrings.endDate,
-                      date: endDate,
-                      isActive: activeIndex == 1,
-                      onTap: () => _selectedTabNotifier.value = 1,
-                    ),
-                  ),
-                ),
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 16.h,
+          children: [
+            const CustomBottomSheetHandle(bottomGap: 0),
+            Text(
+              AppStrings.selectDateRange,
+              style: AppTextStyles.font16Bold.copyWith(color: colors.mainText),
             ),
-          ),
-          SizedBox(height: 16.h),
-          SizedBox(
-            height: 180.h,
-            child: ValueListenableBuilder<int>(
+            ValueListenableBuilder<int>(
               valueListenable: _selectedTabNotifier,
-              builder: (context, activeIndex, _) {
-                final isStart = activeIndex == 0;
-                final currentDate = isStart
-                    ? _startDateNotifier.value
-                    : _endDateNotifier.value;
-
-                return CupertinoTheme(
-                  data: CupertinoThemeData(
-                    brightness: context.isDarkMode
-                        ? Brightness.dark
-                        : Brightness.light,
-                    textTheme: CupertinoTextThemeData(
-                      dateTimePickerTextStyle: AppTextStyles.font16Medium
-                          .copyWith(color: colors.mainText),
+              builder: (context, activeIndex, _) => Row(
+                spacing: 12.w,
+                children: [
+                  Expanded(
+                    child: ValueListenableBuilder<DateTime>(
+                      valueListenable: _startDateNotifier,
+                      builder: (context, startDate, _) => _DateSelectorTab(
+                        label: AppStrings.startDate,
+                        date: startDate,
+                        isActive: activeIndex == 0,
+                        onTap: () => _selectedTabNotifier.value = 0,
+                      ),
                     ),
                   ),
-                  child: CupertinoDatePicker(
-                    key: ValueKey<int>(activeIndex),
-                    mode: CupertinoDatePickerMode.date,
-                    initialDateTime: currentDate,
-                    minimumDate: widget.firstDate,
-                    maximumDate: widget.lastDate,
-                    onDateTimeChanged: (date) {
-                      if (isStart) {
-                        _startDateNotifier.value = date;
-                      } else {
-                        _endDateNotifier.value = date;
-                      }
-                    },
+                  Expanded(
+                    child: ValueListenableBuilder<DateTime>(
+                      valueListenable: _endDateNotifier,
+                      builder: (context, endDate, _) => _DateSelectorTab(
+                        label: AppStrings.endDate,
+                        date: endDate,
+                        isActive: activeIndex == 1,
+                        onTap: () => _selectedTabNotifier.value = 1,
+                      ),
+                    ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          CustomMaterialButton(
-            maxWidth: true,
-            text: AppStrings.apply,
-            onPressed: _onConfirm,
-          ),
-        ],
+            SizedBox(
+              height: 180.h,
+              child: ValueListenableBuilder<int>(
+                valueListenable: _selectedTabNotifier,
+                builder: (context, activeIndex, _) {
+                  final isStart = activeIndex == 0;
+                  final currentDate = isStart
+                      ? _startDateNotifier.value
+                      : _endDateNotifier.value;
+
+                  return CupertinoTheme(
+                    data: CupertinoThemeData(
+                      brightness: context.isDarkMode
+                          ? Brightness.dark
+                          : Brightness.light,
+                      textTheme: CupertinoTextThemeData(
+                        dateTimePickerTextStyle: AppTextStyles.font16Medium
+                            .copyWith(color: colors.mainText),
+                      ),
+                    ),
+                    child: CupertinoDatePicker(
+                      key: ValueKey<int>(activeIndex),
+                      mode: CupertinoDatePickerMode.date,
+                      initialDateTime: currentDate,
+                      minimumDate: widget.firstDate,
+                      maximumDate: widget.lastDate,
+                      onDateTimeChanged: (date) {
+                        if (isStart) {
+                          _startDateNotifier.value = date;
+                        } else {
+                          _endDateNotifier.value = date;
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            CustomMaterialButton(
+              maxWidth: true,
+              text: AppStrings.apply,
+              onPressed: _onConfirm,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -209,6 +209,7 @@ class _DateSelectorTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final primary = colors.primary;
+    final locale = context.isArabic ? 'ar' : 'en';
 
     return InkWell(
       onTap: onTap,
@@ -235,7 +236,7 @@ class _DateSelectorTab extends StatelessWidget {
               ),
             ),
             Text(
-              DateFormat('d MMM yyyy').format(date),
+              DateFormat('d MMM yyyy', locale).format(date),
               style: AppTextStyles.font13Bold.copyWith(
                 color: isActive ? primary : colors.mainText,
               ),
